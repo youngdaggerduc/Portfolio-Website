@@ -1,3 +1,5 @@
+import TypedText from './TypedText'
+
 export default function HeroSection() {
   return (
     <section id="hero" className="hero">
@@ -14,7 +16,9 @@ export default function HeroSection() {
       <div className="hero-video-overlay" />
       <div className="hero-halftone" />
       <div className="hero-content">
-        <div className="hero-eyebrow">// Full Stack Dev & AI Engineer</div>
+        <div className="hero-eyebrow">
+          <TypedText text="// Full Stack Dev & AI Engineer" speed={45} startDelay={250} />
+        </div>
         <h1 className="hero-name">
           <span>PIERCE</span>
           <span className="glitch-layer-1" aria-hidden="true">

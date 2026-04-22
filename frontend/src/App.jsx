@@ -5,13 +5,21 @@ import AboutSection from './components/AboutSection'
 import ProjectsSection from './components/ProjectsSection'
 import SkillsSection from './components/SkillsSection'
 import ContactSection from './components/ContactSection'
+import WebCursor from './components/WebCursor'
+import WebBackground from './components/WebBackground'
+import Preloader from './components/Preloader'
 import { useRevealObserver } from './hooks/useRevealObserver'
+import { useSectionClipReveal } from './hooks/useSectionClipReveal'
 
 function App() {
   useRevealObserver()
+  useSectionClipReveal()
 
   return (
     <>
+      <Preloader />
+      <WebBackground />
+      <WebCursor />
       <Nav />
       <main>
         <HeroSection />

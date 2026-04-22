@@ -1,4 +1,5 @@
 import { skills } from '../data'
+import LetterReveal from './LetterReveal'
 
 export default function SkillsSection() {
   return (
@@ -18,10 +19,10 @@ export default function SkillsSection() {
       <div className="section-label reveal reveal-left">// Chapter 03</div>
       <h2
         id="skills-title"
-        className="section-title reveal reveal-pow"
+        className="section-title"
         style={{ margin: 0, marginBottom: 48 }}
       >
-        TECH STACK
+        <LetterReveal text="TECH STACK" variant="letter-fan" stagger={40} />
       </h2>
       <div className="skills-grid">
         {skills.map((cat, i) => (

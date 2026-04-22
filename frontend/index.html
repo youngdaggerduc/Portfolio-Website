@@ -26,8 +26,10 @@
       property="og:description"
       content="Portfolio of Pierce Doman — full stack developer & AI engineer. Building intelligent web apps, RAG pipelines, and products that ship."
     />
-    <meta property="og:url" content="/" />
     <meta property="og:site_name" content="Pierce Doman" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="/favicon.svg" />
+    <meta property="og:image:alt" content="Pierce Doman — Full Stack Developer & AI Engineer" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Pierce Doman — Full Stack Developer & AI Engineer" />
@@ -35,6 +37,8 @@
       name="twitter:description"
       content="Portfolio of Pierce Doman — full stack developer & AI engineer."
     />
+    <meta name="twitter:image" content="/favicon.svg" />
+    <meta name="twitter:image:alt" content="Pierce Doman portfolio" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,21 +56,33 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Pierce Doman",
-        "jobTitle": "Full Stack Developer & AI Engineer",
-        "description": "Full stack developer and AI engineer specializing in React, Node.js, Python, LLMs, and RAG pipelines.",
-        "url": "/",
-        "knowsAbout": [
-          "React",
-          "Next.js",
-          "TypeScript",
-          "Node.js",
-          "Python",
-          "LangChain",
-          "RAG pipelines",
-          "AI Engineering",
-          "Full Stack Development"
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "#pierce",
+            "name": "Pierce Doman",
+            "jobTitle": "Full Stack Developer & AI Engineer",
+            "description": "Full stack developer and AI engineer specializing in React, Node.js, Python, LLMs, and RAG pipelines.",
+            "knowsAbout": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Node.js",
+              "Python",
+              "FastAPI",
+              "LangChain",
+              "RAG pipelines",
+              "AI Engineering",
+              "Full Stack Development"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "name": "Pierce Doman Portfolio",
+            "inLanguage": "en-US",
+            "author": { "@id": "#pierce" },
+            "about": { "@id": "#pierce" }
+          }
         ]
       }
     </script>

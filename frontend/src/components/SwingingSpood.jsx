@@ -1,55 +1,104 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 /**
- * Spood swings across the viewport, pinned (position: fixed) while the
- * About section is in view. The web attaches to a point that tracks the
- * red comic-divider above — when the divider has scrolled off the top
- * of the viewport, the web line extends beyond the top edge, giving the
- * illusion he's still hanging from it.
+ * Spider-style swinging character. Renders via a portal to <body> so
+ * ancestor clip-paths (section reveal animation) never hide it.
+ *
+ * Trajectory:
+ *  - Starts off-screen top-left when the About section enters the viewport
+ *  - Swings across, bobbing on a pendulum arc, to off-screen top-right
+ *  - Opacity is 1 for the main middle of the traversal, fades in/out at edges
+ *
+ * Web line:
+ *  - Anchored to the red comic-divider immediately above the section
+ *  - Endpoint measured from the actual top-right corner of the <img>
+ *    via getBoundingClientRect, so it lands precisely where the gif's
+ *    web strand originates regardless of rotation
  */
 export default function SwingingSpood({ sectionRef }) {
-  const [progress, setProgress] = useState(0)
-  const [anchorY, setAnchorY] = useState(0)
-  const [active, setActive] = useState(false)
-  const [reduced, setReduced] = useState(() =>
+  const imgRef = useRef(null)
+  const [state, setState] = useState({
+    visible: false,
+    charLeftPct: -25,
+    charTop: 110,
+    rot: -10,
+    anchorY: 0,
+    webEndX: 0,
+    webEndY: 0,
+    opacity: 1,
+  })
+  const [reduced] = useState(() =>
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
   )
 
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const handler = (e) => setReduced(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
-
-  useEffect(() => {
+    if (reduced) return
     const section = sectionRef?.current
     if (!section) return
-
-    // Track whether the About section is in view at all
-    const io = new IntersectionObserver(
-      (entries) => setActive(entries[0].isIntersecting),
-      { threshold: 0, rootMargin: '120px 0px 0px 0px' }
-    )
-    io.observe(section)
 
     let raf = 0
     const update = () => {
       const rect = section.getBoundingClientRect()
       const vh = window.innerHeight || document.documentElement.clientHeight
+      const vw = window.innerWidth || document.documentElement.clientWidth
       const total = rect.height + vh
       const scrolled = vh - rect.top
       const p = Math.max(0, Math.min(1, scrolled / total))
-      setProgress(p)
 
-      // Track the red divider above the section so the web connects to it
+      // Compress the swing into the first 80% of section progress
+      const t = Math.min(1, p / 0.8)
+
+      // L → R traversal. Start off-screen left at t=0, end off-screen right at t=1.
+      const charLeftPct = -22 + t * 140
+
+      // Pendulum bob — a few complete arcs across the traversal
+      const bob = Math.sin(t * Math.PI * 2.4) * 22
+      const charTop = 100 + bob
+
+      // Rotate body along the arc, tilted forward as he picks up speed
+      const rot = Math.cos(t * Math.PI * 2.4) * 26 - 4
+
+      // Visible whenever the section is in play and the swing isn't done
+      let opacity = 1
+      if (p > 0 && t < 0.98) {
+        // Quick fade in (first 4% of section), hold, fade out at end
+        const fadeIn = Math.min(1, p / 0.04)
+        const fadeOut = t > 0.9 ? Math.max(0, (0.98 - t) / 0.08) : 1
+        opacity = fadeIn * fadeOut
+      }
+
+      // Web endpoint: actual top-right pixel of the gif (transform-origin is top-right)
+      const img = imgRef.current
+      let webEndX = (charLeftPct / 100) * vw + 180 // pre-measure fallback
+      let webEndY = charTop + 4
+      if (img) {
+        const r = img.getBoundingClientRect()
+        webEndX = r.right
+        webEndY = r.top + 4
+      }
+
+      // Web anchor: vertical center of the red divider above the section
+      let anchorY = 0
       const divider = section.previousElementSibling
       if (divider) {
         const d = divider.getBoundingClientRect()
-        setAnchorY(d.top + d.height / 2)
+        anchorY = d.top + d.height / 2
       }
+
+      setState({
+        visible: opacity > 1,
+        charLeftPct,
+        charTop,
+        rot,
+        anchorY,
+        webEndX,
+        webEndY,
+        opacity,
+      })
     }
+
     const onScroll = () => {
       cancelAnimationFrame(raf)
       raf = requestAnimationFrame(update)
@@ -59,31 +108,21 @@ export default function SwingingSpood({ sectionRef }) {
     window.addEventListener('resize', update)
     return () => {
       cancelAnimationFrame(raf)
-      io.disconnect()
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', update)
     }
-  }, [sectionRef])
+  }, [reduced, sectionRef])
 
-  if (reduced) return null
+  if (reduced || typeof document === 'undefined') return null
 
-  // Swing happens quickly — compress into the first 85% of the section scroll
-  const t = Math.min(1, progress / 0.85)
-  const charXPct = -18 + t * 130              // viewport X: -18% → 112%
-  const bobY = Math.sin(t * Math.PI * 3) * 14
-  const charY = 110 + bobY                    // px from top of viewport (below nav)
-  const rot = Math.cos(t * Math.PI * 3) * 22 - 6
-
-  // Web anchor: the red divider's current Y in the viewport (may be negative when scrolled off)
-  const anchorXPct = 42
-  // Web endpoint: top-right area of the gif
-  const webEndXPct = charXPct + 9
-  const webEndY = charY + 6
-
-  return (
+  const node = (
     <div
-      className={`swing-zone${active ? ' is-active' : ''}`}
+      className="swing-zone"
       aria-hidden="true"
+      style={{
+        opacity: state.opacity,
+        visibility: state.visible ? 'visible' : 'hidden',
+      }}
     >
       <svg className="swing-web-svg" preserveAspectRatio="none">
         <defs>
@@ -96,27 +135,30 @@ export default function SwingingSpood({ sectionRef }) {
           </filter>
         </defs>
         <line
-          x1={`${anchorXPct}%`}
-          y1={anchorY}
-          x2={`${webEndXPct}%`}
-          y2={webEndY}
-          stroke="rgba(240,238,255,0.9)"
-          strokeWidth="1.8"
+          x1="42%"
+          y1={state.anchorY}
+          x2={state.webEndX}
+          y2={state.webEndY}
+          stroke="rgba(240,238,255,0.95)"
+          strokeWidth="2"
           strokeLinecap="round"
           filter="url(#webGlow)"
         />
       </svg>
       <img
+        ref={imgRef}
         className="swing-char"
         src="/spoodhand.gif"
         alt=""
         decoding="async"
         style={{
-          left: `${charXPct}%`,
-          top: `${charY}px`,
-          transform: `rotate(${rot}deg)`,
+          left: `${state.charLeftPct}%`,
+          top: `${state.charTop}px`,
+          transform: `rotate(${state.rot}deg)`,
         }}
       />
     </div>
   )
+
+  return createPortal(node, document.body)
 }

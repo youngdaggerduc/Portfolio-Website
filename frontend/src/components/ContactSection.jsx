@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import LetterReveal from './LetterReveal'
 
 const SOCIALS = [
   { icon: 'GH', label: 'GitHub', href: '#', sub: '@piercedoman' },
@@ -28,10 +29,10 @@ export default function ContactSection() {
       <div className="section-label reveal reveal-left">// Chapter 04</div>
       <h2
         id="contact-title"
-        className="section-title reveal reveal-pow"
+        className="section-title"
         style={{ margin: 0, marginBottom: 48 }}
       >
-        LET'S TALK
+        <LetterReveal text="LET'S TALK" variant="letter-pop" stagger={55} />
       </h2>
       <div className="contact-wrap">
         <div className="contact-form-panel reveal reveal-slam">

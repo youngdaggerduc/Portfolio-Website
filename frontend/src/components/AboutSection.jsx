@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import SwingingSpood from './SwingingSpood'
+import LetterReveal from './LetterReveal'
 
 export default function AboutSection() {
   const sectionRef = useRef(null)
@@ -26,10 +27,10 @@ export default function AboutSection() {
       <div className="section-label reveal reveal-left">// Chapter 01</div>
       <h2
         id="about-title"
-        className="section-title reveal reveal-pow"
+        className="section-title"
         style={{ margin: 0, marginBottom: 48 }}
       >
-        ABOUT ME
+        <LetterReveal text="ABOUT ME" variant="letter-pop" stagger={45} />
       </h2>
       <div className="about-grid">
         <div className="comic-panel reveal reveal-left">

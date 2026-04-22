@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { projects } from '../data'
-import Modal from './Modal'
 import ProjectPlaceholder from './ProjectPlaceholder'
+import LetterReveal from './LetterReveal'
+
+const Modal = lazy(() => import('./Modal'))
 
 export default function ProjectsSection() {
   const [modal, setModal] = useState(null)
@@ -15,10 +17,10 @@ export default function ProjectsSection() {
       <div className="section-label reveal reveal-left">// Chapter 02</div>
       <h2
         id="projects-title"
-        className="section-title reveal reveal-pow"
+        className="section-title"
         style={{ margin: 0, marginBottom: 48 }}
       >
-        MY WORK
+        <LetterReveal text="MY WORK" variant="letter-slam" stagger={50} />
       </h2>
       <div className="projects-grid">
         {projects.map((p, i) => (
@@ -58,7 +60,11 @@ export default function ProjectsSection() {
           </div>
         ))}
       </div>
-      {modal && <Modal project={modal} onClose={() => setModal(null)} />}
+      {modal && (
+        <Suspense fallback={null}>
+          <Modal project={modal} onClose={() => setModal(null)} />
+        </Suspense>
+      )}
     </section>
   )
 }

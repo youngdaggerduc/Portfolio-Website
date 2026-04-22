@@ -14,15 +14,14 @@ export default function TypedText({
 }) {
   const ref = useRef(null)
   const [shown, setShown] = useState('')
-  const [started, setStarted] = useState(false)
+  const [started, setStarted] = useState(
+    () => typeof window !== 'undefined' && !('IntersectionObserver' in window)
+  )
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    if (!('IntersectionObserver' in window)) {
-      setStarted(true)
-      return
-    }
+    if (!('IntersectionObserver' in window)) return
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
