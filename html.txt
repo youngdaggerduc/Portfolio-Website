@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pierce Doman — Full Stack & AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --bg: #07071a;
+    --bg2: #0d0d2b;
+    --red: #e8192c;
+    --cyan: #00d4ff;
+    --magenta: #ff00aa;
+    --white: #f0eeff;
+    --panel-border: 3px solid #000;
+    --panel-border-thick: 5px solid #000;
+    --glow-red: 0 0 20px #e8192c88;
+    --glow-cyan: 0 0 20px #00d4ff88;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* SCAN LINES OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* HALFTONE PATTERN */
+  .halftone {
+    background-image: radial-gradient(circle, rgba(0,212,255,0.15) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .halftone-red {
+    background-image: radial-gradient(circle, rgba(232,25,44,0.12) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .halftone-mag {
+    background-image: radial-gradient(circle, rgba(255,0,170,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* GLITCH TEXT */
+  @keyframes glitch1 {
+    0%,100% { clip-path: inset(0 0 98% 0); transform: translate(-3px,0); }
+    20% { clip-path: inset(40% 0 50% 0); transform: translate(3px,0); }
+    40% { clip-path: inset(80% 0 5% 0); transform: translate(-2px,0); }
+    60% { clip-path: inset(20% 0 70% 0); transform: translate(4px,0); }
+    80% { clip-path: inset(60% 0 30% 0); transform: translate(-1px,0); }
+  }
+  @keyframes glitch2 {
+    0%,100% { clip-path: inset(95% 0 0 0); transform: translate(3px,0); }
+    20% { clip-path: inset(10% 0 80% 0); transform: translate(-3px,0); }
+    40% { clip-path: inset(50% 0 40% 0); transform: translate(2px,0); }
+    60% { clip-path: inset(70% 0 15% 0); transform: translate(-4px,0); }
+    80% { clip-path: inset(30% 0 60% 0); transform: translate(1px,0); }
+  }
+  @keyframes glitch-idle {
+    0%,89%,100% { opacity:0; }
+    90%,95% { opacity:1; }
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0px) rotate(-2deg); }
+    50% { transform: translateY(-18px) rotate(2deg); }
+  }
+  @keyframes cityPulse {
+    0%,100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  @keyframes neonFlicker {
+    0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:0.3; } 94% { opacity:1; } 97% { opacity:0.6; } 98% { opacity:1; }
+  }
+  @keyframes slideUp {
+    from { opacity:0; transform:translateY(40px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  @keyframes panelIn {
+    from { opacity:0; transform:translateY(30px) rotate(-1deg); }
+    to { opacity:1; transform:translateY(0) rotate(0deg); }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 16px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(7,7,26,0.95) 0%, transparent 100%);
+    border-bottom: 2px solid rgba(0,212,255,0.15);
+  }
+  .nav-logo {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-shadow: 3px 0 0 var(--cyan), -3px 0 0 var(--magenta);
+    animation: neonFlicker 5s infinite;
+    cursor: pointer;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 2px;
+    background: var(--cyan);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 80px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, #1a0a3a 0%, transparent 70%),
+      radial-gradient(ellipse 80% 60% at 30% 80%, #0a1a3a 0%, transparent 60%),
+      linear-gradient(180deg, #07071a 0%, #0d0820 40%, #160830 100%);
+  }
+  /* city buildings silhouette */
+  .hero-city {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 65%;
+    background:
+      linear-gradient(180deg, transparent 0%, rgba(20,10,50,0.6) 100%);
+    opacity: 0.8;
+  }
+  .hero-halftone {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,212,255,0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    animation: slideUp 0.8s ease both;
+  }
+  .hero-eyebrow {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+    font-weight: 700;
+    border-left: 4px solid var(--red);
+    padding-left: 12px;
+  }
+  .hero-name {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(72px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    color: var(--white);
+    position: relative;
+    text-wrap: nowrap;
+  }
+  .hero-name .glitch-layer-1 {
+    position: absolute; inset: 0;
+    color: var(--cyan);
+    animation: glitch1 3.5s infinite, glitch-idle 3.5s infinite;
+    font-family: 'Bangers', cursive;
+    font-size: clamp(72px, 10vw, 130px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+  }
+  .hero-name .glitch-layer-2 {
+    position: absolute; inset: 0;
+    color: var(--magenta);
+    animation: glitch2 3.5s infinite, glitch-idle 3.5s 0.5s infinite;
+    font-family: 'Bangers', cursive;
+    font-size: clamp(72px, 10vw, 130px);
+    letter-spacing: 4px;
+    line-height: 0.9;
+  }
+  .hero-tagline {
+    font-size: clamp(14px, 2vw, 18px);
+    line-height: 1.6;
+    margin-top: 24px;
+    color: rgba(240,238,255,0.8);
+    max-width: 520px;
+    border-top: 2px solid rgba(0,212,255,0.3);
+    padding-top: 16px;
+  }
+  .hero-ctas {
+    margin-top: 36px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    letter-spacing: 3px;
+    padding: 12px 32px;
+    background: var(--red);
+    color: #fff;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000, var(--glow-red);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 6px 6px 0 #000, var(--glow-red);
+  }
+  .btn-secondary {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    letter-spacing: 3px;
+    padding: 12px 32px;
+    background: transparent;
+    color: var(--cyan);
+    border: 3px solid var(--cyan);
+    box-shadow: 4px 4px 0 var(--cyan);
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+    display: inline-block;
+  }
+  .btn-secondary:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 6px 6px 0 var(--cyan);
+    background: rgba(0,212,255,0.1);
+  }
+
+  /* HERO FIGURE */
+  .hero-figure {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-55%);
+    width: min(500px, 45vw);
+    animation: float 6s ease-in-out infinite;
+    z-index: 1;
+    opacity: 0.92;
+    filter: drop-shadow(0 0 30px rgba(0,212,255,0.3)) drop-shadow(0 0 60px rgba(232,25,44,0.2));
+  }
+
+  /* SECTION COMMON */
+  section {
+    padding: 100px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .section-label {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+    animation: neonFlicker 7s infinite;
+  }
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(48px, 6vw, 80px);
+    letter-spacing: 3px;
+    line-height: 1;
+    color: var(--white);
+    text-shadow: 3px 0 0 var(--cyan), -3px 0 0 var(--magenta);
+    margin-bottom: 48px;
+  }
+
+  /* ABOUT */
+  .about-section { background: var(--bg2); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .comic-panel {
+    border: var(--panel-border-thick);
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .comic-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,212,255,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .comic-panel-header {
+    background: var(--red);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 3px;
+    padding: 8px 16px;
+    border-bottom: 3px solid #000;
+    text-transform: uppercase;
+  }
+  .comic-panel-body {
+    padding: 24px;
+    position: relative;
+  }
+  .about-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(240,238,255,0.85);
+  }
+  .about-text p + p { margin-top: 16px; }
+  .highlight { color: var(--cyan); font-weight: 700; }
+  .highlight-red { color: var(--red); font-weight: 700; }
+
+  /* STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: #000;
+    border: var(--panel-border-thick);
+    margin-top: 0;
+  }
+  .stat-item {
+    background: var(--bg);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,0,170,0.08) 1px, transparent 1px);
+    background-size: 12px 12px;
+  }
+  .stat-number {
+    font-family: 'Bangers', cursive;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--red);
+    text-shadow: 2px 0 0 var(--cyan);
+    display: block;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(240,238,255,0.6);
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* PROJECTS */
+  .projects-section { background: var(--bg); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    background: #000;
+    border: var(--panel-border-thick);
+  }
+  .project-card {
+    background: var(--bg2);
+    border-right: 3px solid #000;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .project-card:last-child { border-right: none; }
+  .project-card:hover { z-index: 2; transform: scale(1.02); }
+  .project-card-img {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 3px solid #000;
+  }
+  .project-tag {
+    position: absolute;
+    top: 12px; left: 12px;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border: 2px solid #000;
+    z-index: 2;
+    box-shadow: 2px 2px 0 #000;
+  }
+  .project-card-content { padding: 20px 20px 24px; }
+  .project-title {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--white);
+    text-shadow: 2px 0 0 var(--cyan), -2px 0 0 var(--magenta);
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+  .project-desc {
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(240,238,255,0.7);
+    margin-bottom: 16px;
+  }
+  .project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .stack-tag {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 3px 8px;
+    border: 1.5px solid var(--cyan);
+    color: var(--cyan);
+    text-transform: uppercase;
+    background: rgba(0,212,255,0.05);
+  }
+  .stack-tag-red {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(232,25,44,0.05);
+  }
+  .project-link {
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: #000;
+    background: var(--cyan);
+    border: 2px solid #000;
+    box-shadow: 3px 3px 0 #000;
+    padding: 6px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.1s;
+  }
+  .project-link:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #000; }
+
+  /* SKILLS */
+  .skills-section { background: var(--bg2); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0;
+    background: #000;
+    border: var(--panel-border-thick);
+  }
+  .skill-category {
+    background: var(--bg);
+    padding: 0;
+    border-right: 3px solid #000;
+    border-bottom: 3px solid #000;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-category::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,0,170,0.06) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  .skill-cat-header {
+    background: #000;
+    color: var(--white);
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 10px 16px;
+    border-bottom: 2px solid rgba(0,212,255,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .skill-cat-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+    box-shadow: var(--glow-red);
+  }
+  .skill-cat-dot.cyan { background: var(--cyan); box-shadow: var(--glow-cyan); }
+  .skill-cat-dot.mag { background: var(--magenta); }
+  .skill-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+    position: relative;
+  }
+  .skill-pill {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 5px 12px;
+    background: rgba(0,212,255,0.08);
+    border: 1.5px solid rgba(0,212,255,0.4);
+    color: var(--cyan);
+    text-transform: uppercase;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .skill-pill:hover {
+    background: rgba(0,212,255,0.2);
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0,212,255,0.3);
+    transform: translate(-1px,-1px);
+  }
+  .skill-pill.red {
+    background: rgba(232,25,44,0.08);
+    border-color: rgba(232,25,44,0.4);
+    color: var(--red);
+  }
+  .skill-pill.red:hover { background: rgba(232,25,44,0.2); border-color: var(--red); box-shadow: var(--glow-red); }
+  .skill-pill.mag {
+    background: rgba(255,0,170,0.08);
+    border-color: rgba(255,0,170,0.4);
+    color: var(--magenta);
+  }
+  .skill-pill.mag:hover { background: rgba(255,0,170,0.2); border-color: var(--magenta); }
+
+  /* CONTACT */
+  .contact-section { background: var(--bg); position: relative; }
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .contact-form-panel {
+    border: var(--panel-border-thick);
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-form-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,0,170,0.06) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+  .form-header {
+    background: var(--cyan);
+    color: #000;
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 3px;
+    padding: 10px 16px;
+    border-bottom: 3px solid #000;
+  }
+  .form-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; position: relative; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .form-input {
+    background: rgba(0,0,0,0.5);
+    border: 2px solid rgba(0,212,255,0.3);
+    color: var(--white);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,212,255,0.2); }
+  .form-input::placeholder { color: rgba(240,238,255,0.3); }
+  textarea.form-input { resize: vertical; min-height: 100px; }
+  .send-btn {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 4px;
+    padding: 14px;
+    background: var(--red);
+    color: #fff;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-top: 4px;
+  }
+  .send-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #000; }
+
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-info-title {
+    font-family: 'Bangers', cursive;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--white);
+    text-shadow: 3px 0 0 var(--cyan), -3px 0 0 var(--magenta);
+  }
+  .contact-info-sub {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(240,238,255,0.7);
+    border-left: 4px solid var(--magenta);
+    padding-left: 16px;
+  }
+  .social-links { display: flex; flex-direction: column; gap: 8px; }
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: rgba(240,238,255,0.7);
+    text-decoration: none;
+    padding: 10px 14px;
+    border: 2px solid rgba(0,212,255,0.2);
+    background: rgba(0,212,255,0.03);
+    transition: all 0.2s;
+  }
+  .social-link:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,212,255,0.08);
+    transform: translateX(4px);
+  }
+  .social-icon {
+    width: 20px; height: 20px;
+    border: 2px solid currentColor;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    font-family: 'Bangers';
+    letter-spacing: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #000;
+    border-top: 3px solid var(--red);
+    padding: 24px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-shadow: 2px 0 0 var(--cyan), -2px 0 0 var(--magenta);
+  }
+  .footer-copy {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: rgba(240,238,255,0.4);
+  }
+
+  /* DIVIDER */
+  .comic-divider {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 20px, #000 20px, #000 22px);
+  }
+
+  /* CORNER DECORATORS */
+  .corner-decor {
+    position: absolute;
+    width: 60px; height: 60px;
+    border: 3px solid var(--red);
+    opacity: 0.4;
+  }
+  .corner-tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+  .corner-br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+  /* NOISE TEXTURE ON HERO */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 32px;
+    left: 80px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 3;
+    animation: slideUp 1s 0.5s both;
+  }
+  .scroll-line {
+    width: 40px; height: 2px;
+    background: var(--cyan);
+    animation: neonFlicker 3s infinite;
+  }
+  .scroll-text {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  /* PROJECT MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    background: var(--bg2);
+    border: var(--panel-border-thick);
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+    box-shadow: 8px 8px 0 var(--red);
+  }
+  .modal-header {
+    background: var(--red);
+    padding: 12px 20px;
+    border-bottom: 3px solid #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+  .modal-close {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    background: #000;
+    border: 2px solid #000;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+  }
+  .modal-close:hover { background: var(--bg); }
+  .modal-body { padding: 28px; }
+
+  @media (max-width: 900px) {
+    section { padding: 60px 24px; }
+    .hero { padding: 0 24px; min-height: 100svh; }
+    .about-grid, .contact-wrap { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .hero-figure { display: none; }
+    nav { padding: 14px 24px; }
+    .nav-links { gap: 16px; }
+    footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    .scroll-indicator { left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "#e8192c",
+  "cyanColor": "#00d4ff",
+  "glitchIntensity": "full",
+  "showHalftone": true,
+  "darkMode": true
+}/*EDITMODE-END*/;
+
+const projects = [
+  {
+    id: 1,
+    title: "Lumiere Lounge",
+    tag: "Full Stack",
+    desc: "A fully-featured booking system for a premium restaurant & club. Handles reservations, table management, VIP flows, and real-time availability.",
+    stack: ["React", "Node.js", "PostgreSQL", "Stripe"],
+    color: "cyan",
+    icon: "🍸",
+    details: "End-to-end booking platform with customer-facing reservation flow, admin dashboard for table management, integrated payment processing, and automated confirmation emails. Built with a React frontend, Express backend, and PostgreSQL database."
+  },
+  {
+    id: 2,
+    title: "Student Conduct Tracker",
+    tag: "SaaS",
+    desc: "A systematic platform for schools to log, track, and manage student conduct records with role-based access and reporting.",
+    stack: ["Next.js", "Prisma", "MySQL", "Auth.js"],
+    color: "red",
+    icon: "📋",
+    details: "Full-featured conduct management system for educational institutions. Supports admin, teacher, and student roles. Includes incident logging, escalation workflows, parent notifications, and analytics dashboards for trend analysis."
+  },
+  {
+    id: 3,
+    title: "Platformer Game",
+    tag: "Game Dev",
+    desc: "A Java-based 2D platformer with custom physics, enemy AI, sprite animation, and procedurally generated levels.",
+    stack: ["Java", "Swing", "OOP", "Game Physics"],
+    color: "mag",
+    icon: "🎮",
+    details: "Classic 2D platformer built in Java using Swing for rendering. Features custom physics engine with gravity and collision detection, animated sprite system, enemy AI with patrol and chase behaviors, and a level editor."
+  }
+];
+
+const skills = [
+  { cat: "Frontend", dot: "cyan", pills: [
+    {l:"React", c:"cyan"}, {l:"Next.js", c:"cyan"}, {l:"TypeScript", c:"cyan"},
+    {l:"Tailwind", c:"cyan"}, {l:"HTML/CSS", c:"cyan"}, {l:"Framer Motion", c:"cyan"}
+  ]},
+  { cat: "Backend", dot: "red", pills: [
+    {l:"Node.js", c:"red"}, {l:"Express", c:"red"}, {l:"Python", c:"red"},
+    {l:"REST APIs", c:"red"}, {l:"GraphQL", c:"red"}, {l:"Java", c:"red"}
+  ]},
+  { cat: "AI / ML", dot: "mag", pills: [
+    {l:"LangChain", c:"mag"}, {l:"OpenAI API", c:"mag"}, {l:"Hugging Face", c:"mag"},
+    {l:"RAG Pipelines", c:"mag"}, {l:"Prompt Eng.", c:"mag"}, {l:"Fine-tuning", c:"mag"}
+  ]},
+  { cat: "Databases", dot: "cyan", pills: [
+    {l:"PostgreSQL", c:"cyan"}, {l:"MySQL", c:"cyan"}, {l:"MongoDB", c:"cyan"},
+    {l:"Prisma", c:"cyan"}, {l:"Redis", c:"cyan"}
+  ]},
+  { cat: "DevOps / Tools", dot: "red", pills: [
+    {l:"Git", c:"red"}, {l:"Docker", c:"red"}, {l:"Vercel", c:"red"},
+    {l:"CI/CD", c:"red"}, {l:"Linux", c:"red"}, {l:"AWS", c:"red"}
+  ]},
+  { cat: "Languages", dot: "mag", pills: [
+    {l:"JavaScript", c:"mag"}, {l:"TypeScript", c:"mag"}, {l:"Python", c:"mag"},
+    {l:"Java", c:"mag"}, {l:"SQL", c:"mag"}
+  ]}
+];
+
+// Comic-style halftone city SVG buildings
+function CityBg() {
+  return (
+    <svg style={{position:'absolute',bottom:0,left:0,right:0,width:'100%',height:'65%',opacity:0.35}} viewBox="0 0 1200 500" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      {/* Far buildings */}
+      <rect x="0" y="280" width="60" height="220" fill="#1a1040"/>
+      <rect x="70" y="240" width="40" height="260" fill="#15093a"/>
+      <rect x="120" y="260" width="55" height="240" fill="#1a1040"/>
+      <rect x="185" y="200" width="70" height="300" fill="#0d0626"/>
+      <rect x="265" y="230" width="45" height="270" fill="#15093a"/>
+      <rect x="320" y="180" width="80" height="320" fill="#1a1040"/>
+      <rect x="410" y="220" width="50" height="280" fill="#0d0626"/>
+      <rect x="470" y="250" width="60" height="250" fill="#15093a"/>
+      <rect x="540" y="190" width="90" height="310" fill="#1a1040"/>
+      <rect x="640" y="240" width="45" height="260" fill="#0d0626"/>
+      <rect x="695" y="210" width="75" height="290" fill="#15093a"/>
+      <rect x="780" y="260" width="55" height="240" fill="#1a1040"/>
+      <rect x="845" y="200" width="65" height="300" fill="#0d0626"/>
+      <rect x="920" y="230" width="50" height="270" fill="#15093a"/>
+      <rect x="980" y="180" width="85" height="320" fill="#1a1040"/>
+      <rect x="1075" y="220" width="60" height="280" fill="#0d0626"/>
+      <rect x="1145" y="250" width="55" height="250" fill="#15093a"/>
+      {/* Windows - neon dots */}
+      {[...Array(40)].map((_,i) => (
+        <rect key={i} x={20+i*28} y={200+(i%5)*30} width="4" height="6"
+          fill={i%3===0?"#00d4ff":i%3===1?"#ff00aa":"#e8192c"}
+          opacity={0.4+(i%3)*0.2}/>
+      ))}
+    </svg>
+  );
+}
+
+function GlitchText({text, className, style}) {
+  return (
+    <div className={className} style={{position:'relative',...style}}>
+      <span>{text}</span>
+      <span className="glitch-layer-1">{text}</span>
+      <span className="glitch-layer-2">{text}</span>
+    </div>
+  );
+}
+
+function FigureSVG() {
+  // Stylized falling figure - comic outline style
+  return (
+    <svg viewBox="0 0 300 420" fill="none" xmlns="http://www.w3.org/2000/svg" style={{width:'100%',height:'auto'}}>
+      {/* Chromatic aberration layers */}
+      <g style={{filter:'drop-shadow(3px 0 0 #00d4ff) drop-shadow(-3px 0 0 #ff00aa)'}}>
+        {/* Body */}
+        <ellipse cx="150" cy="200" rx="38" ry="55" fill="#2a2a3a" stroke="#000" strokeWidth="4"/>
+        {/* Head */}
+        <circle cx="150" cy="130" r="38" fill="#c8956a" stroke="#000" strokeWidth="4"/>
+        {/* Sunglasses */}
+        <rect x="126" y="125" width="22" height="14" rx="4" fill="#000" stroke="#000" strokeWidth="2"/>
+        <rect x="152" y="125" width="22" height="14" rx="4" fill="#000" stroke="#000" strokeWidth="2"/>
+        <line x1="148" y1="132" x2="152" y2="132" stroke="#222" strokeWidth="2"/>
+        {/* Hair */}
+        <path d="M116 118 Q120 90 150 88 Q180 90 184 118" fill="#1a1a1a" stroke="#000" strokeWidth="3"/>
+        {/* Left arm */}
+        <path d="M112 195 Q80 230 60 260" stroke="#2a2a3a" strokeWidth="18" strokeLinecap="round" fill="none"/>
+        <path d="M112 195 Q80 230 60 260" stroke="#000" strokeWidth="22" strokeLinecap="round" fill="none" style={{zIndex:-1}}/>
+        <path d="M112 195 Q80 230 60 260" stroke="#2a2a3a" strokeWidth="18" strokeLinecap="round" fill="none"/>
+        {/* Left hand - red glove */}
+        <circle cx="58" cy="264" r="14" fill="#e8192c" stroke="#000" strokeWidth="3"/>
+        {/* Right arm */}
+        <path d="M188 195 Q215 225 235 250" stroke="#2a2a3a" strokeWidth="18" strokeLinecap="round" fill="none"/>
+        <path d="M188 195 Q215 225 235 250" stroke="#000" strokeWidth="22" strokeLinecap="round" fill="none"/>
+        <path d="M188 195 Q215 225 235 250" stroke="#2a2a3a" strokeWidth="18" strokeLinecap="round" fill="none"/>
+        {/* Right hand - red glove */}
+        <circle cx="237" cy="254" r="14" fill="#e8192c" stroke="#000" strokeWidth="3"/>
+        {/* Legs */}
+        <path d="M135 250 Q120 310 100 360" stroke="#1a1a2e" strokeWidth="22" strokeLinecap="round" fill="none"/>
+        <path d="M135 250 Q120 310 100 360" stroke="#000" strokeWidth="26" strokeLinecap="round" fill="none"/>
+        <path d="M135 250 Q120 310 100 360" stroke="#1a1a2e" strokeWidth="22" strokeLinecap="round" fill="none"/>
+        <path d="M165 250 Q178 310 195 355" stroke="#1a1a2e" strokeWidth="22" strokeLinecap="round" fill="none"/>
+        <path d="M165 250 Q178 310 195 355" stroke="#000" strokeWidth="26" strokeLinecap="round" fill="none"/>
+        <path d="M165 250 Q178 310 195 355" stroke="#1a1a2e" strokeWidth="22" strokeLinecap="round" fill="none"/>
+        {/* Left shoe */}
+        <ellipse cx="96" cy="368" rx="22" ry="14" fill="#e8192c" stroke="#000" strokeWidth="4" transform="rotate(-20 96 368)"/>
+        <ellipse cx="96" cy="363" rx="22" ry="8" fill="#fff" stroke="#000" strokeWidth="2" transform="rotate(-20 96 363)"/>
+        {/* Right shoe */}
+        <ellipse cx="198" cy="362" rx="22" ry="14" fill="#e8192c" stroke="#000" strokeWidth="4" transform="rotate(15 198 362)"/>
+        <ellipse cx="198" cy="357" rx="22" ry="8" fill="#fff" stroke="#000" strokeWidth="2" transform="rotate(15 198 357)"/>
+        {/* Chain necklace */}
+        <path d="M128 165 Q150 180 172 165" stroke="#d4af37" strokeWidth="3" fill="none" strokeDasharray="4 2"/>
+      </g>
+      {/* Speed lines */}
+      <line x1="240" y1="60" x2="280" y2="10" stroke="#00d4ff" strokeWidth="1.5" opacity="0.4"/>
+      <line x1="260" y1="80" x2="295" y2="40" stroke="#00d4ff" strokeWidth="1" opacity="0.3"/>
+      <line x1="50" y1="50" x2="10" y2="5" stroke="#ff00aa" strokeWidth="1.5" opacity="0.4"/>
+      <line x1="30" y1="80" x2="0" y2="45" stroke="#ff00aa" strokeWidth="1" opacity="0.3"/>
+    </svg>
+  );
+}
+
+function ProjectPlaceholder({color, icon, title}) {
+  const colors = {
+    cyan: {bg:'rgba(0,212,255,0.06)', border:'rgba(0,212,255,0.2)', dot:'#00d4ff'},
+    red: {bg:'rgba(232,25,44,0.06)', border:'rgba(232,25,44,0.2)', dot:'#e8192c'},
+    mag: {bg:'rgba(255,0,170,0.06)', border:'rgba(255,0,170,0.2)', dot:'#ff00aa'},
+  };
+  const c = colors[color];
+  return (
+    <div style={{
+      height:'100%', width:'100%', display:'flex', alignItems:'center', justifyContent:'center',
+      background: `radial-gradient(circle at 30% 40%, ${c.bg} 0%, rgba(7,7,26,0.8) 70%)`,
+      position:'relative', overflow:'hidden'
+    }}>
+      {/* halftone */}
+      <div style={{
+        position:'absolute', inset:0,
+        backgroundImage: `radial-gradient(circle, ${c.dot}22 1px, transparent 1px)`,
+        backgroundSize:'16px 16px'
+      }}/>
+      {/* border outline */}
+      <div style={{position:'absolute', inset:8, border:`2px solid ${c.border}`}}/>
+      {/* big icon */}
+      <div style={{fontSize:'56px', position:'relative', zIndex:1, filter:`drop-shadow(0 0 20px ${c.dot})`}}>{icon}</div>
+      {/* corner dots */}
+      <div style={{position:'absolute',top:12,right:12,width:8,height:8,background:c.dot,borderRadius:'50%', boxShadow:`0 0 8px ${c.dot}`}}/>
+      <div style={{position:'absolute',bottom:12,left:12,width:8,height:8,background:c.dot,borderRadius:'50%', boxShadow:`0 0 8px ${c.dot}`}}/>
+    </div>
+  );
+}
+
+function Modal({project, onClose}) {
+  useEffect(() => {
+    const handler = e => { if(e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+  return (
+    <div className="modal-overlay" onClick={e => { if(e.target === e.currentTarget) onClose(); }}>
+      <div className="modal-box">
+        <div className="modal-header">
+          <span className="modal-title">{project.title}</span>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <p style={{fontSize:'13px',lineHeight:'1.8',color:'rgba(240,238,255,0.8)',marginBottom:'20px'}}>{project.details}</p>
+          <div className="project-stack" style={{marginBottom:'20px'}}>
+            {project.stack.map(s => (
+              <span key={s} className={`stack-tag ${project.color === 'red' ? 'stack-tag-red' : ''}`}>{s}</span>
+            ))}
+          </div>
+          <div style={{display:'flex',gap:'12px'}}>
+            <a href="#" className="btn-primary" style={{fontSize:'16px',padding:'10px 24px'}}>VIEW CODE</a>
+            <a href="#" className="btn-secondary" style={{fontSize:'16px',padding:'10px 24px'}}>LIVE DEMO</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Nav({active}) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+  return (
+    <nav style={{background: scrolled ? 'rgba(7,7,26,0.97)' : undefined}}>
+      <div className="nav-logo">PD</div>
+      <ul className="nav-links">
+        {['About','Projects','Skills','Contact'].map(s => (
+          <li key={s}><a href={`#${s.toLowerCase()}`}>{s}</a></li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function HeroSection() {
+  return (
+    <section id="hero" className="hero">
+      <div className="hero-bg"/>
+      <div className="hero-halftone"/>
+      <CityBg/>
+      <div className="hero-content" style={{zIndex:3}}>
+        <div className="hero-eyebrow">// Full Stack Dev & AI Engineer</div>
+        <div className="hero-name" style={{position:'relative'}}>
+          <span>PIERCE</span>
+          <span className="glitch-layer-1" aria-hidden="true">PIERCE</span>
+          <span className="glitch-layer-2" aria-hidden="true">PIERCE</span>
+          <br/>
+          <span>DOMAN</span>
+          <span className="glitch-layer-1" aria-hidden="true">DOMAN</span>
+          <span className="glitch-layer-2" aria-hidden="true">DOMAN</span>
+        </div>
+        <p className="hero-tagline">
+          I'm a full stack developer with a keen interest in AI Engineering. I build products that ship — from smart booking systems to intelligent pipelines.
+        </p>
+        <div className="hero-ctas">
+          <a href="#projects" className="btn-primary">SEE MY WORK</a>
+          <a href="#contact" className="btn-secondary">GET IN TOUCH</a>
+        </div>
+      </div>
+      <div className="hero-figure">
+        <FigureSVG/>
+      </div>
+      <div className="scroll-indicator">
+        <div className="scroll-line"/>
+        <span className="scroll-text">Scroll Down</span>
+      </div>
+    </section>
+  );
+}
+
+function AboutSection() {
+  return (
+    <section id="about" className="about-section halftone-mag">
+      <div className="corner-decor corner-tl"/>
+      <div className="corner-decor corner-br" style={{borderColor:'var(--cyan)'}}/>
+      <div className="section-label">// Chapter 01</div>
+      <div className="section-title">ABOUT ME</div>
+      <div className="about-grid">
+        <div className="comic-panel" style={{animationDelay:'0.1s'}}>
+          <div className="comic-panel-header">ORIGIN STORY</div>
+          <div className="comic-panel-body">
+            <div className="about-text">
+              <p>
+                Hey, I'm <span className="highlight">Pierce Doman</span> — a full stack developer with a deep interest in <span className="highlight-red">AI Engineering</span>. I build end-to-end digital products that are fast, functional, and intelligent.
+              </p>
+              <p>
+                From crafting slick React UIs to designing robust backend architectures, I love the full picture. Lately I've been deep in <span className="highlight">LLMs, RAG pipelines, and AI-powered features</span> that actually make people's lives easier.
+              </p>
+              <p>
+                When I'm not coding, I'm exploring how AI will reshape every industry — and making sure I'm the person building the tools that do it.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div style={{display:'flex', flexDirection:'column', gap:'0'}}>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <span className="stat-number">3+</span>
+              <span className="stat-label">Projects Shipped</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number" style={{color:'var(--cyan)'}}>10+</span>
+              <span className="stat-label">Technologies</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number" style={{color:'var(--magenta)'}}>AI</span>
+              <span className="stat-label">Focus Area</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number" style={{color:'var(--cyan)', fontSize:'36px'}}>FS</span>
+              <span className="stat-label">Full Stack</span>
+            </div>
+          </div>
+          <div className="comic-panel" style={{marginTop:0, borderTop:'none'}}>
+            <div className="comic-panel-header" style={{background:'var(--cyan)', color:'#000'}}>CURRENTLY</div>
+            <div className="comic-panel-body" style={{padding:'16px 24px'}}>
+              <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
+                {[
+                  {dot:'var(--cyan)', text:'Building AI-powered web apps'},
+                  {dot:'var(--red)', text:'Exploring LangChain & RAG pipelines'},
+                  {dot:'var(--magenta)', text:'Open to new opportunities'},
+                ].map((item, i) => (
+                  <div key={i} style={{display:'flex', alignItems:'center', gap:'12px', fontSize:'13px', color:'rgba(240,238,255,0.8)'}}>
+                    <div style={{width:8, height:8, borderRadius:'50%', background:item.dot, flexShrink:0, boxShadow:`0 0 8px ${item.dot}`}}/>
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProjectsSection() {
+  const [modal, setModal] = useState(null);
+  return (
+    <section id="projects" className="projects-section">
+      <div className="section-label">// Chapter 02</div>
+      <div className="section-title">MY WORK</div>
+      <div className="projects-grid">
+        {projects.map(p => (
+          <div key={p.id} className="project-card" onClick={() => setModal(p)}>
+            <div className="project-card-img">
+              <div className="project-tag">{p.tag}</div>
+              <ProjectPlaceholder color={p.color} icon={p.icon} title={p.title}/>
+            </div>
+            <div className="project-card-content">
+              <div className="project-title">{p.title}</div>
+              <div className="project-desc">{p.desc}</div>
+              <div className="project-stack">
+                {p.stack.map(s => (
+                  <span key={s} className={`stack-tag ${p.color === 'red' ? 'stack-tag-red' : ''}`}>{s}</span>
+                ))}
+              </div>
+              <button className="project-link" onClick={e => { e.stopPropagation(); setModal(p); }}>
+                VIEW PROJECT →
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {modal && <Modal project={modal} onClose={() => setModal(null)}/>}
+    </section>
+  );
+}
+
+function SkillsSection() {
+  return (
+    <section id="skills" className="skills-section">
+      <div className="section-label">// Chapter 03</div>
+      <div className="section-title">TECH STACK</div>
+      <div className="skills-grid">
+        {skills.map(cat => (
+          <div key={cat.cat} className="skill-category">
+            <div className="skill-cat-header">
+              <div className={`skill-cat-dot ${cat.dot}`}/>
+              {cat.cat}
+            </div>
+            <div className="skill-pills">
+              {cat.pills.map(p => (
+                <span key={p.l} className={`skill-pill ${p.c}`}>{p.l}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ContactSection() {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({name:'', email:'', message:''});
+  const handleSubmit = e => {
+    e.preventDefault();
+    setSent(true);
+  };
+  return (
+    <section id="contact" className="contact-section halftone">
+      <div className="corner-decor corner-tl" style={{borderColor:'var(--magenta)'}}/>
+      <div className="section-label">// Chapter 04</div>
+      <div className="section-title">LET'S TALK</div>
+      <div className="contact-wrap">
+        <div className="contact-form-panel">
+          <div className="form-header">SEND A MESSAGE</div>
+          {sent ? (
+            <div className="form-body" style={{alignItems:'center', padding:'48px', textAlign:'center'}}>
+              <div style={{fontFamily:'Bangers', fontSize:'48px', color:'var(--cyan)', textShadow:'3px 0 0 var(--magenta)'}}>TRANSMITTED!</div>
+              <p style={{fontSize:'13px', color:'rgba(240,238,255,0.7)', marginTop:'12px'}}>Message received. I'll get back to you soon.</p>
+              <button className="btn-secondary" style={{marginTop:'20px', fontFamily:'Bangers', fontSize:'18px'}} onClick={() => setSent(false)}>SEND ANOTHER</button>
+            </div>
+          ) : (
+            <form className="form-body" onSubmit={handleSubmit}>
+              <div className="form-field">
+                <label className="form-label">Your Name</label>
+                <input className="form-input" type="text" placeholder="John Doe" required
+                  value={form.name} onChange={e => setForm({...form, name:e.target.value})}/>
+              </div>
+              <div className="form-field">
+                <label className="form-label">Email Address</label>
+                <input className="form-input" type="email" placeholder="you@example.com" required
+                  value={form.email} onChange={e => setForm({...form, email:e.target.value})}/>
+              </div>
+              <div className="form-field">
+                <label className="form-label">Message</label>
+                <textarea className="form-input" placeholder="Tell me about your project..." required
+                  value={form.message} onChange={e => setForm({...form, message:e.target.value})}/>
+              </div>
+              <button type="submit" className="send-btn">TRANSMIT MESSAGE →</button>
+            </form>
+          )}
+        </div>
+        <div className="contact-info">
+          <div className="contact-info-title">READY TO<br/>BUILD<br/>SOMETHING?</div>
+          <p className="contact-info-sub">
+            Whether you've got a project in mind, a role to fill, or just want to connect — I'm all ears. Let's make something great.
+          </p>
+          <div className="social-links">
+            {[
+              {icon:'GH', label:'GitHub', href:'#', sub:'@piercedoman'},
+              {icon:'LI', label:'LinkedIn', href:'#', sub:'Pierce Doman'},
+              {icon:'EM', label:'Email', href:'mailto:pierce@example.com', sub:'pierce@example.com'},
+            ].map(s => (
+              <a key={s.label} href={s.href} className="social-link">
+                <div className="social-icon">{s.icon}</div>
+                <div>
+                  <div style={{fontSize:'13px', fontWeight:'700', letterSpacing:'1px'}}>{s.label}</div>
+                  <div style={{fontSize:'11px', opacity:0.6}}>{s.sub}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TweaksPanel({tweaks, setTweaks, visible}) {
+  if (!visible) return null;
+  return (
+    <div style={{
+      position:'fixed', bottom:24, right:24, zIndex:5000,
+      background:'#0d0d2b', border:'3px solid #000',
+      boxShadow:'6px 6px 0 #e8192c',
+      width:240, overflow:'hidden'
+    }}>
+      <div style={{background:'var(--red)', padding:'8px 14px', fontFamily:'Bangers', fontSize:'18px', letterSpacing:'3px', borderBottom:'3px solid #000', color:'#fff'}}>TWEAKS</div>
+      <div style={{padding:'16px', display:'flex', flexDirection:'column', gap:'14px'}}>
+        <div>
+          <div style={{fontSize:'10px', letterSpacing:'2px', color:'var(--cyan)', marginBottom:'6px', textTransform:'uppercase'}}>Glitch Effect</div>
+          <div style={{display:'flex', gap:'6px'}}>
+            {['full','medium','off'].map(v => (
+              <button key={v} onClick={() => setTweaks({...tweaks, glitchIntensity:v})}
+                style={{
+                  flex:1, fontFamily:'Bangers', fontSize:'13px', letterSpacing:'1px',
+                  padding:'5px', cursor:'pointer', border:'2px solid',
+                  borderColor: tweaks.glitchIntensity===v ? 'var(--red)' : 'rgba(255,255,255,0.2)',
+                  background: tweaks.glitchIntensity===v ? 'rgba(232,25,44,0.2)' : 'transparent',
+                  color:'var(--white)'
+                }}>{v}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div style={{fontSize:'10px', letterSpacing:'2px', color:'var(--cyan)', marginBottom:'6px', textTransform:'uppercase'}}>Halftone</div>
+          <button onClick={() => setTweaks({...tweaks, showHalftone:!tweaks.showHalftone})}
+            style={{
+              width:'100%', fontFamily:'Bangers', fontSize:'14px', letterSpacing:'2px',
+              padding:'6px', cursor:'pointer', border:'2px solid',
+              borderColor: tweaks.showHalftone ? 'var(--cyan)' : 'rgba(255,255,255,0.2)',
+              background: tweaks.showHalftone ? 'rgba(0,212,255,0.1)' : 'transparent',
+              color:'var(--white)'
+            }}>{tweaks.showHalftone ? '● ON' : '○ OFF'}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [tweaksVisible, setTweaksVisible] = useState(false);
+
+  useEffect(() => {
+    // Apply tweaks
+    const root = document.documentElement;
+    if (tweaks.glitchIntensity === 'off') {
+      document.querySelectorAll('.glitch-layer-1, .glitch-layer-2').forEach(el => el.style.display = 'none');
+    } else {
+      document.querySelectorAll('.glitch-layer-1, .glitch-layer-2').forEach(el => el.style.display = '');
+    }
+    if (!tweaks.showHalftone) {
+      document.querySelectorAll('.halftone, .halftone-red, .halftone-mag').forEach(el => el.style.backgroundImage = 'none');
+    } else {
+      document.querySelectorAll('.halftone').forEach(el => el.style.backgroundImage = '');
+      document.querySelectorAll('.halftone-red').forEach(el => el.style.backgroundImage = '');
+      document.querySelectorAll('.halftone-mag').forEach(el => el.style.backgroundImage = '');
+    }
+  }, [tweaks]);
+
+  useEffect(() => {
+    window.addEventListener('message', e => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksVisible(false);
+    });
+    window.parent.postMessage({type:'__edit_mode_available'}, '*');
+  }, []);
+
+  const handleTweaks = (t) => {
+    setTweaks(t);
+    window.parent.postMessage({type:'__edit_mode_set_keys', edits: t}, '*');
+  };
+
+  return (
+    <>
+      <Nav/>
+      <HeroSection/>
+      <div className="comic-divider"/>
+      <AboutSection/>
+      <div className="comic-divider" style={{background:'repeating-linear-gradient(90deg, var(--cyan) 0px, var(--cyan) 20px, #000 20px, #000 22px)'}}/>
+      <ProjectsSection/>
+      <div className="comic-divider" style={{background:'repeating-linear-gradient(90deg, var(--magenta) 0px, var(--magenta) 20px, #000 20px, #000 22px)'}}/>
+      <SkillsSection/>
+      <div className="comic-divider"/>
+      <ContactSection/>
+      <footer>
+        <div className="footer-logo">PIERCE DOMAN</div>
+        <div className="footer-copy">© 2026 — BUILT WITH FULL STACK ENERGY & AI VIBES</div>
+      </footer>
+      <TweaksPanel tweaks={tweaks} setTweaks={handleTweaks} visible={tweaksVisible}/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="80" fill="#07071a"/>
+    <text x="16" y="50" font-family="monospace" font-size="32" font-weight="bold" fill="#f0eeff" letter-spacing="2"
+      style="text-shadow:3px 0 0 #00d4ff">PD</text>
+    <rect x="0" y="60" width="120" height="4" fill="#e8192c"/>
+    <circle cx="100" cy="20" r="6" fill="#00d4ff" opacity="0.6"/>
+    <circle cx="110" cy="35" r="4" fill="#ff00aa" opacity="0.6"/>
+  </svg>
+</template>
+</body>
+</html>
