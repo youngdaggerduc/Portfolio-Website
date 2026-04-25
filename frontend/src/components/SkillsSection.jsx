@@ -9,7 +9,7 @@ export default function SkillsSection() {
       aria-labelledby="skills-title"
     >
       <img
-        src="/spoodswing.gif"
+        src="/spoodhand.gif"
         alt=""
         aria-hidden="true"
         decoding="async"

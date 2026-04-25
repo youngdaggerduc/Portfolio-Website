@@ -2,9 +2,10 @@ import { useState } from 'react'
 import LetterReveal from './LetterReveal'
 
 const SOCIALS = [
-  { icon: 'GH', label: 'GitHub', href: '#', sub: '@piercedoman' },
-  { icon: 'LI', label: 'LinkedIn', href: '#', sub: 'Pierce Doman' },
-  { icon: 'EM', label: 'Email', href: 'mailto:pierce@example.com', sub: 'pierce@example.com' },
+  { icon: 'GH', label: 'GitHub', href: 'https://github.com/piercedoman', sub: 'github.com/piercedoman' },
+  { icon: 'LI', label: 'LinkedIn', href: 'https://linkedin.com/in/piercedoman', sub: 'linkedin.com/in/piercedoman' },
+  { icon: 'EM', label: 'Email', href: 'mailto:piercedoman25@gmail.com', sub: 'piercedoman25@gmail.com' },
+  { icon: 'PH', label: 'Phone', href: 'tel:+18682665568', sub: '+1 (868) 266-5568' },
 ]
 
 export default function ContactSection() {
@@ -136,7 +137,7 @@ export default function ContactSection() {
             style={{ '--reveal-delay': '220ms' }}
           >
             Whether you've got a project in mind, a role to fill, or just want to connect —
-            I'm all ears. Let's make something great.
+            I'm all ears. Based in Trinidad &amp; Tobago, available globally.
           </p>
           <div className="social-links">
             {SOCIALS.map((s, i) => (

@@ -38,6 +38,8 @@ Two independent apps, connected only over HTTP.
 
 - **`frontend/`** — Vite + React SPA. `vite.config.js` proxies `/api/*` → `http://localhost:8001`, so frontend code calls `fetch('/api/...')` with no host. For prod, serve the API under `/api` or set up an equivalent reverse proxy. Entry: `src/main.jsx` → `src/App.jsx`.
 
+**Frontend routing.** No router library. `App.jsx` defines an inline `useHashRoute` hook and a 2-route switch: `#/chatbot` renders `ChatbotPage` (a fullscreen `position: fixed` overlay scoped under `.chatbot-shell`, with its own scoped CSS in `components/ChatbotPage.css`); anything else renders `Portfolio` (the full animated site). Internal "Ask AI" links (`Nav`, `SpiderCommStrip`) use `href="#/chatbot"`; the in-chatbot back button uses `href="#/"`. To add another route, extend the switch in `App()` — don't reach for react-router.
+
 **Adding a backend endpoint**: new module under `app/routers/`, define an `APIRouter`, register in `app/main.py` via `app.include_router(...)`. The `/api` prefix is set per-router (see `homepage.py`), not globally.
 
 **Switching DB**: change `DATABASE_URL` in `backend/.env` (e.g., `postgres://...`) and add the driver (`asyncpg`) to `requirements.txt`. Tortoise picks the dialect from the URL.
@@ -72,6 +74,19 @@ The portfolio is heavily animated (Spider-Man / comic-book theme). Several load-
 - **Each scroll-driven component runs its own rAF loop** (`SwingingSpood`, `WebBackground`, `WebCursor`, `Nav`). These are not consolidated. If adding another scroll-tied animation, either hook into an existing loop or accept another listener — just make sure each uses `requestAnimationFrame` for coalescing, not raw `scroll` handlers.
 
 - **`content-visibility: auto` is set on all `main > section` except `.hero`** with `contain-intrinsic-size: 1px 900px`. This skips paint/layout for offscreen sections. If a section has dynamic height that differs wildly from 900px, adjust that intrinsic size or you'll get scroll-jank.
+
+## Mobile / responsive
+
+- **Three breakpoint layers, all at the bottom of `App.css`**, applied in cascade order:
+  - `@media (max-width: 900px)` — collapses multi-column grids to single column, hides `.swing-zone` / web cursor, switches `Nav` from inline links to a hamburger drawer.
+  - `@media (max-width: 600px)` — phone-sized typography (hero name, section titles), tighter padding.
+  - `@media (max-width: 420px)` — smallest-phone tightening; hero stats go to 1-col.
+
+  Add new mobile overrides inside the matching block — don't add a fourth one unless the breakpoint is genuinely new.
+
+- **Hero name `clamp()` is shadowed in three places** — `.hero-name`, `.hero-name .glitch-layer-1`, `.hero-name .glitch-layer-2`. The glitch layers must match the base size exactly or the RGB-split desyncs. The mobile breakpoints override all three together; do the same for any new hero typography change.
+
+- **`Nav.jsx` mobile drawer locks body scroll** by writing `document.body.style.overflow = 'hidden'` while open. The cleanup restores `''` (not the previous value), so if another component also writes to `body.style.overflow`, they will trample each other. The chatbot uses `body.chatbot-active { overflow: hidden }` (a class, not inline style) specifically to avoid this.
 
 ## SEO / index.html
 

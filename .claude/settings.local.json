@@ -13,7 +13,9 @@
       "Bash(curl -s http://localhost:5173/spoodhand.gif -o /dev/null -w \"hand: %{http_code}\\\\n\")",
       "Bash(curl -s http://localhost:5173/spoodswing.gif -o /dev/null -w \"swing: %{http_code}\\\\n\")",
       "Bash(curl -s http://localhost:5173/piercespood.mp4 -o /dev/null -w \"video: %{http_code}\\\\n\")",
-      "Bash(taskkill //F //IM node.exe)"
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(kill %1)",
+      "Bash(pkill -f \"vite\")"
     ]
   }
 }

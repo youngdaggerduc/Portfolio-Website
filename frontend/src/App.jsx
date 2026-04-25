@@ -1,17 +1,36 @@
+import { useEffect, useState } from 'react'
 import './App.css'
 import Nav from './components/Nav'
 import HeroSection from './components/HeroSection'
 import AboutSection from './components/AboutSection'
+import ExperienceSection from './components/ExperienceSection'
+import EducationSection from './components/EducationSection'
 import ProjectsSection from './components/ProjectsSection'
+import CertsSection from './components/CertsSection'
 import SkillsSection from './components/SkillsSection'
 import ContactSection from './components/ContactSection'
+import BehindTheMaskSection from './components/BehindTheMaskSection'
+import SpiderCommStrip from './components/SpiderCommStrip'
 import WebCursor from './components/WebCursor'
 import WebBackground from './components/WebBackground'
 import Preloader from './components/Preloader'
+import ChatbotPage from './components/ChatbotPage'
 import { useRevealObserver } from './hooks/useRevealObserver'
 import { useSectionClipReveal } from './hooks/useSectionClipReveal'
 
-function App() {
+function useHashRoute() {
+  const [hash, setHash] = useState(() =>
+    typeof window !== 'undefined' ? window.location.hash : ''
+  )
+  useEffect(() => {
+    const onHash = () => setHash(window.location.hash)
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  return hash
+}
+
+function Portfolio() {
   useRevealObserver()
   useSectionClipReveal()
 
@@ -23,14 +42,24 @@ function App() {
       <Nav />
       <main>
         <HeroSection />
+        <SpiderCommStrip />
         <div className="comic-divider" />
         <AboutSection />
         <div className="comic-divider cyan" />
+        <ExperienceSection />
+        <div className="comic-divider" />
+        <EducationSection />
+        <div className="comic-divider mag" />
         <ProjectsSection />
+        <div className="comic-divider cyan" />
+        <CertsSection />
         <div className="comic-divider mag" />
         <SkillsSection />
         <div className="comic-divider" />
+        <SpiderCommStrip />
         <ContactSection />
+        <div className="comic-divider cyan" />
+        <BehindTheMaskSection />
       </main>
       <footer>
         <div className="footer-logo">PIERCE DOMAN</div>
@@ -38,6 +67,12 @@ function App() {
       </footer>
     </>
   )
+}
+
+function App() {
+  const hash = useHashRoute()
+  if (hash === '#/chatbot') return <ChatbotPage />
+  return <Portfolio />
 }
 
 export default App

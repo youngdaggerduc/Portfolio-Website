@@ -2,37 +2,70 @@ export const projects = [
   {
     id: 1,
     title: 'Lumiere Lounge',
-    tag: 'Full Stack',
-    desc: 'A fully-featured booking system for a premium restaurant & club. Handles reservations, table management, VIP flows, and real-time availability.',
+    tag: 'Freelance',
+    desc: 'Commercial freelance build — a full booking & web presence for a premium restaurant and club.',
     stack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
     color: 'cyan',
     icon: '🍸',
     details:
-      'End-to-end booking platform with customer-facing reservation flow, admin dashboard for table management, integrated payment processing, and automated confirmation emails. Built with a React frontend, Express backend, and PostgreSQL database.',
+      'Delivered end-to-end as a freelance project. Customer-facing reservation flow, table management dashboard, integrated payments, and automated confirmation emails. Production-deployed for a real client.',
   },
   {
     id: 2,
     title: 'Student Conduct Tracker',
-    tag: 'SaaS',
-    desc: 'A systematic platform for schools to log, track, and manage student conduct records with role-based access and reporting.',
-    stack: ['Next.js', 'Prisma', 'MySQL', 'Auth.js'],
+    tag: 'Final Year Project',
+    desc: 'Final year CS project — a systematic platform for tracking, reporting, and analyzing student conduct data across a school.',
+    stack: ['Python', 'Flask', 'SQL', 'Data Analysis'],
     color: 'red',
     icon: '📋',
     details:
-      'Full-featured conduct management system for educational institutions. Supports admin, teacher, and student roles. Includes incident logging, escalation workflows, parent notifications, and analytics dashboards for trend analysis.',
+      'Built for the UWI Computer Science final year project. Supports admin and staff roles. Features incident logging, escalation workflows, conduct trend analytics, and exportable reports. Earned Second Class Honours recognition.',
   },
   {
     id: 3,
+    title: 'AI Image Generator',
+    tag: 'AI / Web',
+    desc: 'AI-powered image generation system integrated directly into a custom WordPress CMS build.',
+    stack: ['PHP', 'WordPress', 'OpenAI API', 'Custom CMS'],
+    color: 'mag',
+    icon: '🤖',
+    details:
+      'Built an AI image generation pipeline integrated into a WordPress site. Custom PHP plugin connects to OpenAI image APIs, allowing users to generate, preview, and publish AI images from within the CMS editor.',
+  },
+  {
+    id: 4,
     title: 'Platformer Game',
     tag: 'Game Dev',
-    desc: 'A Java-based 2D platformer with custom physics, enemy AI, sprite animation, and procedurally generated levels.',
+    desc: 'Full 2D platformer built in Java — custom physics, game mechanics, UI, and complete gameplay systems.',
     stack: ['Java', 'Swing', 'OOP', 'Game Physics'],
-    color: 'mag',
+    color: 'cyan',
     icon: '🎮',
     details:
-      'Classic 2D platformer built in Java using Swing for rendering. Features custom physics engine with gravity and collision detection, animated sprite system, enemy AI with patrol and chase behaviors, and a level editor.',
+      'Java platformer using Swing for rendering. Custom physics engine with gravity and collision detection, animated sprite system, enemy behaviours, level design, and a full in-game UI. All game systems built from scratch.',
   },
-];
+  {
+    id: 5,
+    title: 'Website Manager for Radian',
+    tag: 'Corporate',
+    desc: 'Led the redesign and ongoing management of Radian H.A. Limited\'s corporate website — coordinated a small dev team from strategy to deployment.',
+    stack: ['WordPress', 'PHP', 'Custom CMS', 'Team Lead'],
+    color: 'red',
+    icon: '🌐',
+    details:
+      'Owned the end-to-end redevelopment of the Radian H.A. Limited corporate website. Managed internal dev work, coordinated a small team, handled content architecture, and shipped ongoing maintenance. Previously stalled for months — delivered to production under a clear operational brief.',
+  },
+  {
+    id: 6,
+    title: 'Odoo Custom Module Development',
+    tag: 'ERP / Python',
+    desc: 'Custom Odoo modules extending Accounting, Sales, CRM, Rental, and Reporting to match real operational workflows at Radian.',
+    stack: ['Python', 'Odoo', 'XML', 'PostgreSQL'],
+    color: 'mag',
+    icon: '⚙️',
+    details:
+      'Designed and built custom Odoo modules on top of a full ERP rollout. Tailored Accounting, Sales, CRM, Rental Operations, and Reporting flows to the business, including custom models, views, automated actions, and reports. Trained staff on adoption and maintained the customizations post-go-live.',
+  },
+]
 
 export const skills = [
   {
@@ -41,10 +74,9 @@ export const skills = [
     pills: [
       { l: 'React', c: 'cyan' },
       { l: 'Next.js', c: 'cyan' },
-      { l: 'TypeScript', c: 'cyan' },
-      { l: 'Tailwind', c: 'cyan' },
       { l: 'HTML/CSS', c: 'cyan' },
       { l: 'Framer Motion', c: 'cyan' },
+      { l: 'WordPress', c: 'cyan' },
     ],
   },
   {
@@ -54,8 +86,8 @@ export const skills = [
       { l: 'Node.js', c: 'red' },
       { l: 'Express', c: 'red' },
       { l: 'Python', c: 'red' },
+      { l: 'FastAPI', c: 'red' },
       { l: 'REST APIs', c: 'red' },
-      { l: 'GraphQL', c: 'red' },
       { l: 'Java', c: 'red' },
     ],
   },
@@ -66,32 +98,30 @@ export const skills = [
       { l: 'LangChain', c: 'mag' },
       { l: 'OpenAI API', c: 'mag' },
       { l: 'Hugging Face', c: 'mag' },
-      { l: 'RAG Pipelines', c: 'mag' },
-      { l: 'Prompt Eng.', c: 'mag' },
-      { l: 'Fine-tuning', c: 'mag' },
+      { l: 'Prompt Engineering', c: 'mag' },
+      { l: 'AI Automation', c: 'mag' },
+      { l: 'ML Workflows', c: 'mag' },
     ],
   },
   {
     cat: 'Databases',
     dot: 'cyan',
     pills: [
-      { l: 'PostgreSQL', c: 'cyan' },
+      { l: 'SQL', c: 'cyan' },
       { l: 'MySQL', c: 'cyan' },
-      { l: 'MongoDB', c: 'cyan' },
-      { l: 'Prisma', c: 'cyan' },
-      { l: 'Redis', c: 'cyan' },
+      { l: 'PostgreSQL', c: 'cyan' },
     ],
   },
   {
-    cat: 'DevOps / Tools',
+    cat: 'ERP & Business',
     dot: 'red',
     pills: [
-      { l: 'Git', c: 'red' },
-      { l: 'Docker', c: 'red' },
-      { l: 'Vercel', c: 'red' },
-      { l: 'CI/CD', c: 'red' },
-      { l: 'Linux', c: 'red' },
-      { l: 'AWS', c: 'red' },
+      { l: 'Odoo ERP', c: 'red' },
+      { l: 'CRM', c: 'red' },
+      { l: 'Process Optimization', c: 'red' },
+      { l: 'Power Automate', c: 'red' },
+      { l: 'PowerShell', c: 'red' },
+      { l: 'Agile/Scrum', c: 'red' },
     ],
   },
   {
@@ -99,10 +129,20 @@ export const skills = [
     dot: 'mag',
     pills: [
       { l: 'JavaScript', c: 'mag' },
-      { l: 'TypeScript', c: 'mag' },
       { l: 'Python', c: 'mag' },
       { l: 'Java', c: 'mag' },
+      { l: 'PHP', c: 'mag' },
+      { l: 'C++', c: 'mag' },
       { l: 'SQL', c: 'mag' },
     ],
   },
-];
+  {
+    cat: 'DevOps / Tools',
+    dot: 'cyan',
+    pills: [
+      { l: 'Git / GitHub', c: 'cyan' },
+      { l: 'WordPress (Custom)', c: 'cyan' },
+      { l: 'Vercel', c: 'cyan' },
+    ],
+  },
+]

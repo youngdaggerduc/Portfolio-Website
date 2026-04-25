@@ -1,14 +1,16 @@
 import { useRef } from 'react'
 import SwingingSpood from './SwingingSpood'
+import SwingFigure from './SwingFigure'
 import LetterReveal from './LetterReveal'
 
 export default function AboutSection() {
   const sectionRef = useRef(null)
 
   const currently = [
-    { dot: 'var(--cyan)', text: 'Building AI-powered web apps' },
-    { dot: 'var(--red)', text: 'Exploring LangChain & RAG pipelines' },
-    { dot: 'var(--magenta)', text: 'Open to new opportunities' },
+    { dot: 'var(--cyan)', text: 'Business Process Analyst @ Radian H.A. Limited' },
+    { dot: 'var(--red)', text: 'Building AI automation workflows & tools' },
+    { dot: 'var(--magenta)', text: 'Advancing into full-time AI Engineering' },
+    { dot: 'var(--cyan)', text: 'Open to freelance & dev opportunities' },
   ]
 
   return (
@@ -19,6 +21,7 @@ export default function AboutSection() {
       aria-labelledby="about-title"
     >
       <SwingingSpood sectionRef={sectionRef} />
+      <SwingFigure sectionRef={sectionRef} />
       <div className="corner-decor corner-tl" />
       <div
         className="corner-decor corner-br"
@@ -38,22 +41,30 @@ export default function AboutSection() {
           <div className="comic-panel-body">
             <div className="about-text">
               <p>
-                Hey, I'm <span className="highlight">Pierce Doman</span> — a full stack
-                developer with a deep interest in{' '}
-                <span className="highlight-red">AI Engineering</span>. I build end-to-end
-                digital products that are fast, functional, and intelligent.
-              </p>
-              <p>
-                From crafting slick React UIs to designing robust backend architectures, I
-                love the full picture. Lately I've been deep in{' '}
-                <span className="highlight">
-                  LLMs, RAG pipelines, and AI-powered features
+                I'm <span className="highlight">Pierce Doman</span> — a{' '}
+                <span className="highlight-red">
+                  Business Process Analyst &amp; Full Stack Developer
                 </span>{' '}
-                that actually make people's lives easier.
+                based in Trinidad &amp; Tobago. I hold a BSc in Computer Science (Special)
+                with Second Class Honours from the University of the West Indies, St.
+                Augustine.
               </p>
               <p>
-                When I'm not coding, I'm exploring how AI will reshape every industry — and
-                making sure I'm the person building the tools that do it.
+                I specialize in{' '}
+                <span className="highlight">
+                  digital transformation, ERP implementation, and workflow automation
+                </span>{' '}
+                — translating complex operational requirements into scalable technical
+                systems. At Radian H.A. Limited I led and delivered 5 previously stalled
+                strategic projects, including a full Odoo ERP rollout across Accounting,
+                Sales, CRM, Rental, and Reporting.
+              </p>
+              <p>
+                On the engineering side I work across the full stack — React frontends,
+                Node/Python backends, SQL databases — and I'm actively advancing into{' '}
+                <span className="highlight">AI Engineering</span> with hands-on experience
+                in LangChain, OpenAI APIs, and automation pipelines. I also train teams on
+                AI adoption in real business contexts.
               </p>
             </div>
           </div>
@@ -64,17 +75,17 @@ export default function AboutSection() {
               className="stat-item reveal reveal-zoom"
               style={{ '--reveal-delay': '100ms' }}
             >
-              <span className="stat-number">3+</span>
-              <span className="stat-label">Projects Shipped</span>
+              <span className="stat-number">5</span>
+              <span className="stat-label">Projects Led</span>
             </div>
             <div
               className="stat-item reveal reveal-zoom"
               style={{ '--reveal-delay': '200ms' }}
             >
               <span className="stat-number" style={{ color: 'var(--cyan)' }}>
-                10+
+                2:1
               </span>
-              <span className="stat-label">Technologies</span>
+              <span className="stat-label">Honours Degree</span>
             </div>
             <div
               className="stat-item reveal reveal-zoom"
@@ -83,7 +94,7 @@ export default function AboutSection() {
               <span className="stat-number" style={{ color: 'var(--magenta)' }}>
                 AI
               </span>
-              <span className="stat-label">Focus Area</span>
+              <span className="stat-label">Engineering</span>
             </div>
             <div
               className="stat-item reveal reveal-zoom"
@@ -93,9 +104,9 @@ export default function AboutSection() {
                 className="stat-number"
                 style={{ color: 'var(--cyan)', fontSize: 36 }}
               >
-                FS
+                ERP
               </span>
-              <span className="stat-label">Full Stack</span>
+              <span className="stat-label">Odoo Certified</span>
             </div>
           </div>
           <div

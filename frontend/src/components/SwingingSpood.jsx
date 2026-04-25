@@ -148,7 +148,7 @@ export default function SwingingSpood({ sectionRef }) {
       <img
         ref={imgRef}
         className="swing-char"
-        src="/spoodhand.gif"
+        src="/spoodswing.gif"
         alt=""
         decoding="async"
         style={{
