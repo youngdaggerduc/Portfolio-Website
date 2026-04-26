@@ -44,6 +44,26 @@ Two independent apps, connected only over HTTP.
 
 **Switching DB**: change `DATABASE_URL` in `backend/.env` (e.g., `postgres://...`) and add the driver (`asyncpg`) to `requirements.txt`. Tortoise picks the dialect from the URL.
 
+## Chatbot stack
+
+`/api/chat` is the most complex backend surface. Several pieces interact and the conventions are not obvious from the code alone:
+
+- **Spider-PD's knowledge lives in `backend/data/resume.txt`**, split by lines containing only `---` and titled with `[TITLE: ...]` on the first line of each block. Edit chunks freely — `app/rag.py` re-embeds automatically when the SHA-256 of (model + concatenated chunks) changes. Cache lives at `backend/data/.index.json`; delete it to force a rebuild. Embedding model defaults to `text-embedding-3-small` and is included in the hash so swapping models also invalidates the cache.
+
+- **Persona and RAG context are separate system messages, in that order.** `app/system_prompt.txt` is the persona (read fresh on every request — edits are live with no restart). Retrieved chunks are formatted by `format_context()` and pushed as a *second* system message. Keep them split so persona stays tunable independent of retrieval.
+
+- **Memory is two-layered.** Conversations persist in full to `backend/memory/{session_id}.json` (one JSON file per session, gitignore-worthy). Only the last `CHAT_MAX_HISTORY` messages (default 10) are sent to OpenAI per turn — this is the dominant cost lever, since a long conversation never grows the per-call payload. Session IDs are validated against `^[A-Za-z0-9_-]{1,64}$` to keep filenames safe.
+
+- **`POST /api/chat` returns SSE, not JSON.** Wire format: `event: session` first (`{session_id}` for the client to persist in `localStorage`), then `event: token` repeated with `{text}`, finally `event: done` or `event: error`. The frontend reader in `ChatbotPage.jsx` parses events manually because `EventSource` doesn't support POST. Each `data:` line is JSON-encoded (rather than raw text) so newlines inside tokens can't break SSE framing.
+
+- **Frontend `setMessages` updaters must be pure.** React StrictMode double-invokes state updaters in dev. Earlier bug: an outer `let assistantStarted` flag mutated inside the updater desynced on the second pass and appended assistant tokens into the user bubble. Always derive branch decisions from `prev` inside the updater, never from a closure variable.
+
+- **Rate limiting is in-memory and per-IP** (`_rate_buckets` in `routers/chatbot.py`). State is lost on every uvicorn restart and it does not work across multiple workers or behind a load balancer. Fine for single-process portfolio scale; swap for Redis if either changes. Defaults: 15/min, 100/day.
+
+- **`get_client()` lazy-initializes `AsyncOpenAI`** so the app boots without `OPENAI_API_KEY` set — only chat calls fail (with a clear 500). Useful when working on non-chatbot endpoints without keys configured.
+
+- **Required env: `OPENAI_API_KEY`.** All other chat/RAG/rate-limit knobs have defaults — see `backend/.env.example`.
+
 ## Frontend animation system
 
 The portfolio is heavily animated (Spider-Man / comic-book theme). Several load-bearing conventions are not obvious from the code:

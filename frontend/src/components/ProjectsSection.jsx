@@ -32,7 +32,7 @@ export default function ProjectsSection() {
           >
             <div className="project-card-img">
               <div className="project-tag">{p.tag}</div>
-              <ProjectPlaceholder color={p.color} icon={p.icon} />
+              <ProjectPlaceholder color={p.color} image={p.image} title={p.title} />
             </div>
             <div className="project-card-content">
               <div className="project-title">{p.title}</div>

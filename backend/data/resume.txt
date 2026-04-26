@@ -1,0 +1,110 @@
+[TITLE: About Pierce]
+Pierce Doman is a Trinidad & Tobago–based full-stack developer, AI engineer, and Business Process Analyst. He combines hands-on engineering with operational and process expertise — comfortable building production systems, customizing ERPs, and shipping client-facing products end-to-end.
+
+---
+
+[TITLE: Current Role: Business Process Analyst at Radian H.A. Limited]
+Period: April 2025 – Present.
+- Led and delivered 5 previously stalled strategic projects, including the corporate website redevelopment and a full-scale Odoo ERP implementation.
+- Implemented and customized Odoo ERP modules: Accounting, Sales, CRM, Rental Operations, and Reporting.
+- Managed internal dev work and coordinated a small team to redesign and maintain the company website.
+- Translated complex operational requirements into structured system workflows, improving cross-departmental efficiency.
+- Introduced AI and automation tools across the organization and trained staff on adoption.
+- Authored and published two books; contributed to a third through content, design, and publication support.
+
+---
+
+[TITLE: Previous Role: Operations Coordinator at Pyramid Engineering]
+Period: September 2024 – April 2025.
+- Managed offshore crane operator performance tracking against client KPIs and contract requirements.
+- Developed and maintained an internal inventory tracking system to improve stock visibility.
+- Oversaw daily operational reporting: checklists, incident reports, and action logs.
+- Managed purchase orders, offshore payroll processing, and invoice preparation.
+- Coordinated inspection schedules, maintenance follow-ups, and operational reporting.
+
+---
+
+[TITLE: Education]
+BSc Computer Science (Special), University of the West Indies (UWI). Second Class Honours.
+
+---
+
+[TITLE: Project: Lumiere Lounge (Freelance)]
+Commercial freelance build for a premium restaurant and club. Delivered end-to-end: customer-facing reservation flow, table management dashboard, integrated Stripe payments, and automated confirmation emails. Production-deployed for a real client.
+Stack: React, Node.js, PostgreSQL, Stripe.
+
+---
+
+[TITLE: Project: Student Conduct Tracker (Final Year Project)]
+UWI Computer Science final-year project. A systematic platform for tracking, reporting, and analyzing student conduct data across a school. Supports admin and staff roles with incident logging, escalation workflows, conduct trend analytics, and exportable reports. Earned Second Class Honours recognition.
+Stack: Python, Flask, SQL, Data Analysis.
+
+---
+
+[TITLE: Project: AI Image Generator (WordPress)]
+AI-powered image generation system integrated into a custom WordPress CMS build. A custom PHP plugin connects to OpenAI image APIs, allowing users to generate, preview, and publish AI images directly from the CMS editor.
+Stack: PHP, WordPress, OpenAI API, Custom CMS.
+
+---
+
+[TITLE: Project: 2D Platformer Game (Java)]
+A full 2D platformer built in Java using Swing. Custom physics engine with gravity and collision detection, animated sprite system, enemy behaviors, level design, and a complete in-game UI. All systems built from scratch.
+Stack: Java, Swing, OOP, Game Physics.
+
+---
+
+[TITLE: Project: Radian Corporate Website Manager]
+Owned the end-to-end redevelopment of the Radian H.A. Limited corporate website. Managed internal dev work, coordinated a small team, handled content architecture, and shipped ongoing maintenance. The project had previously stalled for months — Pierce delivered it to production under a clear operational brief.
+Stack: WordPress, PHP, Custom CMS, Team Lead.
+
+---
+
+[TITLE: Project: Odoo Custom Module Development]
+Designed and built custom Odoo modules on top of a full ERP rollout at Radian. Tailored Accounting, Sales, CRM, Rental Operations, and Reporting flows to the business — including custom models, views, automated actions, and reports. Trained staff on adoption and maintained customizations post-go-live.
+Stack: Python, Odoo, XML, PostgreSQL.
+
+---
+
+[TITLE: Skills: Frontend]
+React, Next.js, HTML/CSS, Framer Motion, WordPress (custom builds).
+
+---
+
+[TITLE: Skills: Backend]
+Node.js, Express, Python, FastAPI, REST APIs, Java.
+
+---
+
+[TITLE: Skills: AI / ML]
+LangChain, OpenAI API, Hugging Face, basic machine learning workflows, AI automation, prompt engineering.
+
+---
+
+[TITLE: Skills: Databases]
+SQL, MySQL (basic / working knowledge), PostgreSQL.
+
+---
+
+[TITLE: Skills: DevOps & Tools]
+Git / GitHub, WordPress (custom development), Odoo (ERP implementation & customization), PowerShell, Power Automate, Vercel.
+
+---
+
+[TITLE: Skills: Programming Languages]
+JavaScript, Python, Java, C++, PHP, SQL.
+
+---
+
+[TITLE: Skills: Core / Soft]
+Agile / Scrum methodologies, process optimization & automation, ERP system implementation (Odoo), full-stack web development, data & workflow management, business process improvement, team coordination & project delivery.
+
+---
+
+[TITLE: Certifications]
+- Foundational C# with Microsoft (Free Code Camp, 2025)
+- AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents (Udemy, 2026)
+
+---
+
+[TITLE: Availability & Contact]
+Pierce is open to freelance work — especially full-stack web builds, AI-powered features, and Odoo/ERP customization. Reach out via the contact section of the portfolio site.

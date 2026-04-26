@@ -3,7 +3,11 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/.env
 backend/db.sqlite3
+backend/db.sqlite3-shm
+backend/db.sqlite3-wal
 backend/migrations/
+backend/memory/
+backend/data/.index.json
 frontend/node_modules/
 frontend/dist/
 .DS_Store

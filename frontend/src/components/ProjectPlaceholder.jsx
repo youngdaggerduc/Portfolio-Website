@@ -4,7 +4,7 @@ const COLORS = {
   mag: { bg: 'rgba(255,0,170,0.06)', border: 'rgba(255,0,170,0.2)', dot: '#ff00aa' },
 }
 
-export default function ProjectPlaceholder({ color, icon }) {
+export default function ProjectPlaceholder({ color, image, title }) {
   const c = COLORS[color]
   return (
     <div
@@ -30,16 +30,21 @@ export default function ProjectPlaceholder({ color, icon }) {
       <div
         style={{ position: 'absolute', inset: 8, border: `2px solid ${c.border}` }}
       />
-      <div
-        style={{
-          fontSize: 56,
-          position: 'relative',
-          zIndex: 1,
-          filter: `drop-shadow(0 0 20px ${c.dot})`,
-        }}
-      >
-        {icon}
-      </div>
+      {image && (
+        <img
+          src={image}
+          alt={title || ''}
+          loading="lazy"
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            maxWidth: '80%',
+            maxHeight: '80%',
+            objectFit: 'contain',
+            filter: `drop-shadow(0 0 20px ${c.dot})`,
+          }}
+        />
+      )}
       <div
         style={{
           position: 'absolute',

@@ -268,17 +268,87 @@ export default function ChatbotPage() {
     setMessages((prev) => [...prev, { role: 'user', content: userText }])
     setLoading(true)
 
-    // TODO: replace with real backend call
-    await new Promise((r) => setTimeout(r, 1200))
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: 'assistant',
-        content:
-          "My spider-sense is tingling — but the AI backend isn't wired up yet. Pierce is webbing it together soon. Come back and I'll have all the answers. 🕷️",
-      },
-    ])
-    setLoading(false)
+    const appendDelta = (delta) => {
+      setMessages((prev) => {
+        const last = prev[prev.length - 1]
+        if (!last || last.role !== 'assistant') {
+          return [...prev, { role: 'assistant', content: delta }]
+        }
+        const next = [...prev]
+        next[next.length - 1] = { ...last, content: last.content + delta }
+        return next
+      })
+    }
+
+    try {
+      const sid = localStorage.getItem('spiderpd_session_id') || undefined
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText, session_id: sid }),
+      })
+      if (!res.ok) {
+        let detail = ''
+        try {
+          const j = await res.json()
+          detail = j.detail || ''
+        } catch {
+          /* non-JSON error body */
+        }
+        throw new Error(detail || `HTTP ${res.status}`)
+      }
+      if (!res.body) throw new Error('No response stream')
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        let sep
+        while ((sep = buffer.indexOf('\n\n')) !== -1) {
+          const raw = buffer.slice(0, sep)
+          buffer = buffer.slice(sep + 2)
+          let evt = 'message'
+          let data = ''
+          for (const line of raw.split('\n')) {
+            if (line.startsWith('event: ')) evt = line.slice(7).trim()
+            else if (line.startsWith('data: ')) data += line.slice(6)
+          }
+          if (!data) continue
+          let payload
+          try {
+            payload = JSON.parse(data)
+          } catch {
+            continue
+          }
+          if (evt === 'session' && payload.session_id) {
+            localStorage.setItem('spiderpd_session_id', payload.session_id)
+          } else if (evt === 'token' && payload.text) {
+            if (loading) setLoading(false)
+            appendDelta(payload.text)
+          } else if (evt === 'error') {
+            throw new Error(payload.message || 'Stream error')
+          }
+        }
+      }
+    } catch (err) {
+      const msg = `Spider-sense malfunction — ${err.message}. Try again in a sec.`
+      setMessages((prev) => {
+        const last = prev[prev.length - 1]
+        if (last && last.role === 'assistant') {
+          const next = [...prev]
+          next[next.length - 1] = { ...last, content: `${last.content}\n\n${msg}` }
+          return next
+        }
+        return [...prev, { role: 'assistant', content: msg }]
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleKey = (e) => {

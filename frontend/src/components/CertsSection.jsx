@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import LetterReveal from './LetterReveal'
 
 const CERTS = [
-  { title: 'Foundational C# with Microsoft', issuer: 'Free Code Camp', date: '2025', color: 'cyan', icon: '🏆' },
-  { title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents', issuer: 'Udemy', date: '2026', color: 'red', icon: '🎖️' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2024', color: 'mag', icon: '🥇' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2024', color: 'cyan', icon: '📜' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2025', color: 'red', icon: '⚡' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2025', color: 'mag', icon: '🔬' },
+  { title: 'Foundational C# with Microsoft', issuer: 'Free Code Camp', date: '2025', color: 'cyan', image: '' },
+  { title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents', issuer: 'Udemy', date: '2026', color: 'red', image: '' },
+  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2024', color: 'mag', image: '' },
+  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2024', color: 'cyan', image: '' },
+  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2025', color: 'red', image: '' },
+  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2025', color: 'mag', image: '' },
 ]
 
 const ACCENT = {
@@ -39,7 +39,19 @@ function CertCard({ cert }) {
         CERTIFIED
       </div>
       <div className="cert-icon">
-        <span style={{ filter: `drop-shadow(0 0 14px ${accent})` }}>{cert.icon}</span>
+        {cert.image && (
+          <img
+            src={cert.image}
+            alt={cert.title}
+            loading="lazy"
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit: 'contain',
+              filter: `drop-shadow(0 0 14px ${accent})`,
+            }}
+          />
+        )}
       </div>
       <div className="cert-body">
         <div className="cert-title" style={{ textShadow: `1px 0 0 ${accent}` }}>
