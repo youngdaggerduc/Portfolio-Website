@@ -92,7 +92,8 @@ export default function HeroSection() {
             GET IN TOUCH
           </a>
           <a
-            href="#"
+            href="/Pierce Doman Resume.pdf"
+            download="Pierce Doman Resume.pdf"
             className="btn-secondary"
             style={{
               borderColor: 'var(--magenta)',

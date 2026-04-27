@@ -15,7 +15,12 @@
       "Bash(curl -s http://localhost:5173/piercespood.mp4 -o /dev/null -w \"video: %{http_code}\\\\n\")",
       "Bash(taskkill //F //IM node.exe)",
       "Bash(kill %1)",
-      "Bash(pkill -f \"vite\")"
+      "Bash(pkill -f \"vite\")",
+      "Bash(netsh interface *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

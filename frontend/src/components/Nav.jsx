@@ -59,6 +59,11 @@ export default function Nav() {
           </li>
         ))}
         <li>
+          <a href="#/games" className="nav-games" onClick={close}>
+            🎮 AI GAMES
+          </a>
+        </li>
+        <li>
           <a href="#/chatbot" className="nav-ask-ai" onClick={close}>
             🕷️ ASK AI
           </a>

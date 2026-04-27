@@ -1,20 +1,48 @@
 import { useState } from 'react'
 import LetterReveal from './LetterReveal'
+import { apiUrl } from '../lib/api'
 
 const SOCIALS = [
-  { icon: 'GH', label: 'GitHub', href: 'https://github.com/piercedoman', sub: 'github.com/piercedoman' },
-  { icon: 'LI', label: 'LinkedIn', href: 'https://linkedin.com/in/piercedoman', sub: 'linkedin.com/in/piercedoman' },
+  { icon: 'GH', label: 'GitHub', href: 'https://github.com/youngdaggerduc', sub: 'github.com/youngdaggerduc' },
+  { icon: 'LI', label: 'LinkedIn', href: 'https://tt.linkedin.com/in/pierce-doman-707002331', sub: 'linkedin.com/in/pierce-doman' },
   { icon: 'EM', label: 'Email', href: 'mailto:piercedoman25@gmail.com', sub: 'piercedoman25@gmail.com' },
   { icon: 'PH', label: 'Phone', href: 'tel:+18682665568', sub: '+1 (868) 266-5568' },
 ]
 
 export default function ContactSection() {
   const [sent, setSent] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const [form, setForm] = useState({ name: '', email: '', message: '', website: '' })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSent(true)
+    if (sending) return
+    setError('')
+    setSending(true)
+    try {
+      const res = await fetch(apiUrl('/api/contact'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        let detail = ''
+        try {
+          const j = await res.json()
+          detail = j.detail || ''
+        } catch {
+          /* non-JSON body */
+        }
+        throw new Error(detail || `HTTP ${res.status}`)
+      }
+      setSent(true)
+      setForm({ name: '', email: '', message: '', website: '' })
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Try again or email me directly.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -72,6 +100,16 @@ export default function ContactSection() {
             </div>
           ) : (
             <form className="form-body" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={form.website}
+                onChange={(e) => setForm({ ...form, website: e.target.value })}
+                style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
+              />
               <div className="form-field">
                 <label className="form-label" htmlFor="contact-name">
                   Your Name
@@ -115,8 +153,22 @@ export default function ContactSection() {
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                 />
               </div>
-              <button type="submit" className="send-btn">
-                TRANSMIT MESSAGE →
+              {error && (
+                <div
+                  role="alert"
+                  style={{
+                    fontSize: 12,
+                    color: 'var(--red)',
+                    border: '1px solid var(--red)',
+                    padding: '8px 10px',
+                    background: 'rgba(232,25,44,0.08)',
+                  }}
+                >
+                  {error}
+                </div>
+              )}
+              <button type="submit" className="send-btn" disabled={sending}>
+                {sending ? 'TRANSMITTING…' : 'TRANSMIT MESSAGE →'}
               </button>
             </form>
           )}

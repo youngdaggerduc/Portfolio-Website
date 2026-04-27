@@ -10,11 +10,13 @@ import CertsSection from './components/CertsSection'
 import SkillsSection from './components/SkillsSection'
 import ContactSection from './components/ContactSection'
 import BehindTheMaskSection from './components/BehindTheMaskSection'
+import GamesCalloutSection from './components/GamesCalloutSection'
 import SpiderCommStrip from './components/SpiderCommStrip'
 import WebCursor from './components/WebCursor'
 import WebBackground from './components/WebBackground'
 import Preloader from './components/Preloader'
 import ChatbotPage from './components/ChatbotPage'
+import GamesPage from './components/GamesPage'
 import { useRevealObserver } from './hooks/useRevealObserver'
 import { useSectionClipReveal } from './hooks/useSectionClipReveal'
 
@@ -60,6 +62,8 @@ function Portfolio() {
         <ContactSection />
         <div className="comic-divider cyan" />
         <BehindTheMaskSection />
+        <div className="comic-divider mag" />
+        <GamesCalloutSection />
       </main>
       <footer>
         <div className="footer-logo">PIERCE DOMAN</div>
@@ -72,6 +76,7 @@ function Portfolio() {
 function App() {
   const hash = useHashRoute()
   if (hash === '#/chatbot') return <ChatbotPage />
+  if (hash === '#/games') return <GamesPage />
   return <Portfolio />
 }
 

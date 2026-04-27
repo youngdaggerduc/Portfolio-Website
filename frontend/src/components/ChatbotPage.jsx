@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './ChatbotPage.css'
+import { apiUrl } from '../lib/api'
 
 const SUGGESTIONS = [
   "What's Pierce's current job?",
@@ -282,7 +283,7 @@ export default function ChatbotPage() {
 
     try {
       const sid = localStorage.getItem('spiderpd_session_id') || undefined
-      const res = await fetch('/api/chat', {
+      const res = await fetch(apiUrl('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userText, session_id: sid }),

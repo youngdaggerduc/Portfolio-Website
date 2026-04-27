@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import LetterReveal from './LetterReveal'
 
 const CERTS = [
-  { title: 'Foundational C# with Microsoft', issuer: 'Free Code Camp', date: '2025', color: 'cyan', image: '' },
-  { title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents', issuer: 'Udemy', date: '2026', color: 'red', image: '' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2024', color: 'mag', image: '' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2024', color: 'cyan', image: '' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2025', color: 'red', image: '' },
-  { title: 'Add Your Cert', issuer: 'Issuing Organisation', date: '2025', color: 'mag', image: '' },
+  { title: 'Foundational C# with Microsoft', issuer: 'Free Code Camp', date: '2025', color: 'cyan', image: '/c.png' },
+  { title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents', issuer: 'Udemy', date: '2026', color: 'red', image: '/AI-Engineer.jpg' },
+  { title: 'FastAPI - The Complete Course', issuer: 'Udemy', date: '2026', color: 'mag', image: '/FastAPI.jpg' },
+  { title: 'Six Sigma White Belt', issuer: 'Educate 360', date: '2025', color: 'cyan', image: '/SixSigma.jpeg' },
+ // { title: 'Python Certification - Coming Soon', issuer: 'Free Code Camp', date: '2026', color: 'red', image: '/agentic.jpg' },
+  // { title: 'AI - Agentic Models - Coming Soon', issuer: 'Udemy', date: '2026', color: 'mag', image: '/python.png' },
 ]
 
 const ACCENT = {

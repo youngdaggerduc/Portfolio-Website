@@ -1,0 +1,149 @@
+/* ========================================================================
+   AI GAMES page — scoped under .games-shell
+   Mirrors chatbot.html / chatbot.css conventions: full-screen overlay,
+   crosshair cursor, scan-line overlay, comic accent palette.
+   ======================================================================== */
+.games-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  cursor: crosshair;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.games-shell::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.games-shell .halftone {
+  background-image: radial-gradient(circle, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+@keyframes gamesSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes gamesPopIn {
+  0% { opacity: 0; transform: scale(0.7) rotate(-4deg); }
+  60% { transform: scale(1.06) rotate(1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes gamesPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 25, 44, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(232, 25, 44, 0); }
+}
+@keyframes gamesSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.games-shell .btn {
+  font-family: 'Bangers', cursive;
+  letter-spacing: 3px;
+  border: 3px solid #000;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.games-shell .btn:hover { transform: translate(-2px, -2px); }
+.games-shell .btn-red { background: var(--red); color: #fff; box-shadow: 4px 4px 0 #000; }
+.games-shell .btn-red:hover { box-shadow: 6px 6px 0 #000; }
+.games-shell .btn-cyan { background: var(--cyan); color: #000; box-shadow: 4px 4px 0 #000; }
+.games-shell .btn-cyan:hover { box-shadow: 6px 6px 0 #000; }
+.games-shell .btn-mag { background: var(--magenta); color: #fff; box-shadow: 4px 4px 0 #000; }
+.games-shell .btn-mag:hover { box-shadow: 6px 6px 0 #000; }
+.games-shell .btn-outline {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(240, 238, 255, 0.2);
+  box-shadow: 3px 3px 0 rgba(240, 238, 255, 0.1);
+}
+.games-shell .btn-outline:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 3px 3px 0 var(--cyan);
+}
+
+.games-shell pre,
+.games-shell code {
+  font-family: 'Space Mono', monospace;
+}
+
+/* TOP NAV — matches chatbot's nav so the page feels consistent */
+.games-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: linear-gradient(180deg, rgba(7, 7, 26, 0.97) 0%, rgba(7, 7, 26, 0.6) 100%);
+  border-bottom: 2px solid rgba(0, 212, 255, 0.15);
+}
+.games-nav-logo {
+  font-family: 'Bangers', cursive;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--white);
+  text-shadow: 3px 0 0 var(--cyan), -3px 0 0 var(--magenta);
+  text-decoration: none;
+}
+.games-nav-back {
+  font-family: 'Bangers', cursive;
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: var(--cyan);
+  text-decoration: none;
+  border: 2px solid var(--cyan);
+  padding: 5px 14px;
+  background: rgba(0, 212, 255, 0.05);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.games-nav-back:hover { background: rgba(0, 212, 255, 0.15); }
+.games-nav-pick {
+  font-family: 'Bangers', cursive;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--white);
+  border: 2px solid rgba(240, 238, 255, 0.25);
+  padding: 5px 14px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.games-nav-pick:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+  .games-nav { padding: 0 16px; }
+  .games-nav-logo { font-size: 18px; }
+}
