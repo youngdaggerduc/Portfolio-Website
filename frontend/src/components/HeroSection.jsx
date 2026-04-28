@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import TypedText from './TypedText'
 
 const HERO_STATS = [
@@ -8,9 +9,41 @@ const HERO_STATS = [
 ]
 
 export default function HeroSection() {
+  const videoRef = useRef(null)
+
+  // iOS Safari sometimes refuses autoplay even with the right attributes —
+  // most often because React hasn't set `muted` on the DOM property by the
+  // time the browser evaluates the autoplay policy, or because the user is
+  // in Low Power Mode. We set the props directly on the element after mount
+  // and call .play() explicitly. If autoplay is hard-blocked (Low Power
+  // Mode), we listen for the first touch/click anywhere on the page and
+  // start playback then — works around the "play button overlay" symptom.
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return undefined
+    v.muted = true
+    v.defaultMuted = true
+    v.playsInline = true
+    v.setAttribute('webkit-playsinline', '')
+    const tryPlay = () => v.play().catch(() => {})
+    tryPlay()
+    const onFirstTouch = () => {
+      tryPlay()
+      window.removeEventListener('touchstart', onFirstTouch)
+      window.removeEventListener('click', onFirstTouch)
+    }
+    window.addEventListener('touchstart', onFirstTouch, { passive: true })
+    window.addEventListener('click', onFirstTouch)
+    return () => {
+      window.removeEventListener('touchstart', onFirstTouch)
+      window.removeEventListener('click', onFirstTouch)
+    }
+  }, [])
+
   return (
     <section id="hero" className="hero">
       <video
+        ref={videoRef}
         className="hero-video"
         src="/piercespood.mp4"
         autoPlay
@@ -18,6 +51,9 @@ export default function HeroSection() {
         muted
         playsInline
         preload="auto"
+        disablePictureInPicture
+        disableRemotePlayback
+        controls={false}
         aria-hidden="true"
       />
       <div className="hero-video-vignette" />
