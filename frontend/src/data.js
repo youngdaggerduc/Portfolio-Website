@@ -6,7 +6,7 @@ export const projects = [
     desc: 'Commercial freelance build — a full booking & web presence for a premium restaurant and club.',
     stack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
     color: 'cyan',
-    image: '/lumierelounge.png',
+    image: '/lumierelounge.jpg',
     details:
       'Delivered end-to-end as a freelance project. Customer-facing reservation flow, table management dashboard, integrated payments, and automated confirmation emails. Production-deployed for a real client.',
   },
@@ -28,7 +28,7 @@ export const projects = [
     desc: 'AI-powered image generation system integrated directly into a custom WordPress CMS build.',
     stack: ['PHP', 'WordPress', 'OpenAI API', 'Custom CMS'],
     color: 'mag',
-    image: '/AI.png',
+    image: '/AI.jpg',
     details:
       'Built an AI image generation pipeline integrated into a WordPress site. Custom PHP plugin connects to OpenAI image APIs, allowing users to generate, preview, and publish AI images from within the CMS editor.',
   },
