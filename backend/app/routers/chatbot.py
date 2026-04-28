@@ -173,13 +173,29 @@ async def chat(req: ChatRequest, request: Request) -> StreamingResponse:
 
         yield _sse("done", {})
 
+    # Belt-and-braces CORS: some PaaS edges (Render free tier) drop or rewrite
+    # CORS headers on text/event-stream responses, which causes the browser
+    # to reject the response with "CORS header values invalid". Setting them
+    # explicitly here guarantees the streaming response is valid regardless
+    # of middleware behaviour. Connection: keep-alive is dropped because it's
+    # HTTP/1.1-only and modern proxies (HTTP/2) reject it.
+    request_origin = request.headers.get("origin", "")
+    allowed = [
+        o.strip()
+        for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+        if o.strip()
+    ]
+    cors_origin = request_origin if request_origin in allowed else (allowed[0] if allowed else "*")
+
     return StreamingResponse(
         event_stream(),
         media_type="text/event-stream",
         headers={
-            "Cache-Control": "no-cache",
+            "Cache-Control": "no-cache, no-transform",
             "X-Accel-Buffering": "no",
-            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": cors_origin,
+            "Access-Control-Allow-Credentials": "true",
+            "Vary": "Origin",
         },
     )
 
