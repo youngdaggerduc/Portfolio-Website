@@ -23,7 +23,7 @@ export function useRevealObserver() {
           }
         })
       },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px 120px 0px' }
     )
 
     const observeAll = () => {
@@ -35,8 +35,9 @@ export function useRevealObserver() {
     const mo = new MutationObserver(observeAll)
     mo.observe(document.body, { childList: true, subtree: true })
 
-    // Safety net: anything in view after 1.5s that still isn't marked visible
-    // (e.g., IO starved by content-visibility:auto) gets revealed anyway.
+    // Safety net: anything in view after 400ms that still isn't marked visible
+    // gets revealed anyway. Lower than the original 1500ms because we no longer
+    // pay the content-visibility:auto layout cost on scroll-in.
     const safety = setTimeout(() => {
       document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => {
         const r = el.getBoundingClientRect()
@@ -44,7 +45,7 @@ export function useRevealObserver() {
           el.classList.add('is-visible')
         }
       })
-    }, 1500)
+    }, 400)
 
     return () => {
       io.disconnect()

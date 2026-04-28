@@ -1459,12 +1459,13 @@ html.has-web-cursor body { cursor: none !important; }
 /* Keep sections above the web background */
 nav, main, footer { position: relative; z-index: 1; }
 
-/* PERFORMANCE: let below-fold sections skip layout/paint while off-screen */
-main > section {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 900px;
-}
-.hero { content-visibility: visible; }
+/* NOTE: content-visibility:auto used to be set on every section to skip
+   offscreen paint, but on slower devices it caused a visible "blank section
+   while you scroll into it" delay because the browser had to lay out and
+   paint each section from scratch as it became visible — combined with the
+   IntersectionObserver-driven .reveal and clip-reveal animations, content
+   would lag noticeably behind the scroll position. Removed.
+   The portfolio isn't long enough to need this micro-optimisation. */
 
 /* SPIDER BADGE on section labels (small web icon before the text) */
 .section-label::before {

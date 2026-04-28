@@ -26,7 +26,7 @@ export function useSectionClipReveal() {
           }
         })
       },
-      { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
+      { threshold: 0.04, rootMargin: '0px 0px 150px 0px' }
     )
     sections.forEach((s) => io.observe(s))
     return () => io.disconnect()
