@@ -2660,3 +2660,220 @@ html.has-web-cursor textarea { caret-color: var(--cyan); }
   .games-callout-cta { font-size: 18px; padding: 12px 24px; gap: 10px; letter-spacing: 3px; }
   .games-callout-cta-spider, .games-callout-cta-arrow { font-size: 20px; }
 }
+
+/* ============================================================
+   MOBILE / TOUCH PERFORMANCE OVERRIDES
+   Heavy desktop-only effects (backdrop blur, scroll-snap-stop,
+   clip-path section reveals, parallax web background, persistent
+   keyframe animations) are removed or simplified on small screens
+   and coarse pointers so phones scroll at 60fps without changing
+   the comic-book look on desktop.
+   ============================================================ */
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  /* No fancy custom cursor on touch */
+  body { cursor: auto; }
+
+  /* Fixed-position scan-line overlay forces an extra composited
+     layer that mobile browsers (especially iOS Safari) repaint on
+     every scroll frame. Off on touch. */
+  body::after { display: none; }
+
+  /* backdrop-filter is the single biggest paint cost on mobile GPUs.
+     Drop everywhere and bump the panel backgrounds so the frosted-
+     glass cards still read as solid comic panels. */
+  nav,
+  .comic-panel,
+  .contact-form-panel,
+  .skill-category,
+  .project-card,
+  .modal-overlay,
+  .nav-links {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  nav { background: rgba(7, 7, 26, 0.92); }
+  .comic-panel { background: rgba(13, 13, 43, 0.94); }
+  .nav-links.is-open { background: rgba(7, 7, 26, 0.98); }
+
+  /* Parallax web-background: three full-viewport SVG layers fixed
+     to the viewport. They never move on touch (mousemove handler
+     is gated by pointer: fine) but still cost paint. Hide them. */
+  .web-bg { display: none; }
+
+  /* Section clip-path circular reveal animates a giant inset over
+     every section as it enters the viewport. On phones this stalls
+     scroll — content appears late and jerky. Skip the animation
+     entirely; sections just appear with the per-element .reveal. */
+  .clip-reveal {
+    clip-path: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  /* scroll-snap-stop: always feels grabby on iOS Safari momentum
+     scrolling. Off entirely on mobile — natural scroll only. */
+  html { scroll-snap-type: none; }
+
+  /* Animating `filter: blur` is the most expensive transition we
+     have. Drop the blur on slam reveals; the translate is enough. */
+  .reveal-slam { filter: none; }
+  .reveal-slam.is-visible { filter: none; }
+
+  /* Drop the per-frame glitch clip-path layers on the hero name —
+     keep the single-layer text-shadow so the colour-shift look is
+     preserved without the constant repaint. */
+  .hero-name .glitch-layer-1,
+  .hero-name .glitch-layer-2 { display: none; }
+
+  /* Pause persistent infinite keyframes that repaint every frame.
+     The visible difference is subtle (no neon flicker, no spinning
+     corners, no flowing dividers) — scroll smoothness wins. */
+  .nav-logo,
+  .section-label,
+  .scroll-line,
+  .scroll-indicator,
+  .stat-number,
+  .corner-decor,
+  .comic-divider,
+  .tech-stack-spood,
+  .games-callout-cta-spider,
+  .hero-left::after,
+  .behind-photo-sense-ring {
+    animation: none !important;
+  }
+  /* Replace the animated divider gradient with a static pattern
+     (still the same striped look, no background-position loop). */
+  .comic-divider {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--red) 0 20px,
+      #000 20px 22px
+    );
+    background-size: auto;
+  }
+  .comic-divider.cyan {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--cyan) 0 20px,
+      #000 20px 22px
+    );
+  }
+  .comic-divider.mag {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--magenta) 0 20px,
+      #000 20px 22px
+    );
+  }
+
+  /* Lighter compound text-shadows on big headings — same comic
+     look, ~half the rasterisation cost. */
+  .hero-name,
+  .section-title,
+  .behind-headline,
+  .contact-info-title,
+  .footer-logo,
+  .preloader-title,
+  .behind-photo-name {
+    text-shadow: 2px 0 0 var(--cyan), -2px 0 0 var(--magenta);
+  }
+  .project-title { text-shadow: 1.5px 0 0 var(--cyan), -1.5px 0 0 var(--magenta); }
+
+  /* Lighter glow drop-shadows on icons. */
+  .tech-stack-spood {
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.4));
+  }
+  .games-callout-cta-spider { filter: drop-shadow(0 0 6px var(--red)); }
+
+  /* Hover-only effects fire on touch tap and queue costly paints.
+     Neutralise them on touch devices. */
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .send-btn:hover {
+    animation: none;
+    letter-spacing: 3px;
+    transform: none;
+    box-shadow: 4px 4px 0 #000;
+  }
+  .btn-secondary:hover { box-shadow: 4px 4px 0 var(--cyan); }
+  .project-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .skill-pill:hover {
+    animation: none;
+    box-shadow: none;
+    transform: none;
+    background: rgba(0, 212, 255, 0.08);
+  }
+  .skill-pill.red:hover { background: rgba(232, 25, 44, 0.08); box-shadow: none; }
+  .skill-pill.mag:hover { background: rgba(255, 0, 170, 0.08); box-shadow: none; }
+  .stack-tag:hover { transform: none; background: rgba(0, 212, 255, 0.05); color: var(--cyan); }
+  .stack-tag-red:hover { background: rgba(232, 25, 44, 0.05); color: var(--red); }
+  .social-link:hover {
+    transform: none;
+    box-shadow: none;
+    background: rgba(0, 212, 255, 0.06);
+  }
+  .nav-links a:hover {
+    transform: none;
+    text-shadow: none;
+  }
+  .cert-card:hover { transform: none; }
+  .games-callout-card:hover { transform: none; }
+  .games-callout-cta:hover { transform: none; }
+
+  /* Make taps feel instant. */
+  a, button, .project-card, .cert-card, .skill-pill, .stack-tag {
+    -webkit-tap-highlight-color: rgba(0, 212, 255, 0.2);
+    touch-action: manipulation;
+  }
+
+  /* Reveal animations: keep the comic-book pop, but trim the most
+     expensive transforms and shorten durations so they finish before
+     the user keeps scrolling. The delay token preserves the staggered
+     LetterReveal effect. */
+  .reveal {
+    transition:
+      opacity 0.55s ease var(--reveal-delay, 0s),
+      transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) var(--reveal-delay, 0s);
+  }
+  .reveal-up      { transform: translate3d(0, 50px, 0); }
+  .reveal-down    { transform: translate3d(0, -36px, 0); }
+  .reveal-left    { transform: translate3d(-60px, 0, 0); }
+  .reveal-right   { transform: translate3d(60px, 0, 0); }
+  .reveal-zoom    { transform: scale(0.8); }
+  .reveal-slam    { transform: translate3d(0, -50px, 0) scale(0.92); }
+  .reveal-bounce  { transform: translate3d(0, 60px, 0) scale(0.92); }
+  .reveal-flip    { transform: translate3d(-30px, 0, 0); }
+  .reveal-pow     { transform: scale(0.5); }
+}
+
+/* ============================================================
+   MOBILE LAYOUT POLISH — touch-up of existing breakpoints to
+   prevent overflow and make tap targets comfortable.
+   ============================================================ */
+@media (max-width: 600px) {
+  /* Buttons stretch full-width inside the hero CTA stack — easier
+     to thumb and avoids awkward half-width pills next to each other. */
+  .hero-ctas { gap: 12px; }
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-secondary { width: 100%; padding: 13px 22px; }
+
+  /* Nav padding on small screens — keep logo + burger comfortably apart. */
+  nav { padding: 11px 16px; }
+
+  /* Footer reads cleaner stacked. */
+  footer { gap: 10px; padding: 18px 16px; }
+
+  /* Spider-Comm ticker — slightly smaller pills so a couple fit per line. */
+  .spider-comm-pill { font-size: 12px; padding: 9px 16px; gap: 8px; letter-spacing: 2px; }
+  .spider-comm-pill--ghost { font-size: 9.5px; }
+
+  /* Certs carousel: cards slightly narrower so two start to peek
+     in landscape and one fits cleanly in portrait. */
+  .cert-card { width: 200px; }
+  .cert-icon { height: 78px; }
+  .cert-icon span { font-size: 36px; }
+}
+

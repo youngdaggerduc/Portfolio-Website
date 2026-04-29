@@ -6,10 +6,13 @@ const ANCHOR_Y = 3
 
 export default function SwingFigure({ sectionRef }) {
   const [progress, setProgress] = useState(0)
-  const [reduced] = useState(() =>
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  const [reduced] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.innerWidth <= 900
+    )
+  })
 
   useEffect(() => {
     if (reduced) return
@@ -27,6 +30,8 @@ export default function SwingFigure({ sectionRef }) {
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [reduced, sectionRef])
+
+  if (reduced) return null
 
   const eased =
     progress < 0.5

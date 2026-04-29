@@ -21,7 +21,20 @@
       "Bash(taskkill *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(git checkout *)",
+      "Bash(git rebase *)",
+      "Bash(awk '{printf \"%-8s  %s\\\\n\", $5, $NF}')",
+      "Bash(ffmpeg -version)",
+      "Bash(ffprobe -v error -select_streams v:0 -show_entries stream=width,height,r_frame_rate,duration,bit_rate -of default=noprint_wrappers=1 piercespood.mp4)",
+      "Bash(ffmpeg -y -i piercespood.mp4 -vcodec libx264 -crf 30 -preset slow -vf \"scale=1280:-2\" -movflags +faststart -an piercespood.opt.mp4)",
+      "Bash(ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration,codec_name -of default=noprint_wrappers=1 piercespood.mp4)",
+      "Bash(awk '{printf \"%-8s %s\\\\n\", $5, $NF}')",
+      "Bash(awk '{print $5, $NF}')",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'Remove DEPLOYMENT.md \\(accidentally re-added\\) *)"
     ]
   }
 }

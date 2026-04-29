@@ -28,10 +28,13 @@ export default function SwingingSpood({ sectionRef }) {
     webEndY: 0,
     opacity: 1,
   })
-  const [reduced] = useState(() =>
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  const [reduced] = useState(() => {
+    if (typeof window === 'undefined') return true
+    return (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.innerWidth <= 900
+    )
+  })
 
   useEffect(() => {
     if (reduced) return

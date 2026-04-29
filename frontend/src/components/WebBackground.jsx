@@ -1,9 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
  * Three stacked layers of web patterns that drift with the mouse at
  * different speeds, creating depth. Fixed to the viewport, sits behind
  * all content. Uses a single rAF loop and transforms-only for perf.
+ *
+ * Skipped entirely on touch devices and small viewports — the parallax
+ * is mouse-driven so it adds nothing on mobile, and three full-viewport
+ * layers cost real paint on phone GPUs.
  */
 export default function WebBackground() {
   const l1 = useRef(null)
@@ -11,17 +15,23 @@ export default function WebBackground() {
   const l3 = useRef(null)
   const target = useRef({ x: 0, y: 0 })
   const current = useRef({ x: 0, y: 0 })
+  const [enabled] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return (
+      window.matchMedia('(pointer: fine)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      window.innerWidth > 900
+    )
+  })
 
   useEffect(() => {
-    const fine = window.matchMedia('(pointer: fine)').matches
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) return
+    if (!enabled) return
 
     const onMove = (e) => {
       target.current.x = (e.clientX / window.innerWidth - 0.5) * 2
       target.current.y = (e.clientY / window.innerHeight - 0.5) * 2
     }
-    if (fine) window.addEventListener('mousemove', onMove, { passive: true })
+    window.addEventListener('mousemove', onMove, { passive: true })
 
     let raf = 0
     const tick = () => {
@@ -39,7 +49,9 @@ export default function WebBackground() {
       cancelAnimationFrame(raf)
       window.removeEventListener('mousemove', onMove)
     }
-  }, [])
+  }, [enabled])
+
+  if (!enabled) return null
 
   return (
     <div className="web-bg" aria-hidden="true">
