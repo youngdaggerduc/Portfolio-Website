@@ -17,6 +17,7 @@ frontend/.env.*.local
 # Local backups of large source assets (kept off GitHub — re-encode from these
 # if you ever need higher quality, but ship only the compressed copies)
 frontend/public/*.original.*
+DEPLOYMENT.md
 .DS_Store
 *.pyc
 .vscode/
