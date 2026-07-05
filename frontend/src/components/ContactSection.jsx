@@ -3,8 +3,8 @@ import LetterReveal from './LetterReveal'
 import { apiUrl } from '../lib/api'
 
 const SOCIALS = [
-  { icon: 'GH', label: 'GitHub', href: 'https://github.com/youngdaggerduc', sub: 'github.com/youngdaggerduc' },
-  { icon: 'LI', label: 'LinkedIn', href: 'https://tt.linkedin.com/in/pierce-doman-707002331', sub: 'linkedin.com/in/pierce-doman' },
+  { icon: 'GH', label: 'GitHub', href: 'https://github.com/youngdaggerduc', sub: 'github.com/youngdaggerduc', external: true },
+  { icon: 'LI', label: 'LinkedIn', href: 'https://tt.linkedin.com/in/pierce-doman-707002331', sub: 'linkedin.com/in/pierce-doman', external: true },
   { icon: 'EM', label: 'Email', href: 'mailto:piercedoman25@gmail.com', sub: 'piercedoman25@gmail.com' },
   { icon: 'PH', label: 'Phone', href: 'tel:+18682665568', sub: '+1 (868) 266-5568' },
 ]
@@ -39,7 +39,7 @@ export default function ContactSection() {
       setSent(true)
       setForm({ name: '', email: '', message: '', website: '' })
     } catch (err) {
-      setError(err.message || 'Something went wrong. Try again or email me directly.')
+      setError(err.message || 'Something went wrong')
     } finally {
       setSending(false)
     }
@@ -55,7 +55,7 @@ export default function ContactSection() {
         className="corner-decor corner-tl"
         style={{ borderColor: 'var(--magenta)' }}
       />
-      <div className="section-label reveal reveal-left">// Chapter 04</div>
+      <div className="section-label reveal reveal-left">// ISSUE #07 — TEAM-UP</div>
       <h2
         id="contact-title"
         className="section-title"
@@ -157,14 +157,25 @@ export default function ContactSection() {
                 <div
                   role="alert"
                   style={{
-                    fontSize: 12,
-                    color: 'var(--red)',
-                    border: '1px solid var(--red)',
-                    padding: '8px 10px',
+                    border: '2px solid var(--red)',
+                    boxShadow: '3px 3px 0 var(--red)',
+                    padding: '10px 12px',
                     background: 'rgba(232,25,44,0.08)',
                   }}
                 >
-                  {error}
+                  <div
+                    style={{
+                      fontFamily: 'Bangers',
+                      fontSize: 20,
+                      letterSpacing: 1,
+                      color: 'var(--red)',
+                    }}
+                  >
+                    WEB FLUID JAMMED!
+                  </div>
+                  <div style={{ fontSize: 12, color: 'rgba(240,238,255,0.85)', marginTop: 4 }}>
+                    {error} — try again or email me directly.
+                  </div>
                 </div>
               )}
               <button type="submit" className="send-btn" disabled={sending}>
@@ -198,13 +209,16 @@ export default function ContactSection() {
                 href={s.href}
                 className="social-link reveal reveal-right"
                 style={{ '--reveal-delay': `${350 + i * 120}ms` }}
+                {...(s.external
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
               >
                 <div className="social-icon">{s.icon}</div>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1 }}>
                     {s.label}
                   </div>
-                  <div style={{ fontSize: 11, opacity: 0.6 }}>{s.sub}</div>
+                  <div style={{ fontSize: 11, opacity: 0.78 }}>{s.sub}</div>
                 </div>
               </a>
             ))}

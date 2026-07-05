@@ -6,12 +6,31 @@ import { useEffect, useState } from 'react'
  * spokes first, then concentric strands, with the progress count
  * integrated beside the glyph.
  */
+// Only hold the full web-spin on the first showing per tab — repeat
+// visits and hops back from #/games / #/chatbot shouldn't be gated
+// behind a 1.1 s animation they've already seen.
+const SEEN_KEY = 'preloader-seen'
+
+function hasSeenPreloader() {
+  try {
+    return sessionStorage.getItem(SEEN_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
 export default function Preloader() {
   const [progress, setProgress] = useState(0)
-  const [gone, setGone] = useState(false)
+  const [gone, setGone] = useState(() => hasSeenPreloader())
   const [hiding, setHiding] = useState(false)
 
   useEffect(() => {
+    if (gone) return
+    try {
+      sessionStorage.setItem(SEEN_KEY, '1')
+    } catch {
+      /* private browsing */
+    }
     const start = performance.now()
     const minMs = 1100
     let raf = 0
@@ -46,7 +65,9 @@ export default function Preloader() {
       clearTimeout(hardCap)
       document.removeEventListener('DOMContentLoaded', finish)
     }
-  }, [])
+    // `gone` is only true here when the preloader was skipped at mount;
+    // re-running on its later transition is a harmless no-op.
+  }, [gone])
 
   if (gone) return null
 

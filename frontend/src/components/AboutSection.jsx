@@ -2,6 +2,13 @@ import { useRef } from 'react'
 import SwingingSpood from './SwingingSpood'
 import SwingFigure from './SwingFigure'
 import LetterReveal from './LetterReveal'
+import { stats } from '../data'
+
+const STAT_COLORS = {
+  red: 'var(--red)',
+  cyan: 'var(--cyan)',
+  mag: 'var(--magenta)',
+}
 
 export default function AboutSection() {
   const sectionRef = useRef(null)
@@ -27,7 +34,7 @@ export default function AboutSection() {
         className="corner-decor corner-br"
         style={{ borderColor: 'var(--cyan)' }}
       />
-      <div className="section-label reveal reveal-left">// Chapter 01</div>
+      <div className="section-label reveal reveal-left">// ISSUE #01 — ORIGIN STORY</div>
       <h2
         id="about-title"
         className="section-title"
@@ -71,43 +78,24 @@ export default function AboutSection() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
           <div className="stats-grid reveal reveal-right">
-            <div
-              className="stat-item reveal reveal-zoom"
-              style={{ '--reveal-delay': '100ms' }}
-            >
-              <span className="stat-number">5</span>
-              <span className="stat-label">Projects Led</span>
-            </div>
-            <div
-              className="stat-item reveal reveal-zoom"
-              style={{ '--reveal-delay': '200ms' }}
-            >
-              <span className="stat-number" style={{ color: 'var(--cyan)' }}>
-                2:1
-              </span>
-              <span className="stat-label">Honours Degree</span>
-            </div>
-            <div
-              className="stat-item reveal reveal-zoom"
-              style={{ '--reveal-delay': '300ms' }}
-            >
-              <span className="stat-number" style={{ color: 'var(--magenta)' }}>
-                AI
-              </span>
-              <span className="stat-label">Engineering</span>
-            </div>
-            <div
-              className="stat-item reveal reveal-zoom"
-              style={{ '--reveal-delay': '400ms' }}
-            >
-              <span
-                className="stat-number"
-                style={{ color: 'var(--cyan)', fontSize: 36 }}
+            {stats.map((s, i) => (
+              <div
+                key={s.l}
+                className="stat-item reveal reveal-zoom"
+                style={{ '--reveal-delay': `${(i + 1) * 100}ms` }}
               >
-                ERP
-              </span>
-              <span className="stat-label">Odoo Certified</span>
-            </div>
+                <span
+                  className="stat-number"
+                  style={{
+                    color: STAT_COLORS[s.c],
+                    ...(s.n.length > 2 ? { fontSize: 36 } : {}),
+                  }}
+                >
+                  {s.n}
+                </span>
+                <span className="stat-label">{s.l}</span>
+              </div>
+            ))}
           </div>
           <div
             className="comic-panel reveal reveal-right"

@@ -9,14 +9,14 @@ export default function SkillsSection() {
       aria-labelledby="skills-title"
     >
       <img
-        src="/spoodhand.gif"
+        src="/spoodhand.webp"
         alt=""
         aria-hidden="true"
         decoding="async"
         loading="lazy"
         className="tech-stack-spood"
       />
-      <div className="section-label reveal reveal-left">// Chapter 03</div>
+      <div className="section-label reveal reveal-left">// ISSUE #06 — THE ARSENAL</div>
       <h2
         id="skills-title"
         className="section-title"
@@ -37,7 +37,10 @@ export default function SkillsSection() {
             </div>
             <div className="skill-pills">
               {cat.pills.map((p) => (
-                <span key={p.l} className={`skill-pill ${p.c}`}>
+                <span
+                  key={p.l}
+                  className={`skill-pill ${p.c}${p.core ? ' skill-pill--core' : ''}`}
+                >
                   {p.l}
                 </span>
               ))}

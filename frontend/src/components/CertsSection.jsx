@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LetterReveal from './LetterReveal'
 
 const CERTS = [
@@ -6,8 +6,6 @@ const CERTS = [
   { title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents', issuer: 'Udemy', date: '2026', color: 'red', image: '/AI-Engineer.jpg' },
   { title: 'FastAPI - The Complete Course', issuer: 'Udemy', date: '2026', color: 'mag', image: '/FastAPI.jpg' },
   { title: 'Six Sigma White Belt', issuer: 'Educate 360', date: '2025', color: 'cyan', image: '/SixSigma.jpeg' },
- // { title: 'Python Certification - Coming Soon', issuer: 'Free Code Camp', date: '2026', color: 'red', image: '/agentic.jpg' },
-  // { title: 'AI - Agentic Models - Coming Soon', issuer: 'Udemy', date: '2026', color: 'mag', image: '/python.png' },
 ]
 
 const ACCENT = {
@@ -15,8 +13,6 @@ const ACCENT = {
   red: 'var(--red)',
   mag: 'var(--magenta)',
 }
-
-const CARD_W = 256
 
 function CertCard({ cert }) {
   const accent = ACCENT[cert.color]
@@ -36,7 +32,7 @@ function CertCard({ cert }) {
         className="cert-header"
         style={{ background: accent, color: headerColor }}
       >
-        CERTIFIED
+        {cert.issuer.toUpperCase()}
       </div>
       <div className="cert-icon">
         {cert.image && (
@@ -67,25 +63,69 @@ function CertCard({ cert }) {
 }
 
 export default function CertsSection() {
-  const [pos, setPos] = useState(0)
   const total = CERTS.length
+  // `pos` is unbounded; the track renders three copies and translates from
+  // the middle one, so there is always a card on both sides. After a
+  // transition lands outside the middle copy we snap back by `total` with
+  // the transition disabled — same frame visually, so the wrap is seamless
+  // instead of the track lurching backwards.
+  const [pos, setPos] = useState(0)
+  const [animate, setAnimate] = useState(true)
+  const [paused, setPaused] = useState(false)
+  const autoRef = useRef(true) // auto-advance stops for good once the user takes over
+  const trackRef = useRef(null)
+  const [step, setStep] = useState(256)
 
-  const prev = () => setPos((p) => (p - 1 + total) % total)
-  const next = () => setPos((p) => (p + 1) % total)
+  // Measure the real slide step (card width + flex gap) so the track stays
+  // aligned at every breakpoint instead of trusting a hard-coded width.
+  useEffect(() => {
+    const measure = () => {
+      const track = trackRef.current
+      if (track && track.children.length > 1) {
+        setStep(track.children[1].offsetLeft - track.children[0].offsetLeft)
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  const goto = (updater) => {
+    autoRef.current = false
+    setAnimate(true)
+    setPos(updater)
+  }
+  const prev = () => goto((p) => p - 1)
+  const next = () => goto((p) => p + 1)
 
   useEffect(() => {
-    const t = setInterval(() => setPos((p) => (p + 1) % total), 3200)
+    const t = setInterval(() => {
+      if (!autoRef.current || paused) return
+      setAnimate(true)
+      setPos((p) => p + 1)
+    }, 3200)
     return () => clearInterval(t)
-  }, [total])
+  }, [paused])
 
-  const visibleCerts = [...CERTS, ...CERTS]
+  useEffect(() => {
+    if (pos >= total || pos < 0) {
+      const t = setTimeout(() => {
+        setAnimate(false)
+        setPos((p) => ((p % total) + total) % total)
+      }, 520) // just after the 0.5s track transition
+      return () => clearTimeout(t)
+    }
+  }, [pos, total])
+
+  const visibleCerts = [...CERTS, ...CERTS, ...CERTS]
+  const active = ((pos % total) + total) % total
 
   return (
     <section id="certs" className="certs-section">
       <div className="certs-halftone" aria-hidden="true" />
       <div className="certs-header">
         <div>
-          <div className="section-label reveal reveal-left">// Credentials</div>
+          <div className="section-label reveal reveal-left">// ISSUE #05 — CREDENTIALS</div>
           <h2
             id="certs-title"
             className="section-title"
@@ -114,10 +154,20 @@ export default function CertsSection() {
         </div>
       </div>
 
-      <div className="certs-track-wrap">
+      <div
+        className="certs-track-wrap"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
         <div
+          ref={trackRef}
           className="certs-track"
-          style={{ transform: `translateX(calc(-${pos * CARD_W}px))` }}
+          style={{
+            transform: `translateX(${-(pos + total) * step}px)`,
+            transition: animate ? undefined : 'none',
+          }}
         >
           {visibleCerts.map((cert, i) => (
             <CertCard key={i} cert={cert} />
@@ -126,18 +176,15 @@ export default function CertsSection() {
       </div>
 
       <div className="certs-dots">
-        {CERTS.map((_, i) => {
-          const active = i === pos % total
-          return (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setPos(i)}
-              className={`cert-dot${active ? ' is-active' : ''}`}
-              aria-label={`Go to certificate ${i + 1}`}
-            />
-          )
-        })}
+        {CERTS.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => goto((p) => p + (i - active))}
+            className={`cert-dot${i === active ? ' is-active' : ''}`}
+            aria-label={`Go to certificate ${i + 1}`}
+          />
+        ))}
       </div>
     </section>
   )

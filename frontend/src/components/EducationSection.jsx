@@ -37,7 +37,7 @@ export default function EducationSection() {
   return (
     <section id="education" className="education-section">
       <div className="education-halftone" aria-hidden="true" />
-      <div className="section-label reveal reveal-left">// Chapter 01.8</div>
+      <div className="section-label reveal reveal-left">// ISSUE #03 — TRAINING ARC</div>
       <h2
         id="education-title"
         className="section-title"

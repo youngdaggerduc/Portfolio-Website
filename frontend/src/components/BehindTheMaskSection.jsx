@@ -23,9 +23,7 @@ export default function BehindTheMaskSection() {
               />
               <div className="behind-photo-fallback" aria-hidden="true">
                 <div className="behind-photo-initials">PD</div>
-                <div className="behind-photo-hint">
-                  Upload me.jpg to show your photo
-                </div>
+                <div className="behind-photo-hint">IDENTITY CLASSIFIED</div>
               </div>
               <div className="behind-photo-sense" aria-hidden="true">
                 {[0, 0.5, 1].map((d) => (
@@ -45,7 +43,7 @@ export default function BehindTheMaskSection() {
         </div>
 
         <div className="behind-text reveal reveal-right">
-          <div className="section-label">// The Origin</div>
+          <div className="section-label">// ISSUE #08 — SECRET IDENTITY</div>
           <h2 className="behind-headline">
             <LetterReveal text={'BEHIND\nTHE\nMASK'} variant="letter-pop" stagger={55} />
           </h2>

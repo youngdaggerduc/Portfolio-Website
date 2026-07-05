@@ -14,7 +14,7 @@ export default function ProjectsSection() {
       className="projects-section"
       aria-labelledby="projects-title"
     >
-      <div className="section-label reveal reveal-left">// Chapter 02</div>
+      <div className="section-label reveal reveal-left">// ISSUE #04 — CASE FILES</div>
       <h2
         id="projects-title"
         className="section-title"

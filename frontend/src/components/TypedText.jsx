@@ -49,8 +49,10 @@ export default function TypedText({
   const done = shown.length >= text.length
 
   return (
-    <span ref={ref} className={className} style={style}>
-      <span>{shown || ' '}</span>
+    // Screen readers get the full sentence immediately via aria-label;
+    // the character-by-character rendering is presentation only.
+    <span ref={ref} className={className} style={style} aria-label={text}>
+      <span aria-hidden="true">{shown || ' '}</span>
       {showCaret && (
         <span className={`type-caret${done ? ' type-caret--done' : ''}`}>
           |

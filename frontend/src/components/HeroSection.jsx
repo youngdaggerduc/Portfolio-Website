@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react'
 import TypedText from './TypedText'
+import { stats } from '../data'
 
-const HERO_STATS = [
-  { n: '5', l: 'Projects Led', c: 'var(--red)' },
-  { n: '2:1', l: 'Honours Degree', c: 'var(--cyan)' },
-  { n: 'AI', l: 'Engineering', c: 'var(--magenta)' },
-  { n: 'ERP', l: 'Odoo Expert', c: 'var(--cyan)' },
-]
+const STAT_COLORS = {
+  red: 'var(--red)',
+  cyan: 'var(--cyan)',
+  mag: 'var(--magenta)',
+}
 
 export default function HeroSection() {
   const videoRef = useRef(null)
@@ -46,6 +46,7 @@ export default function HeroSection() {
         ref={videoRef}
         className="hero-video"
         src="/piercespood.mp4"
+        poster="/hero-poster.jpg"
         autoPlay
         loop
         muted
@@ -94,7 +95,7 @@ export default function HeroSection() {
         <div className="hero-role-row" style={{ marginTop: 4 }}>
           <div className="hero-role-pill red">FREELANCER</div>
           <div className="hero-role-pill dark">✦</div>
-          <div className="hero-role-pill cyan">Business Process Analyst</div>
+          <div className="hero-role-pill cyan">PROCESS ANALYST</div>
         </div>
 
         <p className="hero-tagline">
@@ -110,9 +111,9 @@ export default function HeroSection() {
 
       <div className="hero-right">
         <div className="hero-stats-row">
-          {HERO_STATS.map((s) => (
+          {stats.map((s) => (
             <div key={s.l} className="hero-stat">
-              <span className="hero-stat-n" style={{ color: s.c }}>
+              <span className="hero-stat-n" style={{ color: STAT_COLORS[s.c] }}>
                 {s.n}
               </span>
               <span className="hero-stat-l">{s.l}</span>
@@ -128,7 +129,7 @@ export default function HeroSection() {
             GET IN TOUCH
           </a>
           <a
-            href="/Pierce Doman Resume.pdf"
+            href="/pierce-doman-resume.pdf"
             download="Pierce Doman Resume.pdf"
             className="btn-secondary"
             style={{

@@ -51,30 +51,44 @@ function Portfolio() {
         <ExperienceSection />
         <div className="comic-divider" />
         <EducationSection />
-        <div className="comic-divider mag" />
+        <div className="comic-divider mag divider-burst" data-burst="THWIP!" />
         <ProjectsSection />
         <div className="comic-divider cyan" />
         <CertsSection />
         <div className="comic-divider mag" />
         <SkillsSection />
         <div className="comic-divider" />
-        <SpiderCommStrip />
+        <SpiderCommStrip variant="reprise" />
         <ContactSection />
         <div className="comic-divider cyan" />
         <BehindTheMaskSection />
-        <div className="comic-divider mag" />
+        <div className="comic-divider mag divider-burst" data-burst="WHAM!" />
         <GamesCalloutSection />
       </main>
       <footer>
+        <div className="footer-continued" aria-hidden="true">TO BE CONTINUED…</div>
         <div className="footer-logo">PIERCE DOMAN</div>
-        <div className="footer-copy">© 2026 — BUILT WITH FULL STACK ENERGY & AI VIBES</div>
+        <div className="footer-copy">
+          © {new Date().getFullYear()} — BUILT WITH FULL STACK ENERGY & AI VIBES
+        </div>
       </footer>
     </>
   )
 }
 
+const TITLES = {
+  '#/chatbot': 'Spider-Comm AI Chatbot — Pierce Doman',
+  '#/games': 'AI Games — Pierce Doman',
+}
+const DEFAULT_TITLE = 'Pierce Doman — Full Stack Developer & AI Engineer'
+
 function App() {
   const hash = useHashRoute()
+
+  useEffect(() => {
+    document.title = TITLES[hash] ?? DEFAULT_TITLE
+  }, [hash])
+
   if (hash === '#/chatbot') return <ChatbotPage />
   if (hash === '#/games') return <GamesPage />
   return <Portfolio />

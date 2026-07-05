@@ -1,3 +1,14 @@
+// Single source for the headline stats shown in the hero and the About
+// section, so the two can never drift apart.
+export const stats = [
+  { n: '5', l: 'Stalled Projects Rescued', c: 'red' },
+  { n: '2', l: 'Books Published', c: 'cyan' },
+  { n: 'AI', l: 'Engineering', c: 'mag' },
+  { n: 'ERP', l: 'Odoo Expert', c: 'cyan' },
+]
+
+// Accent colors carry meaning: cyan = client/freelance work,
+// red = personal/academic builds, mag = AI-focused work.
 export const projects = [
   {
     id: 1,
@@ -19,7 +30,7 @@ export const projects = [
     color: 'red',
     image: '/Studentconducttracker.jpeg',
     details:
-      'Built for the UWI Computer Science final year project. Supports admin and staff roles. Features incident logging, escalation workflows, conduct trend analytics, and exportable reports. Earned Second Class Honours recognition.',
+      'Built for the UWI Computer Science final year project. Supports admin and staff roles. Features incident logging, escalation workflows, conduct trend analytics, and exportable reports.',
   },
   {
     id: 3,
@@ -38,7 +49,7 @@ export const projects = [
     tag: 'Game Dev',
     desc: 'Full 2D platformer built in Java — custom physics, game mechanics, UI, and complete gameplay systems.',
     stack: ['Java', 'Swing', 'OOP', 'Game Physics'],
-    color: 'cyan',
+    color: 'red',
     image: '/Trinidadisnotarealplace.png',
     details:
       'Java platformer using Swing for rendering. Custom physics engine with gravity and collision detection, animated sprite system, enemy behaviours, level design, and a full in-game UI. All game systems built from scratch.',
@@ -49,7 +60,7 @@ export const projects = [
     tag: 'Corporate',
     desc: 'Led the redesign and ongoing management of Radian H.A. Limited\'s corporate website — coordinated a small dev team from strategy to deployment.',
     stack: ['WordPress', 'PHP', 'Custom CMS', 'Team Lead'],
-    color: 'red',
+    color: 'cyan',
     image: '/Radian.png',
     details:
       'Owned the end-to-end redevelopment of the Radian H.A. Limited corporate website. Managed internal dev work, coordinated a small team, handled content architecture, and shipped ongoing maintenance. Previously stalled for months — delivered to production under a clear operational brief.',
@@ -60,7 +71,7 @@ export const projects = [
     tag: 'ERP / Python',
     desc: 'Custom Odoo modules extending Accounting, Sales, CRM, Rental, and Reporting to match real operational workflows at Radian.',
     stack: ['Python', 'Odoo', 'XML', 'PostgreSQL'],
-    color: 'mag',
+    color: 'cyan',
     image: '/odoo.png',
     details:
       'Designed and built custom Odoo modules on top of a full ERP rollout. Tailored Accounting, Sales, CRM, Rental Operations, and Reporting flows to the business, including custom models, views, automated actions, and reports. Trained staff on adoption and maintained the customizations post-go-live.',
@@ -72,7 +83,7 @@ export const skills = [
     cat: 'Frontend',
     dot: 'cyan',
     pills: [
-      { l: 'React', c: 'cyan' },
+      { l: 'React', c: 'cyan', core: true },
       { l: 'Next.js', c: 'cyan' },
       { l: 'HTML/CSS', c: 'cyan' },
       { l: 'Framer Motion', c: 'cyan' },
@@ -85,8 +96,8 @@ export const skills = [
     pills: [
       { l: 'Node.js', c: 'red' },
       { l: 'Express', c: 'red' },
-      { l: 'Python', c: 'red' },
-      { l: 'FastAPI', c: 'red' },
+      { l: 'Python', c: 'red', core: true },
+      { l: 'FastAPI', c: 'red', core: true },
       { l: 'REST APIs', c: 'red' },
       { l: 'Java', c: 'red' },
     ],
@@ -95,8 +106,8 @@ export const skills = [
     cat: 'AI / ML',
     dot: 'mag',
     pills: [
-      { l: 'LangChain', c: 'mag' },
-      { l: 'OpenAI API', c: 'mag' },
+      { l: 'LangChain', c: 'mag', core: true },
+      { l: 'OpenAI API', c: 'mag', core: true },
       { l: 'Hugging Face', c: 'mag' },
       { l: 'Prompt Engineering', c: 'mag' },
       { l: 'AI Automation', c: 'mag' },
@@ -116,7 +127,7 @@ export const skills = [
     cat: 'ERP & Business',
     dot: 'red',
     pills: [
-      { l: 'Odoo ERP', c: 'red' },
+      { l: 'Odoo ERP', c: 'red', core: true },
       { l: 'CRM', c: 'red' },
       { l: 'Process Optimization', c: 'red' },
       { l: 'Power Automate', c: 'red' },

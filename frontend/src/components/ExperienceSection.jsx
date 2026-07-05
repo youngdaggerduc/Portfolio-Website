@@ -40,7 +40,7 @@ export default function ExperienceSection() {
         className="corner-decor corner-tl"
         style={{ borderColor: 'var(--cyan)' }}
       />
-      <div className="section-label reveal reveal-left">// Chapter 01.5</div>
+      <div className="section-label reveal reveal-left">// ISSUE #02 — FIELD WORK</div>
       <h2
         id="experience-title"
         className="section-title"

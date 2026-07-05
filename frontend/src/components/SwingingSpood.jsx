@@ -91,7 +91,7 @@ export default function SwingingSpood({ sectionRef }) {
       }
 
       setState({
-        visible: opacity > 1,
+        visible: opacity > 0,
         charLeftPct,
         charTop,
         rot,
@@ -151,7 +151,7 @@ export default function SwingingSpood({ sectionRef }) {
       <img
         ref={imgRef}
         className="swing-char"
-        src="/spoodswing.gif"
+        src="/spoodswing.webp"
         alt=""
         decoding="async"
         style={{
