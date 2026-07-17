@@ -17,7 +17,10 @@ frontend/.env.*.local
 # Local backups of large source assets (kept off GitHub — re-encode from these
 # if you ever need higher quality, but ship only the compressed copies)
 frontend/public/*.original.*
-DEPLOYMENT.md
+# Root-level working notes & mockups stay local (README is the repo front page)
+/*.md
+!/README.md
+/*.html
 .DS_Store
 *.pyc
 .vscode/

@@ -1,7 +1,38 @@
 import { useEffect, useRef } from 'react'
+import { loadGsap, prefersReducedMotion } from '../lib/motion'
 
-export default function Modal({ project, onClose }) {
+export default function Modal({ project, originRect, onClose }) {
   const boxRef = useRef(null)
+
+  // FLIP entrance: expand the panel out of the card the user clicked. The
+  // card stays in the DOM behind the overlay, so we just tween the box from
+  // that rect to its natural position. Skipped under reduced motion.
+  useEffect(() => {
+    if (prefersReducedMotion() || !originRect) return undefined
+    let killed = false
+    loadGsap().then(({ gsap }) => {
+      const box = boxRef.current
+      if (killed || !box) return
+      const r = box.getBoundingClientRect()
+      const dx = originRect.left + originRect.width / 2 - (r.left + r.width / 2)
+      const dy = originRect.top + originRect.height / 2 - (r.top + r.height / 2)
+      gsap.fromTo(
+        box,
+        {
+          x: dx,
+          y: dy,
+          scaleX: originRect.width / r.width,
+          scaleY: originRect.height / r.height,
+          opacity: 0.5,
+        },
+        { x: 0, y: 0, scaleX: 1, scaleY: 1, opacity: 1, duration: 0.45, ease: 'power3.out' }
+      )
+      gsap.fromTo('.modal-overlay', { opacity: 0 }, { opacity: 1, duration: 0.25 })
+    })
+    return () => {
+      killed = true
+    }
+  }, [originRect])
 
   // Focus management: remember the trigger, move focus into the dialog on
   // open, trap Tab inside it, and restore focus on close. Body scroll is

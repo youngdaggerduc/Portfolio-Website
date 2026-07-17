@@ -28,7 +28,10 @@ export default function ProjectsSection() {
             key={p.id}
             className="project-card reveal reveal-bounce"
             style={{ '--reveal-delay': `${i * 140}ms` }}
-            onClick={() => setModal(p)}
+            data-tilt="8"
+            onClick={(e) =>
+              setModal({ project: p, rect: e.currentTarget.getBoundingClientRect() })
+            }
           >
             <div className="project-card-img">
               <div className="project-tag">{p.tag}</div>
@@ -51,7 +54,10 @@ export default function ProjectsSection() {
                 className="project-link"
                 onClick={(e) => {
                   e.stopPropagation()
-                  setModal(p)
+                  setModal({
+                    project: p,
+                    rect: e.currentTarget.closest('.project-card').getBoundingClientRect(),
+                  })
                 }}
               >
                 VIEW PROJECT →
@@ -62,7 +68,11 @@ export default function ProjectsSection() {
       </div>
       {modal && (
         <Suspense fallback={null}>
-          <Modal project={modal} onClose={() => setModal(null)} />
+          <Modal
+            project={modal.project}
+            originRect={modal.rect}
+            onClose={() => setModal(null)}
+          />
         </Suspense>
       )}
     </section>

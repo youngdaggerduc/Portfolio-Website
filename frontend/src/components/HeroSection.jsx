@@ -67,6 +67,7 @@ export default function HeroSection() {
             text="// BSc Computer Science · UWI St. Augustine"
             speed={35}
             startDelay={250}
+            scramble
           />
         </div>
         <h1 className="hero-name">
@@ -122,10 +123,20 @@ export default function HeroSection() {
         </div>
 
         <div className="hero-ctas">
-          <a href="#projects" className="btn-primary" style={{ textAlign: 'center' }}>
+          <a
+            href="#projects"
+            className="btn-primary"
+            style={{ textAlign: 'center' }}
+            data-magnetic="0.4"
+          >
             SEE MY WORK
           </a>
-          <a href="#contact" className="btn-secondary" style={{ textAlign: 'center' }}>
+          <a
+            href="#contact"
+            className="btn-secondary"
+            style={{ textAlign: 'center' }}
+            data-magnetic="0.4"
+          >
             GET IN TOUCH
           </a>
           <a

@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { isDesktopFX } from '../lib/motion'
 
 /**
  * Observes every `.reveal` element and adds `.is-visible` when it enters
@@ -6,6 +7,12 @@ import { useEffect } from 'react'
  * the DOM *after* mount (e.g. lazy-rendered components) so they still
  * animate. A safety timer also reveals any still-hidden elements that
  * should already be in view, so nothing is ever permanently invisible.
+ *
+ * Trigger point: on plain/mobile scrolling we pre-trigger 120px below the
+ * fold so content is ready as it arrives. Under the desktop smooth-scroll
+ * stage the glide is slower and steadier, so pre-triggering lets the comic
+ * slams finish *before* they're visible — there we wait until the element
+ * is genuinely a bit inside the viewport so the pop happens on screen.
  */
 export function useRevealObserver() {
   useEffect(() => {
@@ -23,7 +30,10 @@ export function useRevealObserver() {
           }
         })
       },
-      { threshold: 0.05, rootMargin: '0px 0px 120px 0px' }
+      {
+        threshold: 0.05,
+        rootMargin: isDesktopFX() ? '0px 0px -7% 0px' : '0px 0px 120px 0px',
+      }
     )
 
     const observeAll = () => {

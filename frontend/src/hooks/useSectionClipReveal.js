@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { isDesktopFX } from '../lib/motion'
 
 /**
  * Progressively uncovers each <section> by animating a clip-path from a
@@ -26,7 +27,9 @@ export function useSectionClipReveal() {
           }
         })
       },
-      { threshold: 0.04, rootMargin: '0px 0px 150px 0px' }
+      // See useRevealObserver: under desktop smooth scroll, uncover on screen
+      // instead of pre-triggering below the fold.
+      { threshold: 0.04, rootMargin: isDesktopFX() ? '0px 0px -4% 0px' : '0px 0px 150px 0px' }
     )
     sections.forEach((s) => io.observe(s))
     return () => io.disconnect()

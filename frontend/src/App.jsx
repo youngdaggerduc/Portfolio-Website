@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import './motion.css'
 import Nav from './components/Nav'
 import HeroSection from './components/HeroSection'
 import AboutSection from './components/AboutSection'
@@ -13,12 +14,15 @@ import BehindTheMaskSection from './components/BehindTheMaskSection'
 import GamesCalloutSection from './components/GamesCalloutSection'
 import SpiderCommStrip from './components/SpiderCommStrip'
 import WebCursor from './components/WebCursor'
-import WebBackground from './components/WebBackground'
+import SiteBackground from './components/SiteBackground'
+import WebSpine from './components/WebSpine'
+import RouteWipe from './components/RouteWipe'
 import Preloader from './components/Preloader'
 import ChatbotPage from './components/ChatbotPage'
 import GamesPage from './components/GamesPage'
 import { useRevealObserver } from './hooks/useRevealObserver'
 import { useSectionClipReveal } from './hooks/useSectionClipReveal'
+import { useMotionStage } from './hooks/useMotionStage'
 
 function useHashRoute() {
   const [hash, setHash] = useState(() =>
@@ -35,11 +39,13 @@ function useHashRoute() {
 function Portfolio() {
   useRevealObserver()
   useSectionClipReveal()
+  useMotionStage()
 
   return (
     <>
       <Preloader />
-      <WebBackground />
+      <SiteBackground />
+      <WebSpine />
       <WebCursor />
       <Nav />
       <main>
@@ -51,7 +57,9 @@ function Portfolio() {
         <ExperienceSection />
         <div className="comic-divider" />
         <EducationSection />
-        <div className="comic-divider mag divider-burst" data-burst="THWIP!" />
+        <div className="comic-divider mag divider-burst">
+          <span className="divider-burst-word" aria-hidden="true">THWIP!</span>
+        </div>
         <ProjectsSection />
         <div className="comic-divider cyan" />
         <CertsSection />
@@ -62,7 +70,9 @@ function Portfolio() {
         <ContactSection />
         <div className="comic-divider cyan" />
         <BehindTheMaskSection />
-        <div className="comic-divider mag divider-burst" data-burst="WHAM!" />
+        <div className="comic-divider mag divider-burst">
+          <span className="divider-burst-word" aria-hidden="true">WHAM!</span>
+        </div>
         <GamesCalloutSection />
       </main>
       <footer>
@@ -89,9 +99,17 @@ function App() {
     document.title = TITLES[hash] ?? DEFAULT_TITLE
   }, [hash])
 
-  if (hash === '#/chatbot') return <ChatbotPage />
-  if (hash === '#/games') return <GamesPage />
-  return <Portfolio />
+  const route =
+    hash === '#/chatbot' ? 'chatbot' : hash === '#/games' ? 'games' : 'portfolio'
+
+  return (
+    <>
+      {route === 'chatbot' && <ChatbotPage />}
+      {route === 'games' && <GamesPage />}
+      {route === 'portfolio' && <Portfolio />}
+      <RouteWipe routeKey={route} />
+    </>
+  )
 }
 
 export default App

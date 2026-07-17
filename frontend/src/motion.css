@@ -1,0 +1,283 @@
+/* ============================================================================
+   MOTION LAYER — styles for the GSAP/Lenis/three.js upgrade (DESIGN.md).
+   Loaded after App.css. Everything here is additive and degrades to the
+   static comic look under reduced motion / on touch.
+   ========================================================================== */
+
+/* ----- Lenis smooth scroll ------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+/* Lenis and CSS scroll-snap fight each other — snap off while smoothing. */
+html.lenis {
+  scroll-snap-type: none !important;
+}
+
+/* ----- three.js background canvas ----------------------------------------- */
+.webgl-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  contain: strict;
+}
+.webgl-bg canvas {
+  display: block;
+}
+
+/* ----- Web-strand scroll spine -------------------------------------------- */
+.web-spine {
+  position: fixed;
+  top: 0;
+  left: 6px;
+  width: 30px;
+  height: 100vh;
+  z-index: 60;
+  pointer-events: none;
+  overflow: visible;
+}
+.web-spine-track {
+  stroke: rgba(0, 212, 255, 0.12);
+  stroke-width: 1.4;
+}
+.web-spine-line {
+  stroke: var(--cyan);
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.7));
+}
+.web-spine-rider circle {
+  fill: var(--red);
+  stroke: #000;
+  stroke-width: 1.2;
+}
+.web-spine-rider path {
+  stroke: var(--white);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+@media (max-width: 1100px) {
+  .web-spine {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .web-spine {
+    display: none;
+  }
+}
+
+/* ----- Divider onomatopoeia (real span, punched by ScrollTrigger) --------- */
+/* Replace the old pseudo-element burst with an animatable child span. */
+.divider-burst::after {
+  content: none !important;
+}
+.divider-burst-word {
+  position: absolute;
+  right: 7%;
+  top: 50%;
+  transform: translateY(-50%) rotate(-7deg);
+  transform-origin: center;
+  font-family: 'Bangers', cursive;
+  font-size: 30px;
+  letter-spacing: 3px;
+  color: #ffd42a;
+  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+    4px 4px 0 rgba(232, 25, 44, 0.85);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ----- Comic click sparks ------------------------------------------------- */
+.comic-spark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  z-index: 99997;
+  pointer-events: none;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ----- Route wipe (Spider-Verse halftone iris) ---------------------------- */
+.route-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 99995;
+  pointer-events: none;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, rgba(0, 212, 255, 0.28) 2px, transparent 2px),
+    radial-gradient(circle, rgba(255, 0, 170, 0.22) 2px, transparent 2px);
+  background-size: 16px 16px, 16px 16px;
+  background-position: 0 0, 8px 8px;
+  will-change: clip-path;
+}
+.route-wipe--cover {
+  animation: routeCover 0.34s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+.route-wipe--uncover {
+  animation: routeUncover 0.4s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes routeCover {
+  from {
+    clip-path: circle(0% at 50% 50%);
+  }
+  to {
+    clip-path: circle(150% at 50% 50%);
+  }
+}
+@keyframes routeUncover {
+  from {
+    clip-path: circle(150% at 50% 50%);
+  }
+  to {
+    clip-path: circle(0% at 50% 50%);
+  }
+}
+
+/* ----- Footer stamp flicker ----------------------------------------------- */
+.footer-flicker {
+  animation: footerFlicker 0.6s steps(2, start) 1;
+}
+@keyframes footerFlicker {
+  0%, 100% { opacity: 1; }
+  20% { opacity: 0.4; }
+  40% { opacity: 1; }
+  60% { opacity: 0.6; }
+  80% { opacity: 1; }
+}
+
+/* ----- Magnetic buttons: hand transform to GSAP while hovered ------------- */
+.btn-primary[data-magnetic]:hover,
+.btn-secondary[data-magnetic]:hover {
+  animation: none;
+  transform: none; /* GSAP writes inline transform; avoid the CSS fight */
+}
+
+/* ----- Project card tilt: perspective on the parent, not the card --------- */
+.projects-grid {
+  perspective: 1400px;
+}
+.project-card[data-tilt] {
+  transform-style: preserve-3d;
+}
+
+/* ----- Horizontal "case files" scrub (desktop-FX, added by projectsScrub) - */
+.projects-section.is-horizontal {
+  overflow: hidden;
+}
+.projects-section.is-horizontal .projects-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content;
+  border: none;
+  background: transparent;
+  perspective: 1400px;
+}
+.projects-section.is-horizontal .project-card {
+  flex: 0 0 clamp(320px, 26vw, 380px);
+  width: clamp(320px, 26vw, 380px);
+  border: 3px solid #000;
+  margin-right: -3px; /* collapse neighbouring borders into one line */
+}
+
+/* ============================================================================
+   PHASE 5 — PRINT POLISH
+   ========================================================================== */
+
+/* ----- Film grain over the whole page (static; off on touch for paint) ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ----- Per-issue accent: a thin colour bar climbs each section top --------- */
+main > section {
+  --issue-accent: var(--red);
+}
+main > section:nth-of-type(3n + 1) { --issue-accent: var(--red); }
+main > section:nth-of-type(3n + 2) { --issue-accent: var(--cyan); }
+main > section:nth-of-type(3n + 3) { --issue-accent: var(--magenta); }
+/* The hero keeps its own ::before (film-noise overlay) and the certs strip
+   owns its top edge, so both are excluded rather than overridden. */
+main > section:not(#hero):not(.certs-section)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 3;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--issue-accent) 20%,
+    var(--issue-accent) 80%,
+    transparent
+  );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ----- Section title: accent glow on hover --------------------------------
+   Glow only — the scroll parallax writes an inline transform every frame on
+   desktop, so a transform-based hover effect would be silently overridden. */
+.section-title {
+  transition: text-shadow 0.35s ease;
+}
+.section-title:hover {
+  text-shadow: 3px 0 0 var(--cyan), -3px 0 0 var(--magenta),
+    0 0 26px var(--issue-accent);
+}
+
+/* ----- Panel gutters: faint rotate that straightens on hover -------------- */
+.comic-panel {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.about-grid .comic-panel {
+  transform: rotate(-0.35deg);
+}
+.about-grid .comic-panel:hover {
+  transform: rotate(0deg);
+}
+
+/* ----- Reduced motion: strip everything that moves ------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .route-wipe,
+  .comic-spark,
+  .footer-flicker {
+    animation: none !important;
+  }
+  .comic-panel,
+  .about-grid .comic-panel {
+    transform: none !important;
+  }
+}
+
+/* ----- Touch / small screens: drop the fixed grain layer (paint cost) ----- */
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  body::before {
+    display: none;
+  }
+  .web-spine {
+    display: none;
+  }
+}
