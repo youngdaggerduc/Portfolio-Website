@@ -93,6 +93,19 @@ export default function Modal({ project, originRect, onClose }) {
           </button>
         </div>
         <div className="modal-body">
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
+            <span className="project-tag" style={{ position: 'static' }}>
+              {project.tag}
+            </span>
+            {project.year && (
+              <span
+                className="project-tag"
+                style={{ position: 'static', background: '#000', color: 'var(--cyan)' }}
+              >
+                {project.year}
+              </span>
+            )}
+          </div>
           <p
             style={{
               fontSize: 14,
@@ -103,6 +116,35 @@ export default function Modal({ project, originRect, onClose }) {
           >
             {project.details}
           </p>
+          {project.highlights?.length > 0 && (
+            <ul
+              style={{
+                listStyle: 'none',
+                margin: '0 0 20px',
+                padding: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+              }}
+            >
+              {project.highlights.map((h) => (
+                <li
+                  key={h}
+                  style={{
+                    display: 'flex',
+                    gap: 10,
+                    alignItems: 'flex-start',
+                    fontSize: 13,
+                    lineHeight: 1.6,
+                    color: 'rgba(240,238,255,0.75)',
+                  }}
+                >
+                  <span style={{ color: 'var(--cyan)', fontWeight: 700 }}>▸</span>
+                  {h}
+                </li>
+              ))}
+            </ul>
+          )}
           <div className="project-stack" style={{ marginBottom: 20 }}>
             {project.stack.map((s) => (
               <span
@@ -134,7 +176,7 @@ export default function Modal({ project, originRect, onClose }) {
                   className="btn-secondary"
                   style={{ fontSize: 16, padding: '10px 24px' }}
                 >
-                  LIVE DEMO
+                  VISIT SITE ↗
                 </a>
               )}
             </div>

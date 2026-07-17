@@ -9,7 +9,57 @@ export const stats = [
 
 // Accent colors carry meaning: cyan = client/freelance work,
 // red = personal/academic builds, mag = AI-focused work.
+// Newest work first — the grid and the horizontal scrub both read in order.
 export const projects = [
+  {
+    id: 7,
+    title: 'Radian Training Website',
+    tag: 'Corporate',
+    year: '2026',
+    desc: 'Developed and coded the Radian training platform — every course on offer, plus a live certificate database & checker.',
+    stack: ['WordPress', 'PHP', 'MySQL', 'JavaScript'],
+    color: 'cyan',
+    live: 'https://training.rhatt.com',
+    details:
+      'Built training.rhatt.com end-to-end: a comprehensive catalogue of every training programme Radian offers, enrollment information, and a certificate database with a public checker so employers can verify any certificate issued. Designed, developed, and deployed solo.',
+    highlights: [
+      'Full training catalogue with per-course pages',
+      'Certificate database + public verification checker',
+      'Live in production at training.rhatt.com',
+    ],
+  },
+  {
+    id: 8,
+    title: 'Radian Training Management System',
+    tag: 'ERP / Systems',
+    year: '2026',
+    desc: 'A full Odoo-style management system purpose-built for Radian\'s training operation — everything training, one system.',
+    stack: ['Python', 'PostgreSQL', 'Odoo', 'ERP Design'],
+    color: 'cyan',
+    details:
+      'A complete training-operations platform modeled on ERP patterns: course scheduling, student enrollment, trainer assignment, certificate issuance, and reporting — all the moving parts of running a training business in one Radian-specific system.',
+    highlights: [
+      'Course scheduling, enrollment & trainer management',
+      'Certificate issuance wired to the public checker',
+      'Odoo-style modular architecture, built for Radian workflows',
+    ],
+  },
+  {
+    id: 9,
+    title: 'ABSCO Enterprises Ltd',
+    tag: 'Freelance',
+    year: '2026',
+    desc: 'Commercial freelance build — the full company website for ABSCO Enterprises Ltd at abscoltdtt.com.',
+    stack: ['WordPress', 'Custom Theme', 'SEO'],
+    color: 'cyan',
+    live: 'https://abscoltdtt.com',
+    details:
+      'Designed and delivered the complete web presence for ABSCO Enterprises Ltd — company profile, services, and contact pipeline — shipped to production at abscoltdtt.com.',
+    highlights: [
+      'Full company site: profile, services, contact',
+      'Live in production at abscoltdtt.com',
+    ],
+  },
   {
     id: 1,
     title: 'Lumiere Lounge',
@@ -154,6 +204,15 @@ export const skills = [
       { l: 'Git / GitHub', c: 'cyan' },
       { l: 'WordPress (Custom)', c: 'cyan' },
       { l: 'Vercel', c: 'cyan' },
+    ],
+  },
+  {
+    cat: 'Learning Now',
+    dot: 'mag',
+    pills: [
+      { l: 'AWS Cloud Practitioner', c: 'mag', core: true },
+      { l: 'AWS AI Practitioner', c: 'mag', core: true },
+      { l: 'AWS Cloud', c: 'mag' },
     ],
   },
 ]

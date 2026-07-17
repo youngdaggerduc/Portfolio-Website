@@ -2959,3 +2959,127 @@ html.has-web-cursor textarea { caret-color: var(--cyan); }
   .cert-icon { height: 78px; }
   .cert-icon span { font-size: 36px; }
 }
+
+/* ============================================================
+   CERT LIGHTBOX — click a certificate to expand + share
+   ============================================================ */
+.cert-card--clickable { cursor: pointer; }
+.cert-expand-hint {
+  position: absolute;
+  top: 42px;
+  right: 10px;
+  z-index: 2;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(2px);
+  pointer-events: none;
+  text-shadow: 0 0 8px currentColor;
+}
+.cert-card--clickable:hover .cert-expand-hint,
+.cert-card--clickable:focus-visible .cert-expand-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cert-card--clickable:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.cert-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  backdrop-filter: blur(4px);
+}
+.cert-lightbox {
+  background: var(--bg2);
+  border: var(--panel-border-thick);
+  max-width: 720px;
+  width: 100%;
+  max-height: calc(100vh - 64px);
+  max-height: calc(100svh - 64px);
+  display: flex;
+  flex-direction: column;
+  animation: panelIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cert-lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 3px solid #000;
+  font-family: 'Bangers', cursive;
+  font-size: 16px;
+  letter-spacing: 3px;
+}
+.cert-lightbox-close {
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  color: #fff;
+  cursor: pointer;
+  background: #000;
+  border: 2px solid #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cert-lightbox-img-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 16px;
+}
+.cert-lightbox-img {
+  max-width: 100%;
+  max-height: min(62vh, 560px);
+  object-fit: contain;
+}
+.cert-lightbox-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-top: 3px solid #000;
+}
+.cert-lightbox-name {
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: var(--white);
+  line-height: 1.15;
+}
+.cert-lightbox-meta {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+}
+@media (max-width: 600px) {
+  .cert-lightbox-overlay { padding: 14px; }
+  .cert-lightbox-name { font-size: 17px; }
+}
+
+/* Live-site chip on project cards */
+.project-link--live {
+  background: transparent;
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 3px 3px 0 rgba(0, 212, 255, 0.5);
+}
+.project-link--live:hover {
+  background: var(--cyan);
+  color: #000;
+}

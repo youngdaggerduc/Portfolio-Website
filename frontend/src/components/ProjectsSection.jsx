@@ -34,7 +34,10 @@ export default function ProjectsSection() {
             }
           >
             <div className="project-card-img">
-              <div className="project-tag">{p.tag}</div>
+              <div className="project-tag">
+                {p.tag}
+                {p.year ? ` · ${p.year}` : ''}
+              </div>
               <ProjectPlaceholder color={p.color} image={p.image} title={p.title} />
             </div>
             <div className="project-card-content">
@@ -50,18 +53,31 @@ export default function ProjectsSection() {
                   </span>
                 ))}
               </div>
-              <button
-                className="project-link"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setModal({
-                    project: p,
-                    rect: e.currentTarget.closest('.project-card').getBoundingClientRect(),
-                  })
-                }}
-              >
-                VIEW PROJECT →
-              </button>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button
+                  className="project-link"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setModal({
+                      project: p,
+                      rect: e.currentTarget.closest('.project-card').getBoundingClientRect(),
+                    })
+                  }}
+                >
+                  VIEW PROJECT →
+                </button>
+                {p.live && (
+                  <a
+                    className="project-link project-link--live"
+                    href={p.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    LIVE ↗
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         ))}

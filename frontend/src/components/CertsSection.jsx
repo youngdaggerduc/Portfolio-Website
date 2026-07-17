@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import LetterReveal from './LetterReveal'
 
 const CERTS = [
@@ -14,13 +15,23 @@ const ACCENT = {
   mag: 'var(--magenta)',
 }
 
-function CertCard({ cert }) {
+function CertCard({ cert, onOpen }) {
   const accent = ACCENT[cert.color]
   const headerColor = cert.color === 'cyan' ? '#000' : '#fff'
   return (
     <div
-      className="cert-card"
+      className="cert-card cert-card--clickable"
       style={{ boxShadow: `4px 4px 0 ${accent}`, '--cert-accent': accent }}
+      role="button"
+      tabIndex={0}
+      aria-label={`View certificate: ${cert.title}`}
+      onClick={() => onOpen(cert)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onOpen(cert)
+        }
+      }}
     >
       <div
         className="cert-halftone"
@@ -58,7 +69,110 @@ function CertCard({ cert }) {
         </div>
         <div className="cert-date">{cert.date}</div>
       </div>
+      <div className="cert-expand-hint" aria-hidden="true" style={{ color: accent }}>
+        ⤢
+      </div>
     </div>
+  )
+}
+
+/**
+ * Full-screen certificate viewer. Same focus/scroll-lock pattern as the
+ * project Modal: Escape closes, backdrop click closes, focus is moved in on
+ * open and restored on close. SHARE uses the native share sheet when the
+ * browser has one and falls back to copying the certificate link.
+ */
+function CertLightbox({ cert, onClose }) {
+  const boxRef = useRef(null)
+  const [copied, setCopied] = useState(false)
+  const accent = ACCENT[cert.color]
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement
+    document.body.style.overflow = 'hidden'
+    boxRef.current?.querySelector('.cert-lightbox-close')?.focus()
+    const handler = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handler)
+    return () => {
+      window.removeEventListener('keydown', handler)
+      document.body.style.overflow = ''
+      previouslyFocused?.focus?.()
+    }
+  }, [onClose])
+
+  const share = async () => {
+    const url = window.location.origin + cert.image
+    const payload = {
+      title: cert.title,
+      text: `${cert.title} — ${cert.issuer} (${cert.date}) · Pierce Doman`,
+      url,
+    }
+    if (navigator.share) {
+      try {
+        await navigator.share(payload)
+        return
+      } catch {
+        /* user dismissed the sheet — fall through to copy */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(`${payload.text} ${url}`)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      /* clipboard unavailable — nothing sensible left to do */
+    }
+  }
+
+  return createPortal(
+    <div
+      className="cert-lightbox-overlay"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+    >
+      <div
+        ref={boxRef}
+        className="cert-lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label={cert.title}
+        style={{ boxShadow: `8px 8px 0 ${accent}` }}
+      >
+        <div
+          className="cert-lightbox-header"
+          style={{ background: accent, color: cert.color === 'cyan' ? '#000' : '#fff' }}
+        >
+          <span className="cert-lightbox-title">{cert.issuer.toUpperCase()}</span>
+          <button
+            className="cert-lightbox-close"
+            onClick={onClose}
+            aria-label="Close certificate viewer"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="cert-lightbox-img-wrap">
+          <img src={cert.image} alt={cert.title} className="cert-lightbox-img" />
+        </div>
+        <div className="cert-lightbox-footer">
+          <div>
+            <div className="cert-lightbox-name">{cert.title}</div>
+            <div className="cert-lightbox-meta" style={{ color: accent }}>
+              {cert.issuer} · {cert.date}
+            </div>
+          </div>
+          <div className="cert-lightbox-actions">
+            <button type="button" className="project-link" onClick={share}>
+              {copied ? 'LINK COPIED ✓' : 'SHARE ↗'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.body
   )
 }
 
@@ -72,6 +186,7 @@ export default function CertsSection() {
   const [pos, setPos] = useState(0)
   const [animate, setAnimate] = useState(true)
   const [paused, setPaused] = useState(false)
+  const [viewing, setViewing] = useState(null)
   const autoRef = useRef(true) // auto-advance stops for good once the user takes over
   const trackRef = useRef(null)
   const [step, setStep] = useState(256)
@@ -100,12 +215,12 @@ export default function CertsSection() {
 
   useEffect(() => {
     const t = setInterval(() => {
-      if (!autoRef.current || paused) return
+      if (!autoRef.current || paused || viewing) return
       setAnimate(true)
       setPos((p) => p + 1)
     }, 3200)
     return () => clearInterval(t)
-  }, [paused])
+  }, [paused, viewing])
 
   useEffect(() => {
     if (pos >= total || pos < 0) {
@@ -170,7 +285,7 @@ export default function CertsSection() {
           }}
         >
           {visibleCerts.map((cert, i) => (
-            <CertCard key={i} cert={cert} />
+            <CertCard key={i} cert={cert} onOpen={setViewing} />
           ))}
         </div>
       </div>
@@ -186,6 +301,8 @@ export default function CertsSection() {
           />
         ))}
       </div>
+
+      {viewing && <CertLightbox cert={viewing} onClose={() => setViewing(null)} />}
     </section>
   )
 }
