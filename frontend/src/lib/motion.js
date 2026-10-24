@@ -35,22 +35,23 @@ let gsapPromise = null
 
 /**
  * Loads GSAP core + the plugins we use and registers them once. Returns the
- * same promise on repeat calls. Resolves to { gsap, ScrollTrigger, Flip }.
+ * same promise on repeat calls. Resolves to { gsap, ScrollTrigger, SplitText };
+ * ScrambleText is registered as a tween property.
  */
 export function loadGsap() {
   if (!gsapPromise) {
     gsapPromise = Promise.all([
       import('gsap'),
       import('gsap/ScrollTrigger'),
-      import('gsap/Flip'),
       import('gsap/SplitText'),
-    ]).then(([g, st, flip, split]) => {
+      import('gsap/ScrambleTextPlugin'),
+    ]).then(([g, st, split, scramble]) => {
       const gsap = g.gsap ?? g.default
       const ScrollTrigger = st.ScrollTrigger ?? st.default
-      const Flip = flip.Flip ?? flip.default
       const SplitText = split.SplitText ?? split.default
-      gsap.registerPlugin(ScrollTrigger, Flip, SplitText)
-      return { gsap, ScrollTrigger, Flip, SplitText }
+      const ScrambleTextPlugin = scramble.ScrambleTextPlugin ?? scramble.default
+      gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin)
+      return { gsap, ScrollTrigger, SplitText }
     })
   }
   return gsapPromise

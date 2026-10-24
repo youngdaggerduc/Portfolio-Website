@@ -1,18 +1,29 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { GamepadIcon, SpiderIcon } from './Icons'
 
-const LINKS = ['About', 'Experience', 'Projects', 'Skills', 'Contact']
+const LINKS = [
+  { label: 'About', href: '#about' },
+  { label: 'Work', href: '#projects' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'GitHub', href: '#github' },
+  { label: 'Certs', href: '#certs' },
+  { label: 'Contact', href: '#contact' },
+]
+
+// Must match the burger breakpoint in App.css.
+const DRAWER_BP = 1100
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth <= 900
+    () => typeof window !== 'undefined' && window.innerWidth <= DRAWER_BP
   )
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
-    const onResize = () => setIsMobile(window.innerWidth <= 900)
+    const onResize = () => setIsMobile(window.innerWidth <= DRAWER_BP)
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onResize)
     return () => {
@@ -24,7 +35,7 @@ export default function Nav() {
   useEffect(() => {
     if (!open) return
     const onResize = () => {
-      if (window.innerWidth > 900) setOpen(false)
+      if (window.innerWidth > DRAWER_BP) setOpen(false)
     }
     const onKey = (e) => e.key === 'Escape' && setOpen(false)
     window.addEventListener('resize', onResize)
@@ -41,21 +52,21 @@ export default function Nav() {
 
   const linksList = (
     <ul id="primary-nav" className={`nav-links${open ? ' is-open' : ''}`}>
-      {LINKS.map((s) => (
-        <li key={s}>
-          <a href={`#${s.toLowerCase()}`} onClick={close}>
-            {s}
+      {LINKS.map((l) => (
+        <li key={l.href}>
+          <a href={l.href} onClick={close}>
+            {l.label}
           </a>
         </li>
       ))}
       <li>
         <a href="#/games" className="nav-games" onClick={close}>
-          🎮 AI GAMES
+          <GamepadIcon /> AI GAMES
         </a>
       </li>
       <li>
         <a href="#/chatbot" className="nav-ask-ai" onClick={close}>
-          🕷️ ASK AI
+          <SpiderIcon /> ASK AI
         </a>
       </li>
     </ul>
@@ -64,7 +75,9 @@ export default function Nav() {
   return (
     <>
       <nav style={{ background: scrolled ? 'rgba(7,7,26,0.97)' : undefined }}>
-        <div className="nav-logo">Pierce.exe_</div>
+        <a href="#hero" className="nav-logo" aria-label="Pierce Doman, back to top">
+          Pierce.exe_
+        </a>
 
         <button
           type="button"

@@ -1,5 +1,5 @@
 /* ============================================================================
-   MOTION LAYER — styles for the GSAP/Lenis/three.js upgrade (DESIGN.md).
+   MOTION LAYER — styles for the GSAP/Lenis/three.js upgrade.
    Loaded after App.css. Everything here is additive and degrades to the
    static comic look under reduced motion / on touch.
    ========================================================================== */
@@ -172,25 +172,6 @@ html.lenis {
 }
 .project-card[data-tilt] {
   transform-style: preserve-3d;
-}
-
-/* ----- Horizontal "case files" scrub (desktop-FX, added by projectsScrub) - */
-.projects-section.is-horizontal {
-  overflow: hidden;
-}
-.projects-section.is-horizontal .projects-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  width: max-content;
-  border: none;
-  background: transparent;
-  perspective: 1400px;
-}
-.projects-section.is-horizontal .project-card {
-  flex: 0 0 clamp(320px, 26vw, 380px);
-  width: clamp(320px, 26vw, 380px);
-  border: 3px solid #000;
-  margin-right: -3px; /* collapse neighbouring borders into one line */
 }
 
 /* ============================================================================

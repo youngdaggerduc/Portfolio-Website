@@ -13,10 +13,11 @@ import { loadGsap, prefersReducedMotion } from '../lib/motion'
  * device toggle) and on unmount:
  *
  *   - universal  : motion-OK on any device — cheap one-shots (stat count-up,
- *                  divider onomatopoeia punches, footer stamp).
+ *                  section-label decode, divider onomatopoeia punches,
+ *                  footer stamp).
  *   - desktop FX : fine pointer + real width — the expensive set pieces
  *                  (Lenis smooth scroll, hero pin/scrub, web-strand scroll
- *                  spine, section-title parallax, horizontal projects scrub,
+ *                  spine, section-title parallax, flagship media parallax,
  *                  magnetic buttons, card tilt, click bursts).
  *
  * Mount once, near the root of the portfolio page only.
@@ -57,6 +58,7 @@ async function initStage({ gsap, ScrollTrigger, SplitText }) {
   mm.add(MOTION_OK, () => {
     const scenes = [
       countUpStats(gsap, ScrollTrigger),
+      labelDecode(gsap, ScrollTrigger),
       dividerPunches(gsap, ScrollTrigger),
       footerStamp(gsap, ScrollTrigger, SplitText),
     ]
@@ -78,7 +80,7 @@ async function initStage({ gsap, ScrollTrigger, SplitText }) {
       heroScrub(gsap, ScrollTrigger),
       webSpine(gsap, ScrollTrigger),
       titleParallax(gsap, ScrollTrigger),
-      projectsScrub(gsap, ScrollTrigger),
+      flagshipParallax(gsap),
       magneticTargets(gsap),
       tiltCards(gsap),
       clickBursts(gsap),
@@ -108,6 +110,27 @@ async function initStage({ gsap, ScrollTrigger, SplitText }) {
    Each returns its own cleanup fn (or null). They only touch elements that
    exist; a missing element just means the scene no-ops.
    ========================================================================== */
+
+/** Section labels ("// ISSUE #04 — CASE FILES") decode from glyph noise
+ *  as they arrive, like a Spider-Comm signal locking on. */
+function labelDecode(gsap, ScrollTrigger) {
+  const labels = gsap.utils.toArray('.section-label')
+  const triggers = labels.map((el) => {
+    const text = el.textContent
+    return ScrollTrigger.create({
+      trigger: el,
+      start: 'top 92%',
+      once: true,
+      onEnter: () =>
+        gsap.to(el, {
+          duration: 1.1,
+          ease: 'none',
+          scrambleText: { text, chars: '!<>-_/[]{}=+*^?#01', revealDelay: 0.15, speed: 0.6 },
+        }),
+    })
+  })
+  return () => triggers.forEach((t) => t.kill())
+}
 
 /** Count numeric stats up from zero when their row scrolls in. */
 function countUpStats(gsap, ScrollTrigger) {
@@ -305,36 +328,32 @@ function titleParallax(gsap, ScrollTrigger) {
   })
 }
 
-/** "Flip through the case files" — pin projects and pan the row sideways. */
-function projectsScrub(gsap, ScrollTrigger) {
-  const section = document.querySelector('#projects')
-  const grid = section?.querySelector('.projects-grid')
-  if (!section || !grid) return null
-
-  section.classList.add('is-horizontal')
-  const distance = () => Math.max(0, grid.scrollWidth - section.clientWidth)
-  if (distance() <= 0) {
-    section.classList.remove('is-horizontal')
-    return null
-  }
-
-  const anim = gsap.to(grid, { x: () => -distance(), ease: 'none' })
-  const st = ScrollTrigger.create({
-    trigger: section,
-    start: 'top top',
-    end: () => '+=' + distance(),
-    pin: true,
-    scrub: 1,
-    anticipatePin: 1,
-    invalidateOnRefresh: true,
-    animation: anim,
-  })
-  return () => {
-    st.kill()
-    anim.kill()
-    section.classList.remove('is-horizontal')
-    gsap.set(grid, { clearProps: 'transform' })
-  }
+/** Flagship screenshots drift inside their frames as the case file passes,
+ *  so each panel reads as a window onto the product rather than a flat image. */
+function flagshipParallax(gsap) {
+  const media = gsap.utils.toArray('.flagship-browser, .flagship-media .secmap-svg')
+  const tweens = media.map((el) =>
+    gsap.fromTo(
+      el,
+      { yPercent: 5 },
+      {
+        yPercent: -5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el.closest('.flagship'),
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      }
+    )
+  )
+  return () =>
+    tweens.forEach((tw) => {
+      tw.scrollTrigger?.kill()
+      tw.kill()
+      gsap.set(tw.targets(), { clearProps: 'transform' })
+    })
 }
 
 /** Elements with [data-magnetic] lean toward the cursor within their bounds. */

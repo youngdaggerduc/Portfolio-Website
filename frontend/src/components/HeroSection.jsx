@@ -1,12 +1,16 @@
 import { useEffect, useRef } from 'react'
 import TypedText from './TypedText'
-import { stats } from '../data'
+import RotatingWords from './RotatingWords'
+import { DownloadIcon, GitHubIcon, LinkedInIcon } from './Icons'
+import { LINKS } from '../data'
 
-const STAT_COLORS = {
-  red: 'var(--red)',
-  cyan: 'var(--cyan)',
-  mag: 'var(--magenta)',
-}
+const BUILDS = [
+  'AI PIPELINES',
+  'ERP PLATFORMS',
+  'SECURITY SYSTEMS',
+  'FULL-STACK APPS',
+  'TRAINING PLATFORMS',
+]
 
 export default function HeroSection() {
   const videoRef = useRef(null)
@@ -41,7 +45,7 @@ export default function HeroSection() {
   }, [])
 
   return (
-    <section id="hero" className="hero">
+    <section id="hero" className="hero" aria-labelledby="hero-name">
       <video
         ref={videoRef}
         className="hero-video"
@@ -64,14 +68,14 @@ export default function HeroSection() {
       <div className="hero-left">
         <div className="hero-eyebrow">
           <TypedText
-            text="// BSc Computer Science · UWI St. Augustine"
+            text="// BSc Computer Science · UWI"
             speed={35}
             startDelay={250}
             scramble
           />
         </div>
-        <h1 className="hero-name">
-          <span>PIERCE</span>
+        <h1 className="hero-name" id="hero-name" aria-label="Pierce Doman">
+          <span aria-hidden="true">PIERCE</span>
           <span className="glitch-layer-1" aria-hidden="true">
             PIERCE
           </span>
@@ -79,7 +83,7 @@ export default function HeroSection() {
             PIERCE
           </span>
           <br />
-          <span>DOMAN</span>
+          <span aria-hidden="true">DOMAN</span>
           <span className="glitch-layer-1" aria-hidden="true">
             DOMAN
           </span>
@@ -93,15 +97,15 @@ export default function HeroSection() {
           <div className="hero-role-pill dark">✦</div>
           <div className="hero-role-pill cyan">AI ENGINEER</div>
         </div>
-        <div className="hero-role-row" style={{ marginTop: 4 }}>
-          <div className="hero-role-pill red">FREELANCER</div>
-          <div className="hero-role-pill dark">✦</div>
-          <div className="hero-role-pill cyan">PROCESS ANALYST</div>
-        </div>
+
+        <p className="hero-builds">
+          <span className="hero-builds-lead">I BUILD</span>{' '}
+          <RotatingWords words={BUILDS} className="hero-builds-word" />
+        </p>
 
         <p className="hero-tagline">
-          Building end-to-end digital products — from AI-powered pipelines to full-stack
-          web apps. Based in Trinidad &amp; Tobago, shipping globally.
+          End-to-end products, from AI pipelines and ERP platforms to full-stack web
+          apps. Based in Trinidad &amp; Tobago, shipping globally.
         </p>
       </div>
 
@@ -111,46 +115,32 @@ export default function HeroSection() {
       </div>
 
       <div className="hero-right">
-        <div className="hero-stats-row">
-          {stats.map((s) => (
-            <div key={s.l} className="hero-stat">
-              <span className="hero-stat-n" style={{ color: STAT_COLORS[s.c] }}>
-                {s.n}
-              </span>
-              <span className="hero-stat-l">{s.l}</span>
-            </div>
-          ))}
+        <div className="hero-status">
+          <span className="hero-status-dot" aria-hidden="true" />
+          <span>
+            <strong>OPEN TO ROLES</strong>
+            <span className="hero-status-sub">Full-time · Freelance · Remote</span>
+          </span>
         </div>
 
         <div className="hero-ctas">
-          <a
-            href="#projects"
-            className="btn-primary"
-            style={{ textAlign: 'center' }}
-            data-magnetic="0.4"
-          >
+          <a href="#projects" className="btn-primary" data-magnetic="0.4">
             SEE MY WORK
           </a>
-          <a
-            href="#contact"
-            className="btn-secondary"
-            style={{ textAlign: 'center' }}
-            data-magnetic="0.4"
-          >
+          <a href="#contact" className="btn-secondary" data-magnetic="0.4">
             GET IN TOUCH
           </a>
-          <a
-            href="/pierce-doman-resume.pdf"
-            download="Pierce Doman Resume.pdf"
-            className="btn-secondary"
-            style={{
-              borderColor: 'var(--magenta)',
-              color: 'var(--magenta)',
-              boxShadow: '4px 4px 0 var(--magenta)',
-              textAlign: 'center',
-            }}
-          >
-            DOWNLOAD CV
+        </div>
+
+        <div className="hero-quicklinks">
+          <a href={LINKS.resume} download="Pierce Doman Resume.pdf">
+            <DownloadIcon /> CV
+          </a>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer">
+            <GitHubIcon /> GitHub
+          </a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">
+            <LinkedInIcon /> LinkedIn
           </a>
         </div>
 
@@ -163,7 +153,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="scroll-indicator">
+      <div className="scroll-indicator" aria-hidden="true">
         <div className="scroll-line" />
         <span className="scroll-text">Scroll Down</span>
       </div>

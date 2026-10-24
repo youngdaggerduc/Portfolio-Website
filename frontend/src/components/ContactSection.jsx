@@ -55,7 +55,7 @@ export default function ContactSection() {
         className="corner-decor corner-tl"
         style={{ borderColor: 'var(--magenta)' }}
       />
-      <div className="section-label reveal reveal-left">// ISSUE #07 — TEAM-UP</div>
+      <div className="section-label reveal reveal-left">// ISSUE #09 — TEAM-UP</div>
       <h2
         id="contact-title"
         className="section-title"

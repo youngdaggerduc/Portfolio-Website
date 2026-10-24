@@ -1,130 +1,323 @@
-// Single source for the headline stats shown in the hero and the About
-// section, so the two can never drift apart.
+// Single source for the headline stats shown in About and the recruiter
+// quick-scan, so the two can never drift apart. Every stat is a real count
+// (numeric stats count up on scroll).
 export const stats = [
   { n: '5', l: 'Stalled Projects Rescued', c: 'red' },
-  { n: '2', l: 'Books Published', c: 'cyan' },
-  { n: 'AI', l: 'Engineering', c: 'mag' },
-  { n: 'ERP', l: 'Odoo Expert', c: 'cyan' },
+  { n: '4', l: 'Live Client Sites', c: 'cyan' },
+  { n: '2', l: 'Books Published', c: 'mag' },
+  { n: '4', l: 'Certifications', c: 'cyan' },
 ]
 
-// Accent colors carry meaning: cyan = client/freelance work,
-// red = personal/academic builds, mag = AI-focused work.
-// Newest work first — the grid and the horizontal scrub both read in order.
+export const GITHUB_USER = 'youngdaggerduc'
+
+export const LINKS = {
+  github: `https://github.com/${GITHUB_USER}`,
+  linkedin: 'https://tt.linkedin.com/in/pierce-doman-707002331',
+  email: 'mailto:piercedoman25@gmail.com',
+  resume: '/pierce-doman-resume.pdf',
+}
+
+// Responsive screenshot helper: every /work image ships as -800 and -1600
+// WebP variants (see public/work).
+const shot = (name, w, h) => ({
+  src: `/work/${name}-1600.webp`,
+  srcSet: `/work/${name}-800.webp 800w, /work/${name}-1600.webp 1600w`,
+  w,
+  h,
+})
+const single = (file, w, h) => ({ src: `/work/${file}`, w, h })
+
+// Filter categories for the case-file grid.
+export const PROJECT_FILTERS = [
+  { id: 'all', label: 'All Files' },
+  { id: 'systems', label: 'Systems' },
+  { id: 'client', label: 'Client Sites' },
+  { id: 'ai', label: 'AI' },
+  { id: 'personal', label: 'Academic & Personal' },
+]
+
+// Accent colors carry meaning: cyan = client/production work,
+// red = personal/academic builds, mag = AI-focused or in-progress work.
+// `featured` projects render as the large flagship case files, in order.
 export const projects = [
   {
-    id: 7,
+    id: 'tms',
+    featured: true,
+    title: 'Radian Training Management System',
+    short: 'Training Management System',
+    tag: 'Flagship · Ops Platform',
+    category: 'systems',
+    year: '2026',
+    status: 'live',
+    statusLabel: 'In Production · Internal',
+    role: 'Sole developer: architecture, build & rollout',
+    desc: 'A full Odoo-style operations platform purpose-built for Radian\'s training business. Every learner, every payment, every certificate in one system.',
+    details:
+      'Radian ran its training operation across spreadsheets, inboxes and paper. I designed and built a single internal platform that covers the whole lifecycle: from the first enquiry, through scheduling, enrollment and payment, to instructor assessment and certificate issuance. It also handles expiry tracking and recertification.',
+    features: [
+      'Course scheduling, enrollment, payments and follow-up tracking',
+      'Instructor management: assign instructors, manage rosters, record student performance',
+      'Certificate management: issue certificates, monitor expiry dates and drive recertification',
+      'Student portal with passwordless email/OTP sign-in',
+      'Certificates wired to the public checker on training.rhatt.com',
+    ],
+    impact: [
+      'Replaced scattered spreadsheets with one source of truth',
+      'Certificate expiry is tracked, not remembered',
+    ],
+    stack: ['Python', 'PostgreSQL', 'Odoo', 'ERP Design', 'Email OTP Auth'],
+    color: 'cyan',
+    url: 'Radian TMS · internal staff portal',
+    image: shot('tms', 1600, 770),
+  },
+  {
+    id: 'security',
+    featured: true,
+    title: 'Radian Security Management System',
+    short: 'Security Management System',
+    tag: 'Flagship · Security Ops',
+    category: 'systems',
+    year: '2026',
+    status: 'building',
+    statusLabel: 'In Development',
+    role: 'Sole developer: product design & full-stack build',
+    desc: 'A security operations platform: visual patrol maps, NFC checkpoint verification, incident reporting and AI-summarised daily reports.',
+    details:
+      'Guard patrols are hard to verify and harder to report on. This system gives administrators a visual map editor to draw patrol routes, position NFC checkpoints, and define zones and labels without a developer. Patrols are scheduled, run and verified checkpoint-by-checkpoint, and every incident and shift rolls up into daily reports with AI-powered summaries.',
+    features: [
+      'Visual map editor: draw patrol routes, place NFC checkpoints, define zones & labels',
+      'Patrol scheduling, live patrol runs and NFC checkpoint verification',
+      'Incident reporting for security events and operational activity',
+      'Daily security activity reports with AI-powered summaries',
+      'Admin-configurable: no developer needed to change a site map',
+    ],
+    impact: [
+      'Backend complete for maps, zones, checkpoints, routes, scheduling & verification',
+      'Map-editor frontend in active development',
+    ],
+    stack: ['Full Stack', 'NFC', 'Interactive Maps', 'AI Summaries', 'Scheduling'],
+    color: 'mag',
+    image: null, // in progress: renders the animated patrol-map visual instead
+  },
+  {
+    id: 'radian-site',
+    featured: true,
+    title: 'Radian H.A. Limited Website',
+    short: 'Radian Corporate Website',
+    tag: 'Flagship · Corporate',
+    category: 'client',
+    year: '2026',
+    status: 'live',
+    statusLabel: 'Live',
+    role: 'Project lead: led a small dev team from strategy to launch',
+    desc: 'Led the redevelopment of Radian\'s corporate site, a project that had stalled for months, and shipped it to production at rhatt.com.',
+    details:
+      'Owned the end-to-end redevelopment of the Radian H.A. Limited corporate website: scaffolding sales and rental, shop, training, services and resources. I managed internal dev work, coordinated a small team, handled content architecture and shipped ongoing maintenance. It was one of five stalled strategic projects I picked up and delivered.',
+    features: [
+      'Interactive 3D scaffold hero and full service catalogue',
+      'Sales, rental, shop, training & resources sections',
+      'On-site AI assistant and quote pipeline',
+    ],
+    impact: [
+      'Previously stalled project, now delivered and live',
+      'Ongoing ownership of content and maintenance',
+    ],
+    stack: ['WordPress', 'PHP', 'Custom CMS', 'Team Lead'],
+    color: 'cyan',
+    live: 'https://rhatt.com',
+    url: 'rhatt.com',
+    image: shot('radian-site', 1600, 749),
+  },
+  {
+    id: 'radian-training',
     title: 'Radian Training Website',
     tag: 'Corporate',
+    category: 'client',
     year: '2026',
-    desc: 'Developed and coded the Radian training platform — every course on offer, plus a live certificate database & checker.',
+    status: 'live',
+    statusLabel: 'Live',
+    role: 'Solo: design, build & deploy',
+    desc: 'The full Radian training platform: every course on offer, enrollment info, and a live certificate database & checker.',
+    details:
+      'Built training.rhatt.com end-to-end: a catalogue of every training programme Radian offers, enrollment information, and a certificate database with a public checker so employers can verify any certificate issued.',
+    features: [
+      'Full training catalogue with per-course pages',
+      'Certificate database + public verification checker',
+      'Linked to the Training Management System',
+    ],
     stack: ['WordPress', 'PHP', 'MySQL', 'JavaScript'],
     color: 'cyan',
     live: 'https://training.rhatt.com',
-    details:
-      'Built training.rhatt.com end-to-end: a comprehensive catalogue of every training programme Radian offers, enrollment information, and a certificate database with a public checker so employers can verify any certificate issued. Designed, developed, and deployed solo.',
-    highlights: [
-      'Full training catalogue with per-course pages',
-      'Certificate database + public verification checker',
-      'Live in production at training.rhatt.com',
-    ],
+    image: shot('radian-training', 1600, 768),
   },
   {
-    id: 8,
-    title: 'Radian Training Management System',
-    tag: 'ERP / Systems',
-    year: '2026',
-    desc: 'A full Odoo-style management system purpose-built for Radian\'s training operation — everything training, one system.',
-    stack: ['Python', 'PostgreSQL', 'Odoo', 'ERP Design'],
-    color: 'cyan',
-    details:
-      'A complete training-operations platform modeled on ERP patterns: course scheduling, student enrollment, trainer assignment, certificate issuance, and reporting — all the moving parts of running a training business in one Radian-specific system.',
-    highlights: [
-      'Course scheduling, enrollment & trainer management',
-      'Certificate issuance wired to the public checker',
-      'Odoo-style modular architecture, built for Radian workflows',
-    ],
-  },
-  {
-    id: 9,
+    id: 'absco',
     title: 'ABSCO Enterprises Ltd',
     tag: 'Freelance',
+    category: 'client',
     year: '2026',
-    desc: 'Commercial freelance build — the full company website for ABSCO Enterprises Ltd at abscoltdtt.com.',
+    status: 'live',
+    statusLabel: 'Live',
+    role: 'Freelance: design, build & deploy',
+    desc: 'Commercial freelance build: the full company website for a Trinidad & Tobago general contractor.',
+    details:
+      'Designed and delivered the complete web presence for ABSCO Enterprises Ltd: company profile, the full services range (construction, steel fabrication, welding, road paving and more), and a quote-request pipeline. Shipped to production at abscoltdtt.com.',
+    features: [
+      'Full company site: profile, services, contact',
+      'Request-a-quote pipeline',
+      'Live in production at abscoltdtt.com',
+    ],
     stack: ['WordPress', 'Custom Theme', 'SEO'],
     color: 'cyan',
     live: 'https://abscoltdtt.com',
-    details:
-      'Designed and delivered the complete web presence for ABSCO Enterprises Ltd — company profile, services, and contact pipeline — shipped to production at abscoltdtt.com.',
-    highlights: [
-      'Full company site: profile, services, contact',
-      'Live in production at abscoltdtt.com',
-    ],
+    image: shot('absco', 1600, 779),
   },
   {
-    id: 1,
-    title: 'Lumiere Lounge',
-    tag: 'Freelance',
-    desc: 'Commercial freelance build — a full booking & web presence for a premium restaurant and club.',
-    stack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
-    color: 'cyan',
-    image: '/lumierelounge.jpg',
-    details:
-      'Delivered end-to-end as a freelance project. Customer-facing reservation flow, table management dashboard, integrated payments, and automated confirmation emails. Production-deployed for a real client.',
-  },
-  {
-    id: 2,
-    title: 'Student Conduct Tracker',
-    tag: 'Final Year Project',
-    desc: 'Final year CS project — a systematic platform for tracking, reporting, and analyzing student conduct data across a school.',
-    stack: ['Python', 'Flask', 'SQL', 'Data Analysis'],
-    color: 'red',
-    image: '/Studentconducttracker.jpeg',
-    details:
-      'Built for the UWI Computer Science final year project. Supports admin and staff roles. Features incident logging, escalation workflows, conduct trend analytics, and exportable reports.',
-  },
-  {
-    id: 3,
-    title: 'AI Image Generator',
-    tag: 'AI / Web',
-    desc: 'AI-powered image generation system integrated directly into a custom WordPress CMS build.',
-    stack: ['PHP', 'WordPress', 'OpenAI API', 'Custom CMS'],
-    color: 'mag',
-    image: '/AI.jpg',
-    details:
-      'Built an AI image generation pipeline integrated into a WordPress site. Custom PHP plugin connects to OpenAI image APIs, allowing users to generate, preview, and publish AI images from within the CMS editor.',
-  },
-  {
-    id: 4,
-    title: 'Platformer Game',
-    tag: 'Game Dev',
-    desc: 'Full 2D platformer built in Java — custom physics, game mechanics, UI, and complete gameplay systems.',
-    stack: ['Java', 'Swing', 'OOP', 'Game Physics'],
-    color: 'red',
-    image: '/Trinidadisnotarealplace.png',
-    details:
-      'Java platformer using Swing for rendering. Custom physics engine with gravity and collision detection, animated sprite system, enemy behaviours, level design, and a full in-game UI. All game systems built from scratch.',
-  },
-  {
-    id: 5,
-    title: 'Website Manager for Radian',
-    tag: 'Corporate',
-    desc: 'Led the redesign and ongoing management of Radian H.A. Limited\'s corporate website — coordinated a small dev team from strategy to deployment.',
-    stack: ['WordPress', 'PHP', 'Custom CMS', 'Team Lead'],
-    color: 'cyan',
-    image: '/Radian.png',
-    details:
-      'Owned the end-to-end redevelopment of the Radian H.A. Limited corporate website. Managed internal dev work, coordinated a small team, handled content architecture, and shipped ongoing maintenance. Previously stalled for months — delivered to production under a clear operational brief.',
-  },
-  {
-    id: 6,
+    id: 'odoo',
     title: 'Odoo Custom Module Development',
     tag: 'ERP / Python',
-    desc: 'Custom Odoo modules extending Accounting, Sales, CRM, Rental, and Reporting to match real operational workflows at Radian.',
+    category: 'systems',
+    year: '2025',
+    status: 'shipped',
+    statusLabel: 'Shipped',
+    role: 'ERP implementation lead',
+    desc: 'Custom Odoo modules extending Accounting, Sales, CRM, Rental and Reporting to match real operational workflows at Radian.',
+    details:
+      'Designed and built custom Odoo modules on top of a full ERP rollout. Tailored Accounting, Sales, CRM, Rental Operations and Reporting flows to the business, including custom models, views, automated actions and reports. Trained staff on adoption and maintained the customisations after go-live.',
+    features: [
+      'Custom models, views and automated actions',
+      'Accounting, Sales, CRM, Rental & Reporting modules',
+      'Staff training and post-go-live support',
+    ],
     stack: ['Python', 'Odoo', 'XML', 'PostgreSQL'],
     color: 'cyan',
-    image: '/odoo.png',
+    image: null,
+    icon: '/odoo.png',
+  },
+  {
+    id: 'lumiere',
+    title: 'Lumiere Lounge',
+    tag: 'Freelance',
+    category: 'client',
+    status: 'shipped',
+    statusLabel: 'Shipped',
+    role: 'Freelance: full stack',
+    desc: 'Commercial freelance build: booking and web presence for a premium restaurant and club.',
     details:
-      'Designed and built custom Odoo modules on top of a full ERP rollout. Tailored Accounting, Sales, CRM, Rental Operations, and Reporting flows to the business, including custom models, views, automated actions, and reports. Trained staff on adoption and maintained the customizations post-go-live.',
+      'Delivered end-to-end as a freelance project: customer-facing reservation flow, table-management dashboard, integrated payments and automated confirmation emails. Production-deployed for a real client.',
+    stack: ['React', 'Node.js', 'PostgreSQL', 'Stripe'],
+    color: 'cyan',
+    image: single('lumiere.webp', 800, 384),
+    contain: true,
+  },
+  {
+    id: 'ai-image',
+    title: 'AI Image Generator',
+    tag: 'AI / Web',
+    category: 'ai',
+    status: 'shipped',
+    statusLabel: 'Shipped',
+    role: 'Solo: plugin & integration',
+    desc: 'AI-powered image generation built directly into a custom WordPress CMS.',
+    details:
+      'A custom PHP plugin connects WordPress to OpenAI image APIs, so editors can generate, preview and publish AI images without leaving the CMS editor.',
+    stack: ['PHP', 'WordPress', 'OpenAI API', 'Custom CMS'],
+    color: 'mag',
+    image: single('ai-image-gen.webp', 770, 534),
+    contain: true,
+  },
+  {
+    id: 'student-conduct',
+    title: 'Student Conduct Tracker',
+    tag: 'Final Year Project',
+    category: 'personal',
+    year: '2024',
+    status: 'shipped',
+    statusLabel: 'Academic',
+    role: 'UWI final-year project',
+    desc: 'A platform for tracking, reporting and analysing student conduct data across a school.',
+    details:
+      'Built for the UWI Computer Science final-year project. Supports admin and staff roles, with incident logging, escalation workflows, conduct trend analytics and exportable reports.',
+    stack: ['Python', 'Flask', 'SQL', 'Data Analysis'],
+    color: 'red',
+    image: single('student-conduct-800.webp', 800, 500),
+  },
+  {
+    id: 'platformer',
+    title: 'Platformer Game',
+    tag: 'Game Dev',
+    category: 'personal',
+    status: 'shipped',
+    statusLabel: 'Personal',
+    role: 'Solo: engine & gameplay',
+    desc: 'A full 2D platformer in Java with custom physics, game mechanics, UI and complete gameplay systems.',
+    details:
+      'A Java platformer rendered with Swing. Custom physics engine with gravity and collision detection, animated sprite system, enemy behaviours, level design and a full in-game UI, all built from scratch.',
+    stack: ['Java', 'Swing', 'OOP', 'Game Physics'],
+    color: 'red',
+    image: single('platformer.webp', 677, 379),
+  },
+]
+
+// Certificates. `learning` entries render as in-progress cards (no image).
+export const certs = [
+  {
+    id: 'ai-engineer',
+    title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents',
+    issuer: 'Udemy',
+    date: '2026',
+    color: 'red',
+    image: '/certs/ai-engineer-1200.webp',
+    thumb: '/certs/ai-engineer-600.webp',
+    skills: ['LLM Engineering', 'RAG', 'QLoRA', 'Agents'],
+  },
+  {
+    id: 'fastapi',
+    title: 'FastAPI: The Complete Course',
+    issuer: 'Udemy',
+    date: '2026',
+    color: 'mag',
+    image: '/certs/fastapi-1200.webp',
+    thumb: '/certs/fastapi-600.webp',
+    skills: ['FastAPI', 'REST APIs', 'Python'],
+  },
+  {
+    id: 'csharp',
+    title: 'Foundational C# with Microsoft',
+    issuer: 'freeCodeCamp',
+    date: '2025',
+    color: 'cyan',
+    image: '/certs/csharp-1200.webp',
+    thumb: '/certs/csharp-600.webp',
+    skills: ['C#', '.NET', 'OOP'],
+  },
+  {
+    id: 'six-sigma',
+    title: 'Six Sigma White Belt',
+    issuer: 'Educate 360',
+    date: '2025',
+    color: 'cyan',
+    image: '/certs/six-sigma-1200.webp',
+    thumb: '/certs/six-sigma-600.webp',
+    skills: ['Process Improvement', 'Lean'],
+  },
+  {
+    id: 'aws-cloud',
+    title: 'AWS Certified Cloud Practitioner',
+    issuer: 'Amazon Web Services',
+    date: 'In progress',
+    color: 'mag',
+    learning: true,
+    skills: ['AWS Cloud', 'Security', 'Billing'],
+  },
+  {
+    id: 'aws-ai',
+    title: 'AWS Certified AI Practitioner',
+    issuer: 'Amazon Web Services',
+    date: 'In progress',
+    color: 'mag',
+    learning: true,
+    skills: ['Bedrock', 'GenAI', 'Responsible AI'],
   },
 ]
 
@@ -137,6 +330,7 @@ export const skills = [
       { l: 'Next.js', c: 'cyan' },
       { l: 'HTML/CSS', c: 'cyan' },
       { l: 'Framer Motion', c: 'cyan' },
+      { l: 'GSAP', c: 'cyan' },
       { l: 'WordPress', c: 'cyan' },
     ],
   },
@@ -144,12 +338,12 @@ export const skills = [
     cat: 'Backend',
     dot: 'red',
     pills: [
-      { l: 'Node.js', c: 'red' },
-      { l: 'Express', c: 'red' },
       { l: 'Python', c: 'red', core: true },
       { l: 'FastAPI', c: 'red', core: true },
+      { l: 'Node.js', c: 'red' },
+      { l: 'Express', c: 'red' },
       { l: 'REST APIs', c: 'red' },
-      { l: 'Java', c: 'red' },
+      { l: 'PHP', c: 'red' },
     ],
   },
   {
@@ -158,52 +352,43 @@ export const skills = [
     pills: [
       { l: 'LangChain', c: 'mag', core: true },
       { l: 'OpenAI API', c: 'mag', core: true },
+      { l: 'RAG Pipelines', c: 'mag' },
       { l: 'Hugging Face', c: 'mag' },
       { l: 'Prompt Engineering', c: 'mag' },
       { l: 'AI Automation', c: 'mag' },
-      { l: 'ML Workflows', c: 'mag' },
     ],
   },
   {
-    cat: 'Databases',
+    cat: 'Data & ERP',
     dot: 'cyan',
     pills: [
-      { l: 'SQL', c: 'cyan' },
-      { l: 'MySQL', c: 'cyan' },
+      { l: 'Odoo ERP', c: 'cyan', core: true },
       { l: 'PostgreSQL', c: 'cyan' },
-    ],
-  },
-  {
-    cat: 'ERP & Business',
-    dot: 'red',
-    pills: [
-      { l: 'Odoo ERP', c: 'red', core: true },
-      { l: 'CRM', c: 'red' },
-      { l: 'Process Optimization', c: 'red' },
-      { l: 'Power Automate', c: 'red' },
-      { l: 'PowerShell', c: 'red' },
-      { l: 'Agile/Scrum', c: 'red' },
+      { l: 'MySQL', c: 'cyan' },
+      { l: 'SQL', c: 'cyan' },
+      { l: 'CRM', c: 'cyan' },
     ],
   },
   {
     cat: 'Languages',
-    dot: 'mag',
+    dot: 'red',
     pills: [
-      { l: 'JavaScript', c: 'mag' },
-      { l: 'Python', c: 'mag' },
-      { l: 'Java', c: 'mag' },
-      { l: 'PHP', c: 'mag' },
-      { l: 'C++', c: 'mag' },
-      { l: 'SQL', c: 'mag' },
+      { l: 'JavaScript', c: 'red' },
+      { l: 'Java', c: 'red' },
+      { l: 'C++', c: 'red' },
+      { l: 'C#', c: 'red' },
     ],
   },
   {
-    cat: 'DevOps / Tools',
-    dot: 'cyan',
+    cat: 'Process & Tools',
+    dot: 'mag',
     pills: [
-      { l: 'Git / GitHub', c: 'cyan' },
-      { l: 'WordPress (Custom)', c: 'cyan' },
-      { l: 'Vercel', c: 'cyan' },
+      { l: 'Git / GitHub', c: 'mag' },
+      { l: 'Vercel', c: 'mag' },
+      { l: 'Power Automate', c: 'mag' },
+      { l: 'PowerShell', c: 'mag' },
+      { l: 'Process Optimization', c: 'mag' },
+      { l: 'Agile/Scrum', c: 'mag' },
     ],
   },
   {
@@ -212,7 +397,6 @@ export const skills = [
     pills: [
       { l: 'AWS Cloud Practitioner', c: 'mag', core: true },
       { l: 'AWS AI Practitioner', c: 'mag', core: true },
-      { l: 'AWS Cloud', c: 'mag' },
     ],
   },
 ]

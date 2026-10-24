@@ -3,8 +3,8 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 /**
- * three.js replacement for the CSS parallax web background (Phase 3 of
- * DESIGN.md). Two elements, one draw call each:
+ * three.js replacement for the CSS parallax web background. Two elements,
+ * one draw call each:
  *
  *   - WebLines:      a radial spider web whose strands bulge *away* from the
  *                    cursor (GPU displacement in the vertex shader) with a

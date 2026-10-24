@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import './App.css'
 import './motion.css'
+import './sections.css'
 import Nav from './components/Nav'
 import HeroSection from './components/HeroSection'
 import AboutSection from './components/AboutSection'
@@ -12,17 +13,22 @@ import SkillsSection from './components/SkillsSection'
 import ContactSection from './components/ContactSection'
 import BehindTheMaskSection from './components/BehindTheMaskSection'
 import GamesCalloutSection from './components/GamesCalloutSection'
+import GitHubSection from './components/GitHubSection'
+import QuickScanSection from './components/QuickScanSection'
+import KineticMarquee from './components/KineticMarquee'
 import SpiderCommStrip from './components/SpiderCommStrip'
 import WebCursor from './components/WebCursor'
 import SiteBackground from './components/SiteBackground'
 import WebSpine from './components/WebSpine'
 import RouteWipe from './components/RouteWipe'
 import Preloader from './components/Preloader'
-import ChatbotPage from './components/ChatbotPage'
-import GamesPage from './components/GamesPage'
 import { useRevealObserver } from './hooks/useRevealObserver'
 import { useSectionClipReveal } from './hooks/useSectionClipReveal'
 import { useMotionStage } from './hooks/useMotionStage'
+
+// Separate routes: only downloaded when someone actually opens them.
+const ChatbotPage = lazy(() => import('./components/ChatbotPage'))
+const GamesPage = lazy(() => import('./components/GamesPage'))
 
 function useHashRoute() {
   const [hash, setHash] = useState(() =>
@@ -35,6 +41,11 @@ function useHashRoute() {
   }, [])
   return hash
 }
+
+const MARQUEE_ROWS = [
+  ['FULL STACK', 'AI ENGINEER', 'ERP SYSTEMS', 'SECURITY OPS', 'RAG PIPELINES'],
+  ['SHIPPED', 'LIVE IN PRODUCTION', 'OPEN TO WORK', 'TRINIDAD & TOBAGO', 'CASE FILES'],
+]
 
 function Portfolio() {
   useRevealObserver()
@@ -51,29 +62,31 @@ function Portfolio() {
       <main>
         <HeroSection />
         <SpiderCommStrip />
+        <QuickScanSection />
         <div className="comic-divider" />
         <AboutSection />
         <div className="comic-divider cyan" />
         <ExperienceSection />
         <div className="comic-divider" />
         <EducationSection />
+        <KineticMarquee rows={MARQUEE_ROWS} />
+        <ProjectsSection />
         <div className="comic-divider mag divider-burst">
           <span className="divider-burst-word" aria-hidden="true">THWIP!</span>
         </div>
-        <ProjectsSection />
+        <GitHubSection />
         <div className="comic-divider cyan" />
         <CertsSection />
         <div className="comic-divider mag" />
         <SkillsSection />
-        <div className="comic-divider" />
-        <SpiderCommStrip variant="reprise" />
-        <ContactSection />
         <div className="comic-divider cyan" />
         <BehindTheMaskSection />
         <div className="comic-divider mag divider-burst">
           <span className="divider-burst-word" aria-hidden="true">WHAM!</span>
         </div>
         <GamesCalloutSection />
+        <SpiderCommStrip variant="reprise" />
+        <ContactSection />
       </main>
       <footer>
         <div className="footer-continued" aria-hidden="true">TO BE CONTINUED…</div>
@@ -104,8 +117,10 @@ function App() {
 
   return (
     <>
-      {route === 'chatbot' && <ChatbotPage />}
-      {route === 'games' && <GamesPage />}
+      <Suspense fallback={null}>
+        {route === 'chatbot' && <ChatbotPage />}
+        {route === 'games' && <GamesPage />}
+      </Suspense>
       {route === 'portfolio' && <Portfolio />}
       <RouteWipe routeKey={route} />
     </>

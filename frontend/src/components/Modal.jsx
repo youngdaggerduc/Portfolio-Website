@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { loadGsap, prefersReducedMotion } from '../lib/motion'
+import ProjectPlaceholder from './ProjectPlaceholder'
+import SecurityMapVisual from './SecurityMapVisual'
+
+const ACCENT = { cyan: 'var(--cyan)', red: 'var(--red)', mag: 'var(--magenta)' }
 
 export default function Modal({ project, originRect, onClose }) {
   const boxRef = useRef(null)
@@ -70,6 +74,8 @@ export default function Modal({ project, originRect, onClose }) {
     }
   }, [onClose])
 
+  const accent = ACCENT[project.color] ?? ACCENT.cyan
+
   return (
     <div
       className="modal-overlay"
@@ -83,104 +89,106 @@ export default function Modal({ project, originRect, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        style={{ '--accent': accent }}
       >
         <div className="modal-header">
           <span className="modal-title" id="modal-title">
             {project.title}
           </span>
-          <button className="modal-close" onClick={onClose} aria-label="Close modal">
+          <button className="modal-close" onClick={onClose} aria-label="Close case file">
             ✕
           </button>
         </div>
-        <div className="modal-body">
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
-            <span className="project-tag" style={{ position: 'static' }}>
-              {project.tag}
-            </span>
-            {project.year && (
-              <span
-                className="project-tag"
-                style={{ position: 'static', background: '#000', color: 'var(--cyan)' }}
-              >
-                {project.year}
-              </span>
+        <div className="modal-scroll" data-lenis-prevent>
+          <div className="modal-media">
+            {project.image ? (
+              <ProjectPlaceholder
+                color={project.color}
+                image={project.image}
+                title={project.title}
+                contain={project.contain}
+                sizes="(max-width: 760px) 100vw, 720px"
+                eager
+              />
+            ) : project.status === 'building' ? (
+              <SecurityMapVisual />
+            ) : (
+              <ProjectPlaceholder color={project.color} icon={project.icon} title={project.title} />
             )}
           </div>
-          <p
-            style={{
-              fontSize: 14,
-              lineHeight: 1.8,
-              color: 'rgba(240,238,255,0.85)',
-              marginBottom: 20,
-            }}
-          >
-            {project.details}
-          </p>
-          {project.highlights?.length > 0 && (
-            <ul
-              style={{
-                listStyle: 'none',
-                margin: '0 0 20px',
-                padding: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 8,
-              }}
-            >
-              {project.highlights.map((h) => (
-                <li
-                  key={h}
-                  style={{
-                    display: 'flex',
-                    gap: 10,
-                    alignItems: 'flex-start',
-                    fontSize: 13,
-                    lineHeight: 1.6,
-                    color: 'rgba(240,238,255,0.75)',
-                  }}
-                >
-                  <span style={{ color: 'var(--cyan)', fontWeight: 700 }}>▸</span>
-                  {h}
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="project-stack" style={{ marginBottom: 20 }}>
-            {project.stack.map((s) => (
-              <span
-                key={s}
-                className={`stack-tag ${project.color === 'red' ? 'stack-tag-red' : ''}`}
-              >
-                {s}
+          <div className="modal-body">
+            <div className="modal-tags">
+              <span className="project-tag modal-tag">{project.tag}</span>
+              {project.year && <span className="project-tag modal-tag modal-tag--dark">{project.year}</span>}
+              <span className={`status-badge status-badge--${project.status}`}>
+                <span className="status-badge-dot" aria-hidden="true" />
+                {project.statusLabel}
               </span>
-            ))}
-          </div>
-          {(project.github || project.live) && (
-            <div style={{ display: 'flex', gap: 12 }}>
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary"
-                  style={{ fontSize: 16, padding: '10px 24px' }}
-                >
-                  VIEW CODE
-                </a>
-              )}
-              {project.live && (
-                <a
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary"
-                  style={{ fontSize: 16, padding: '10px 24px' }}
-                >
-                  VISIT SITE ↗
-                </a>
-              )}
             </div>
-          )}
+            {project.role && (
+              <div className="flagship-role">
+                <span>MY ROLE</span> {project.role}
+              </div>
+            )}
+            <p className="modal-details">{project.details}</p>
+
+            {project.features?.length > 0 && (
+              <>
+                <h4 className="modal-subhead">WHAT IT DOES</h4>
+                <ul className="modal-list">
+                  {project.features.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {project.impact?.length > 0 && (
+              <>
+                <h4 className="modal-subhead">OUTCOME</h4>
+                <ul className="modal-list modal-list--impact">
+                  {project.impact.map((h) => (
+                    <li key={h}>{h}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            <h4 className="modal-subhead">STACK</h4>
+            <div className="project-stack" style={{ marginBottom: 20 }}>
+              {project.stack.map((s) => (
+                <span
+                  key={s}
+                  className={`stack-tag ${project.color === 'red' ? 'stack-tag-red' : ''}${project.color === 'mag' ? ' stack-tag-mag' : ''}`}
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+            {(project.github || project.live) && (
+              <div className="modal-actions">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary modal-btn"
+                  >
+                    VIEW CODE
+                  </a>
+                )}
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary modal-btn"
+                  >
+                    VISIT SITE ↗
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

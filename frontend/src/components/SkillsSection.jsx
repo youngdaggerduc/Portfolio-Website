@@ -8,15 +8,19 @@ export default function SkillsSection() {
       className="skills-section"
       aria-labelledby="skills-title"
     >
-      <img
-        src="/spoodhand.webp"
-        alt=""
-        aria-hidden="true"
-        decoding="async"
-        loading="lazy"
-        className="tech-stack-spood"
-      />
-      <div className="section-label reveal reveal-left">// ISSUE #06 — THE ARSENAL</div>
+      {/* Phones get a 12 KB still frame instead of the 3.9 MB animation. */}
+      <picture>
+        <source media="(max-width: 900px)" srcSet="/spoodhand-still.webp" />
+        <img
+          src="/spoodhand.webp"
+          alt=""
+          aria-hidden="true"
+          decoding="async"
+          loading="lazy"
+          className="tech-stack-spood"
+        />
+      </picture>
+      <div className="section-label reveal reveal-left">// ISSUE #07 — THE ARSENAL</div>
       <h2
         id="skills-title"
         className="section-title"

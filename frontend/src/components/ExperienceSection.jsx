@@ -9,6 +9,9 @@ const JOBS = [
     tag: 'Current',
     bullets: [
       'Led and delivered 5 previously stalled strategic projects incl. corporate website redevelopment and full-scale Odoo ERP implementation',
+      'Designed and built the Radian Training Management System: scheduling, enrollment, instructor rosters, certificate issuance & expiry tracking, and an email/OTP student portal',
+      'Building the Radian Security Management System: visual patrol-map editor, NFC checkpoint verification, incident reporting and AI-summarised daily reports',
+      'Built and launched training.rhatt.com with a public certificate database and checker',
       'Implemented and customized Odoo ERP — Accounting, Sales, CRM, Rental Operations, and Reporting modules',
       'Managed internal dev work and coordinated a small team to redesign and maintain the company website',
       'Translated complex operational requirements into structured system workflows, improving efficiency across departments',

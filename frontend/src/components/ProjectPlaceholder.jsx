@@ -1,74 +1,43 @@
-const COLORS = {
-  cyan: { bg: 'rgba(0,212,255,0.06)', border: 'rgba(0,212,255,0.2)', dot: '#00d4ff' },
-  red: { bg: 'rgba(232,25,44,0.06)', border: 'rgba(232,25,44,0.2)', dot: '#e8192c' },
-  mag: { bg: 'rgba(255,0,170,0.06)', border: 'rgba(255,0,170,0.2)', dot: '#ff00aa' },
-}
+const DOT = { cyan: '#00d4ff', red: '#e8192c', mag: '#ff00aa' }
 
-export default function ProjectPlaceholder({ color, image, title }) {
-  const c = COLORS[color]
+/**
+ * Project media. Screenshots render full-bleed (`cover`) with responsive
+ * srcset; logo-style art (`contain`) and icon-only projects sit centred on
+ * the halftone panel. Explicit width/height reserve the box so nothing
+ * shifts while the image streams in.
+ */
+export default function ProjectPlaceholder({
+  color,
+  image,
+  icon,
+  title,
+  contain = false,
+  sizes = '(max-width: 900px) 100vw, 33vw',
+  eager = false,
+}) {
+  const dot = DOT[color] ?? DOT.cyan
   return (
-    <div
-      style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: `radial-gradient(circle at 30% 40%, ${c.bg} 0%, rgba(7,7,26,0.8) 70%)`,
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `radial-gradient(circle, ${c.dot}22 1px, transparent 1px)`,
-          backgroundSize: '16px 16px',
-        }}
-      />
-      <div
-        style={{ position: 'absolute', inset: 8, border: `2px solid ${c.border}` }}
-      />
-      {image && (
+    <div className={`project-media project-media--${color}${contain || !image ? ' is-contain' : ''}`}>
+      <div className="project-media-dots" style={{ '--dot': `${dot}22` }} />
+      {image ? (
         <img
-          src={image}
-          alt={title || ''}
-          loading="lazy"
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            maxWidth: '80%',
-            maxHeight: '80%',
-            objectFit: 'contain',
-            filter: `drop-shadow(0 0 20px ${c.dot})`,
-          }}
+          src={image.src}
+          srcSet={image.srcSet}
+          sizes={image.srcSet ? sizes : undefined}
+          width={image.w}
+          height={image.h}
+          alt={title ? `${title} screenshot` : ''}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+          className="project-media-img"
         />
+      ) : icon ? (
+        <img src={icon} alt="" loading="lazy" decoding="async" className="project-media-icon" />
+      ) : (
+        <span className="project-media-mono" aria-hidden="true">
+          {title?.split(' ').map((w) => w[0]).slice(0, 3).join('')}
+        </span>
       )}
-      <div
-        style={{
-          position: 'absolute',
-          top: 12,
-          right: 12,
-          width: 8,
-          height: 8,
-          background: c.dot,
-          borderRadius: '50%',
-          boxShadow: `0 0 8px ${c.dot}`,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 12,
-          left: 12,
-          width: 8,
-          height: 8,
-          background: c.dot,
-          borderRadius: '50%',
-          boxShadow: `0 0 8px ${c.dot}`,
-        }}
-      />
     </div>
   )
 }

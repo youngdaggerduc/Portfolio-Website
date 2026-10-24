@@ -1,13 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import LetterReveal from './LetterReveal'
-
-const CERTS = [
-  { title: 'Foundational C# with Microsoft', issuer: 'Free Code Camp', date: '2025', color: 'cyan', image: '/c.png' },
-  { title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents', issuer: 'Udemy', date: '2026', color: 'red', image: '/AI-Engineer.jpg' },
-  { title: 'FastAPI - The Complete Course', issuer: 'Udemy', date: '2026', color: 'mag', image: '/FastAPI.jpg' },
-  { title: 'Six Sigma White Belt', issuer: 'Educate 360', date: '2025', color: 'cyan', image: '/SixSigma.jpeg' },
-]
+import { certs } from '../data'
+import { DownloadIcon, ExternalIcon } from './Icons'
 
 const ACCENT = {
   cyan: 'var(--cyan)',
@@ -15,116 +10,145 @@ const ACCENT = {
   mag: 'var(--magenta)',
 }
 
-function CertCard({ cert, onOpen }) {
+const earned = certs.filter((c) => !c.learning)
+const learning = certs.filter((c) => c.learning)
+
+// Deep links: ?cert=<id> opens that certificate straight away, so a shared
+// link lands on the certificate itself, not just the page.
+const certUrl = (id) => {
+  const u = new URL(window.location.href)
+  u.searchParams.set('cert', id)
+  u.hash = 'certs'
+  return u.toString()
+}
+const setCertParam = (id) => {
+  const u = new URL(window.location.href)
+  if (id) u.searchParams.set('cert', id)
+  else u.searchParams.delete('cert')
+  window.history.replaceState(window.history.state, '', u)
+}
+
+function CertCard({ cert, index, onOpen }) {
   const accent = ACCENT[cert.color]
-  const headerColor = cert.color === 'cyan' ? '#000' : '#fff'
+  return (
+    <div className="cert-cell reveal reveal-up" style={{ '--reveal-delay': `${index * 90}ms` }}>
+    <button
+      type="button"
+      className={`cert-tile cert-tile--${cert.color}`}
+      style={{ '--cert-accent': accent }}
+      onClick={() => onOpen(cert.id)}
+      aria-label={`View certificate: ${cert.title}, ${cert.issuer}, ${cert.date}`}
+    >
+      <span className="cert-tile-header">
+        <span>{cert.issuer}</span>
+        <span>{cert.date}</span>
+      </span>
+      <span className="cert-tile-img">
+        <img src={cert.thumb} alt="" loading="lazy" decoding="async" width="600" height="420" />
+        <span className="cert-tile-zoom" aria-hidden="true">
+          ⤢ EXPAND
+        </span>
+      </span>
+      <span className="cert-tile-body">
+        <span className="cert-tile-title">{cert.title}</span>
+        <span className="cert-tile-skills">
+          {cert.skills.map((s) => (
+            <span key={s}>{s}</span>
+          ))}
+        </span>
+      </span>
+    </button>
+    </div>
+  )
+}
+
+function LearningCard({ cert, index }) {
   return (
     <div
-      className="cert-card cert-card--clickable"
-      style={{ boxShadow: `4px 4px 0 ${accent}`, '--cert-accent': accent }}
-      role="button"
-      tabIndex={0}
-      aria-label={`View certificate: ${cert.title}`}
-      onClick={() => onOpen(cert)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onOpen(cert)
-        }
-      }}
+      className="cert-cell reveal reveal-up"
+      style={{ '--reveal-delay': `${(index + earned.length) * 90}ms` }}
     >
-      <div
-        className="cert-halftone"
-        style={{
-          backgroundImage: `radial-gradient(circle, ${accent}28 1px, transparent 1px)`,
-        }}
-      />
-      <div
-        className="cert-header"
-        style={{ background: accent, color: headerColor }}
-      >
-        {cert.issuer.toUpperCase()}
-      </div>
-      <div className="cert-icon">
-        {cert.image && (
-          <img
-            src={cert.image}
-            alt={cert.title}
-            loading="lazy"
-            style={{
-              maxWidth: '100%',
-              maxHeight: '100%',
-              objectFit: 'contain',
-              filter: `drop-shadow(0 0 14px ${accent})`,
-            }}
-          />
-        )}
-      </div>
-      <div className="cert-body">
-        <div className="cert-title" style={{ textShadow: `1px 0 0 ${accent}` }}>
-          {cert.title}
-        </div>
-        <div className="cert-issuer" style={{ color: accent }}>
-          {cert.issuer}
-        </div>
-        <div className="cert-date">{cert.date}</div>
-      </div>
-      <div className="cert-expand-hint" aria-hidden="true" style={{ color: accent }}>
-        ⤢
-      </div>
+    <div className="cert-tile cert-tile--learning" style={{ '--cert-accent': ACCENT[cert.color] }}>
+      <span className="cert-tile-header">
+        <span>{cert.issuer}</span>
+        <span className="cert-tile-progress">IN PROGRESS</span>
+      </span>
+      <span className="cert-tile-img cert-tile-img--learning" aria-hidden="true">
+        <span className="cert-learning-glyph">AWS</span>
+        <span className="cert-learning-bar">
+          <span />
+        </span>
+        <span className="cert-learning-note">TRAINING ARC · LOADING…</span>
+      </span>
+      <span className="cert-tile-body">
+        <span className="cert-tile-title">{cert.title}</span>
+        <span className="cert-tile-skills">
+          {cert.skills.map((s) => (
+            <span key={s}>{s}</span>
+          ))}
+        </span>
+      </span>
+    </div>
     </div>
   )
 }
 
 /**
- * Full-screen certificate viewer. Same focus/scroll-lock pattern as the
- * project Modal: Escape closes, backdrop click closes, focus is moved in on
- * open and restored on close. SHARE uses the native share sheet when the
- * browser has one and falls back to copying the certificate link.
+ * Full-screen certificate viewer. Escape/backdrop close, ←/→ step through
+ * the earned certificates, focus is trapped-in on open and restored on
+ * close. SHARE uses the native share sheet when there is one and otherwise
+ * copies a deep link that re-opens this exact certificate.
  */
-function CertLightbox({ cert, onClose }) {
+function CertLightbox({ index, onClose, onStep }) {
+  const cert = earned[index]
   const boxRef = useRef(null)
-  const [copied, setCopied] = useState(false)
+  const [copiedId, setCopiedId] = useState(null)
+  const copied = copiedId === cert.id
   const accent = ACCENT[cert.color]
 
   useEffect(() => {
     const previouslyFocused = document.activeElement
     document.body.style.overflow = 'hidden'
     boxRef.current?.querySelector('.cert-lightbox-close')?.focus()
-    const handler = (e) => {
-      if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', handler)
     return () => {
-      window.removeEventListener('keydown', handler)
       document.body.style.overflow = ''
       previouslyFocused?.focus?.()
     }
-  }, [onClose])
+  }, [])
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'Escape') onClose()
+      else if (e.key === 'ArrowRight') onStep(1)
+      else if (e.key === 'ArrowLeft') onStep(-1)
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose, onStep])
 
   const share = async () => {
-    const url = window.location.origin + cert.image
-    const payload = {
-      title: cert.title,
-      text: `${cert.title} — ${cert.issuer} (${cert.date}) · Pierce Doman`,
-      url,
-    }
+    const url = certUrl(cert.id)
+    const text = `${cert.title} (${cert.issuer}, ${cert.date}) · Pierce Doman`
     if (navigator.share) {
       try {
-        await navigator.share(payload)
+        await navigator.share({ title: cert.title, text, url })
         return
       } catch {
-        /* user dismissed the sheet — fall through to copy */
+        /* dismissed: fall through to copy */
       }
     }
     try {
-      await navigator.clipboard.writeText(`${payload.text} ${url}`)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(url)
+      setCopiedId(cert.id)
+      setTimeout(() => setCopiedId(null), 2000)
     } catch {
-      /* clipboard unavailable — nothing sensible left to do */
+      /* clipboard unavailable */
     }
   }
+
+  const linkedInShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+    typeof window !== 'undefined' ? certUrl(cert.id) : ''
+  )}`
 
   return createPortal(
     <div
@@ -145,17 +169,31 @@ function CertLightbox({ cert, onClose }) {
           className="cert-lightbox-header"
           style={{ background: accent, color: cert.color === 'cyan' ? '#000' : '#fff' }}
         >
-          <span className="cert-lightbox-title">{cert.issuer.toUpperCase()}</span>
-          <button
-            className="cert-lightbox-close"
-            onClick={onClose}
-            aria-label="Close certificate viewer"
-          >
+          <span className="cert-lightbox-title">
+            {cert.issuer.toUpperCase()} · {index + 1}/{earned.length}
+          </span>
+          <button className="cert-lightbox-close" onClick={onClose} aria-label="Close certificate viewer">
             ✕
           </button>
         </div>
         <div className="cert-lightbox-img-wrap">
-          <img src={cert.image} alt={cert.title} className="cert-lightbox-img" />
+          <button
+            type="button"
+            className="cert-lightbox-step cert-lightbox-step--prev"
+            onClick={() => onStep(-1)}
+            aria-label="Previous certificate"
+          >
+            ←
+          </button>
+          <img key={cert.id} src={cert.image} alt={cert.title} className="cert-lightbox-img" />
+          <button
+            type="button"
+            className="cert-lightbox-step cert-lightbox-step--next"
+            onClick={() => onStep(1)}
+            aria-label="Next certificate"
+          >
+            →
+          </button>
         </div>
         <div className="cert-lightbox-footer">
           <div>
@@ -168,6 +206,22 @@ function CertLightbox({ cert, onClose }) {
             <button type="button" className="project-link" onClick={share}>
               {copied ? 'LINK COPIED ✓' : 'SHARE ↗'}
             </button>
+            <a
+              className="project-link project-link--live"
+              href={linkedInShare}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LINKEDIN <ExternalIcon />
+            </a>
+            <a
+              className="project-link project-link--ghost"
+              href={cert.image}
+              download={`Pierce Doman - ${cert.title}.webp`}
+              aria-label={`Download ${cert.title}`}
+            >
+              <DownloadIcon />
+            </a>
           </div>
         </div>
       </div>
@@ -176,133 +230,74 @@ function CertLightbox({ cert, onClose }) {
   )
 }
 
-export default function CertsSection() {
-  const total = CERTS.length
-  // `pos` is unbounded; the track renders three copies and translates from
-  // the middle one, so there is always a card on both sides. After a
-  // transition lands outside the middle copy we snap back by `total` with
-  // the transition disabled — same frame visually, so the wrap is seamless
-  // instead of the track lurching backwards.
-  const [pos, setPos] = useState(0)
-  const [animate, setAnimate] = useState(true)
-  const [paused, setPaused] = useState(false)
-  const [viewing, setViewing] = useState(null)
-  const autoRef = useRef(true) // auto-advance stops for good once the user takes over
-  const trackRef = useRef(null)
-  const [step, setStep] = useState(256)
+function deepLinkedIndex() {
+  if (typeof window === 'undefined') return null
+  const id = new URLSearchParams(window.location.search).get('cert')
+  const i = earned.findIndex((c) => c.id === id)
+  return i < 0 ? null : i
+}
 
-  // Measure the real slide step (card width + flex gap) so the track stays
-  // aligned at every breakpoint instead of trusting a hard-coded width.
-  useEffect(() => {
-    const measure = () => {
-      const track = trackRef.current
-      if (track && track.children.length > 1) {
-        setStep(track.children[1].offsetLeft - track.children[0].offsetLeft)
-      }
-    }
-    measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+export default function CertsSection() {
+  // index into `earned`; a ?cert= deep link opens straight onto that one
+  const [viewing, setViewing] = useState(deepLinkedIndex)
+  const sectionRef = useRef(null)
+
+  const open = useCallback((id) => {
+    const i = earned.findIndex((c) => c.id === id)
+    if (i < 0) return
+    setViewing(i)
+    setCertParam(id)
+  }, [])
+  const close = useCallback(() => {
+    setViewing(null)
+    setCertParam(null)
+  }, [])
+  const step = useCallback((dir) => {
+    setViewing((i) => {
+      const next = (i + dir + earned.length) % earned.length
+      setCertParam(earned[next].id)
+      return next
+    })
   }, [])
 
-  const goto = (updater) => {
-    autoRef.current = false
-    setAnimate(true)
-    setPos(updater)
-  }
-  const prev = () => goto((p) => p - 1)
-  const next = () => goto((p) => p + 1)
-
+  // A deep-linked certificate also brings its section into view behind it.
   useEffect(() => {
-    const t = setInterval(() => {
-      if (!autoRef.current || paused || viewing) return
-      setAnimate(true)
-      setPos((p) => p + 1)
-    }, 3200)
-    return () => clearInterval(t)
-  }, [paused, viewing])
-
-  useEffect(() => {
-    if (pos >= total || pos < 0) {
-      const t = setTimeout(() => {
-        setAnimate(false)
-        setPos((p) => ((p % total) + total) % total)
-      }, 520) // just after the 0.5s track transition
-      return () => clearTimeout(t)
-    }
-  }, [pos, total])
-
-  const visibleCerts = [...CERTS, ...CERTS, ...CERTS]
-  const active = ((pos % total) + total) % total
+    if (deepLinkedIndex() != null) sectionRef.current?.scrollIntoView({ block: 'start' })
+  }, [])
 
   return (
-    <section id="certs" className="certs-section">
+    <section id="certs" ref={sectionRef} className="certs-section" aria-labelledby="certs-title">
       <div className="certs-halftone" aria-hidden="true" />
       <div className="certs-header">
         <div>
-          <div className="section-label reveal reveal-left">// ISSUE #05 — CREDENTIALS</div>
-          <h2
-            id="certs-title"
-            className="section-title"
-            style={{ margin: 0 }}
-          >
+          <div className="section-label reveal reveal-left">// ISSUE #06 — CREDENTIALS</div>
+          <h2 id="certs-title" className="section-title" style={{ margin: 0 }}>
             <LetterReveal text="CERTIFICATES" variant="letter-pop" stagger={40} />
           </h2>
         </div>
-        <div className="certs-nav">
-          <button
-            type="button"
-            onClick={prev}
-            className="cert-nav-btn cert-nav-btn--ghost"
-            aria-label="Previous certificate"
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            className="cert-nav-btn cert-nav-btn--solid"
-            aria-label="Next certificate"
-          >
-            →
-          </button>
+        <div className="certs-tally" aria-label={`${earned.length} earned, ${learning.length} in progress`}>
+          <span>
+            <strong>{earned.length}</strong> EARNED
+          </span>
+          <span>
+            <strong>{learning.length}</strong> IN PROGRESS
+          </span>
         </div>
       </div>
+      <p className="section-intro certs-intro">
+        Tap any certificate to expand it, flip through with ← →, and share a direct link.
+      </p>
 
-      <div
-        className="certs-track-wrap"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-      >
-        <div
-          ref={trackRef}
-          className="certs-track"
-          style={{
-            transform: `translateX(${-(pos + total) * step}px)`,
-            transition: animate ? undefined : 'none',
-          }}
-        >
-          {visibleCerts.map((cert, i) => (
-            <CertCard key={i} cert={cert} onOpen={setViewing} />
-          ))}
-        </div>
-      </div>
-
-      <div className="certs-dots">
-        {CERTS.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => goto((p) => p + (i - active))}
-            className={`cert-dot${i === active ? ' is-active' : ''}`}
-            aria-label={`Go to certificate ${i + 1}`}
-          />
+      <div className="certs-grid">
+        {earned.map((c, i) => (
+          <CertCard key={c.id} cert={c} index={i} onOpen={open} />
+        ))}
+        {learning.map((c, i) => (
+          <LearningCard key={c.id} cert={c} index={i} />
         ))}
       </div>
 
-      {viewing && <CertLightbox cert={viewing} onClose={() => setViewing(null)} />}
+      {viewing != null && <CertLightbox index={viewing} onClose={close} onStep={step} />}
     </section>
   )
 }

@@ -15,8 +15,8 @@ export default function AboutSection() {
 
   const currently = [
     { dot: 'var(--cyan)', text: 'Business Process Analyst @ Radian H.A. Limited' },
-    { dot: 'var(--red)', text: 'Building AI automation workflows & tools' },
-    { dot: 'var(--magenta)', text: 'Advancing into full-time AI Engineering' },
+    { dot: 'var(--red)', text: 'Building the Radian Security Management System' },
+    { dot: 'var(--magenta)', text: 'Studying for AWS Cloud & AI Practitioner' },
     { dot: 'var(--cyan)', text: 'Open to freelance & dev opportunities' },
   ]
 
@@ -88,7 +88,6 @@ export default function AboutSection() {
                   className="stat-number"
                   style={{
                     color: STAT_COLORS[s.c],
-                    ...(s.n.length > 2 ? { fontSize: 36 } : {}),
                   }}
                 >
                   {s.n}
