@@ -5,7 +5,7 @@ export const stats = [
   { n: '5', l: 'Stalled Projects Rescued', c: 'red' },
   { n: '4', l: 'Live Client Sites', c: 'cyan' },
   { n: '2', l: 'Books Published', c: 'mag' },
-  { n: '4', l: 'Certifications', c: 'cyan' },
+  { n: '6', l: 'Certifications', c: 'cyan' },
 ]
 
 export const GITHUB_USER = 'youngdaggerduc'
@@ -261,6 +261,26 @@ export const projects = [
 
 // Certificates. `learning` entries render as in-progress cards (no image).
 export const certs = [
+  {
+    id: 'aws-cpe',
+    title: 'AWS Cloud Practitioner Essentials',
+    issuer: 'AWS Training & Certification',
+    date: '2026',
+    color: 'mag',
+    image: '/certs/aws-cpe-1200.webp',
+    thumb: '/certs/aws-cpe-600.webp',
+    skills: ['AWS Cloud', 'Core Services', 'Security'],
+  },
+  {
+    id: 'ai-agentic',
+    title: 'AI Engineer Agentic Track: The Complete Agent & MCP Course',
+    issuer: 'Udemy',
+    date: '2026',
+    color: 'cyan',
+    image: '/certs/ai-agentic-1200.webp',
+    thumb: '/certs/ai-agentic-600.webp',
+    skills: ['AI Agents', 'MCP', 'Agentic Workflows'],
+  },
   {
     id: 'ai-engineer',
     title: 'AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents',
