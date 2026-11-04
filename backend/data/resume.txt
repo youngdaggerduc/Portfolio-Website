@@ -34,26 +34,27 @@ BSc Computer Science (Special), University of the West Indies, St. Augustine. Se
 ---
 
 [TITLE: Project: Radian Training Management System]
-Full-stack enterprise platform built for Radian's training business. Covers the full training lifecycle: student enquiries, enrollment, payment plans and reminders, role-based administration, instructor access, and certificate management including expiry tracking and recertification. Responsive frontend with an API-backed relational data model; workflows documented for staff adoption. In production internally.
-Stack: React, Python, FastAPI, PostgreSQL, Tortoise ORM, JWT, Vercel, Render.
+Multi-country operations platform Pierce designed and built solo for Radian's training business (CISRS scaffolding and GetmieSafe working-at-height courses). It covers the full lifecycle: lead, deposit, trainee, payments, class scheduling, assessment, certificate and recertification. Live in production across Trinidad (the hub), Guyana and Suriname with per-branch currency and VAT.
+Features: Kanban lead-pipeline CRM with duplicate detection; deposit and instalment payment plans with overdue tracking; a sequential invoice register; an accounting layer with per-branch VAT, a unified receipts ledger and VAT / cash-up / journal reports; branded PDF agreements, receipts, enrolment letters, invoices and statements; batches and cohorts; a customer portal for students and sponsoring companies with one-time-password onboarding; admin email 2FA; audit log; Excel bulk import and Excel/PDF reports. 190+ commits.
+Stack: React, FastAPI, PostgreSQL, Tortoise ORM, JWT, APScheduler, jsPDF, Sentry. Hosted on Vercel and Render.
 
 ---
 
 [TITLE: Project: Radian Security Management System]
-Modular, multi-site internal application for security operations: digital guard handovers, incident reporting, communications, patrol schedules, and supervision. Includes customizable maps with zones, route drawing, checkpoint placement, and NFC/GPS checkpoint verification. Under active development.
-Stack: React, FastAPI, PostgreSQL, REST APIs, NFC/GPS workflow design.
+Security operations platform Pierce is building solo: one responsive app with an admin command center and a mobile guard interface. Admins draw patrol routes, place NFC/QR checkpoints and define zones on a visual map editor; guards clock in with a GPS geofence and selfie, run patrols, complete checklists and hand over shifts. It also covers incident reporting (people, vehicles, evidence, workflow, severity history), visitor / vehicle / material entry and exit logs, live GPS tracking, 12 server-evaluated alert types plus panic alerts delivered over WebSocket, and internal communications (official notices with read receipts, channels and voice rooms). Role-based permission matrix, multi-site admin, evidence stored in AWS S3, and a pytest test suite. 1,100+ commits; in active development.
+Stack: React, Vite, FastAPI, Tortoise ORM, PostgreSQL, WebSockets, AWS S3. Hosted on Vercel and Render.
 
 ---
 
 [TITLE: Project: Odoo ERP Implementation & Custom Modules]
-Led the Odoo ERP rollout at Radian and the design of business workflows for quotations, rental dispatch and returns, inventory, purchasing, accounting, CRM, and reporting. Built custom Odoo modules — custom models, views, automated actions, and reports — tailored to the business. Coordinated integration partners, system testing, staff training, and post-launch improvements.
-Stack: Odoo, Python, XML, PostgreSQL, data migration.
+Pierce led the company-wide Odoo ERP rollout at Radian across Sales, Rental, Inventory, Purchasing, Accounting, CRM and Reporting, then built seven custom Odoo modules where standard flows fell short: Custom Rental Workflow (split deliveries, partial returns, job grouping, pro-rated rental billing), Multiple Quotation Templates (watermarks, custom fields, professional formatting), per-line pricelists, sale-order line numbering, a rental-duration fix (calendar days instead of 24-hour periods), an archived-product replacer and a scaffolding UoM fix. They run on Odoo 19 Enterprise via Odoo.sh and are kept forward-compatible with Odoo 20.
+Stack: Odoo 19, Python, XML/QWeb, PostgreSQL, Odoo.sh.
 
 ---
 
 [TITLE: Project: Radian Corporate Website (rhatt.com)]
-Led the redevelopment of the Radian H.A. Limited corporate website, a project that had previously stalled for months. Product and service discovery, business quotation pathways, CMS customization, hosting, DNS, and performance optimization. Live at rhatt.com.
-Stack: WordPress, PHP, Custom CMS.
+Pierce led the redevelopment of the Radian H.A. Limited corporate website, a project that had stalled for months, and is the sole developer of its bespoke WordPress theme. Highlights: a 3D scaffold-pyramid hero and construction-site design language; a WooCommerce quote catalogue of about 1,700 migrated products (1,266 titles restructured); a shop hub with a category wheel, mega-menu and AJAX live search; a scaffold calculator and catalogue library; and "The Yard Hand", a customer-facing AI product advisor that uses RAG over a vector index of the catalogue fused with Odoo sales history (OpenAI embeddings + GPT-4o-mini). A performance pass with Cloudflare took the home page from 0 to 53 on PageSpeed and server response time from 1.1 s to 20 ms. Live at rhatt.com.
+Stack: WordPress, WooCommerce, PHP, OpenAI API, Cloudflare.
 
 ---
 
@@ -138,3 +139,15 @@ In progress: AWS Certified Cloud Practitioner and AWS Certified AI Practitioner 
 
 [TITLE: Availability & Contact]
 Pierce is open to full-time roles, freelance work, and remote opportunities — especially full-stack web builds, business systems, AI-powered features, and Odoo/ERP work. Contact: piercedoman25@gmail.com, +1 (868) 266-5568, LinkedIn (Pierce Doman), or the contact form on piercedoman.com. His resume can be downloaded from the portfolio.
+
+---
+
+[TITLE: Project: Radian Tower Stacker (Conference Game)]
+A branded 3D scaffolding stacker arcade game Pierce built solo for Radian's conference booth. Players stack swinging scaffold pieces as high as possible while managing balance, combos and hazards (wind, projectiles, chaos events). It runs on a portrait touch kiosk with a prize target, per-visitor identity and a FastAPI backend that records scores and captures booth leads.
+Stack: Three.js, React, Vite, FastAPI.
+
+---
+
+[TITLE: Project: PierceBrain (AI Second Brain)]
+Pierce's personal knowledge base: an Obsidian vault run on the "LLM wiki" pattern, where he curates sources and asks questions and Claude Code does the writing, filing and cross-linking. It keeps notes per project, idea and concept, plus codebase notes documenting each of his production systems subsystem by subsystem. Python tooling scans every note and wikilink and renders the vault as an interactive radial "cortex" neural-map, an Obsidian canvas and an SVG snapshot, with a linter for broken links.
+Stack: Claude Code, Obsidian, Python, three.js, GSAP.
