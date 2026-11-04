@@ -1,5 +1,4 @@
 import { useRef } from 'react'
-import SwingingSpood from './SwingingSpood'
 import SwingFigure from './SwingFigure'
 import LetterReveal from './LetterReveal'
 import { stats } from '../data'
@@ -27,7 +26,6 @@ export default function AboutSection() {
       className="about-section halftone-mag"
       aria-labelledby="about-title"
     >
-      <SwingingSpood sectionRef={sectionRef} />
       <SwingFigure sectionRef={sectionRef} />
       <div className="corner-decor corner-tl" />
       <div
