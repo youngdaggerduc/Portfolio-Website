@@ -1326,37 +1326,8 @@ footer {
     drop-shadow(0 0 32px rgba(255, 0, 170, 0.25));
 }
 
-/* SWINGING SPOOD — pinned to viewport while the ABOUT section is in play */
+/* ABOUT — positioning context for the SwingFigure overlay */
 .about-section { position: relative; }
-.swing-zone {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 420px;
-  pointer-events: none;
-  z-index: 9000;
-  overflow: visible;
-  contain: layout style;
-  transition: opacity 0.25s ease;
-}
-.swing-web-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-.swing-char {
-  position: absolute;
-  height: auto;
-  width: clamp(160px, 16vw, 240px);
-  transform-origin: top right;
-  will-change: transform, left, top, opacity;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.6));
-  pointer-events: none;
-}
 
 /* LETTER REVEAL — per-character comic pops */
 .letter-wrap { display: inline-block; white-space: pre-wrap; }
@@ -2564,7 +2535,6 @@ html.has-web-cursor textarea { caret-color: var(--cyan); }
   }
   .scroll-indicator { left: 50%; }
   .tech-stack-spood { top: 16px; right: 16px; width: 84px; }
-  .swing-zone { display: none; }
   .spider-comm-pill { padding: 10px 18px; font-size: 13px; letter-spacing: 2px; }
 }
 
