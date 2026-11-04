@@ -5,7 +5,7 @@ export const stats = [
   { n: '5', l: 'Stalled Projects Rescued', c: 'red' },
   { n: '4', l: 'Live Client Sites', c: 'cyan' },
   { n: '2', l: 'Books Published', c: 'mag' },
-  { n: '6', l: 'Certifications', c: 'cyan' },
+  { n: '8', l: 'Certifications', c: 'cyan' },
 ]
 
 export const GITHUB_USER = 'youngdaggerduc'
