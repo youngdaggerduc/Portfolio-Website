@@ -262,6 +262,26 @@ export const projects = [
 // Certificates. `learning` entries render as in-progress cards (no image).
 export const certs = [
   {
+    id: 'aws-simulearn-cloud',
+    title: 'AWS SimuLearn: Cloud Practitioner',
+    issuer: 'AWS Training & Certification',
+    date: '2026',
+    color: 'cyan',
+    image: '/certs/aws-simulearn-cloud-1200.webp',
+    thumb: '/certs/aws-simulearn-cloud-600.webp',
+    skills: ['AWS Cloud', 'Hands-on Labs', 'Solution Design'],
+  },
+  {
+    id: 'aws-simulearn-ai',
+    title: 'AWS SimuLearn: AI Practitioner',
+    issuer: 'AWS Training & Certification',
+    date: '2026',
+    color: 'red',
+    image: '/certs/aws-simulearn-ai-1200.webp',
+    thumb: '/certs/aws-simulearn-ai-600.webp',
+    skills: ['Generative AI', 'Amazon Bedrock', 'Hands-on Labs'],
+  },
+  {
     id: 'aws-cpe',
     title: 'AWS Cloud Practitioner Essentials',
     issuer: 'AWS Training & Certification',
