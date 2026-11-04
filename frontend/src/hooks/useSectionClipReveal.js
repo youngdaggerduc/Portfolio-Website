@@ -29,7 +29,9 @@ export function useSectionClipReveal() {
       },
       // See useRevealObserver: under desktop smooth scroll, uncover on screen
       // instead of pre-triggering below the fold.
-      { threshold: 0.04, rootMargin: isDesktopFX() ? '0px 0px -4% 0px' : '0px 0px 150px 0px' }
+      // threshold 0 + a pixel-based margin: a ratio threshold on a tall section
+      // meant hundreds of px had to scroll in before it uncovered.
+      { threshold: 0, rootMargin: isDesktopFX() ? '0px 0px -60px 0px' : '0px 0px 150px 0px' }
     )
     sections.forEach((s) => io.observe(s))
     return () => io.disconnect()
