@@ -14,6 +14,7 @@ import ContactSection from './components/ContactSection'
 import BehindTheMaskSection from './components/BehindTheMaskSection'
 import GamesCalloutSection from './components/GamesCalloutSection'
 import GitHubSection from './components/GitHubSection'
+import BadgesSection from './components/BadgesSection'
 import QuickScanSection from './components/QuickScanSection'
 import KineticMarquee from './components/KineticMarquee'
 import SpiderCommStrip from './components/SpiderCommStrip'
@@ -87,6 +88,8 @@ function Portfolio() {
         <GamesCalloutSection />
         <SpiderCommStrip variant="reprise" />
         <ContactSection />
+        <div className="comic-divider cyan" />
+        <BadgesSection />
       </main>
       <footer>
         <div className="footer-continued" aria-hidden="true">TO BE CONTINUED…</div>
