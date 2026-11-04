@@ -85,7 +85,7 @@ export default function SecurityMapVisual() {
         <span className="secmap-live" /> PATROL RUN · LIVE
       </div>
       <div className="secmap-hud secmap-hud--br">
-        <strong>AI DAILY SUMMARY</strong>
+        <strong>SHIFT SUMMARY</strong>
         <span>6/6 checkpoints verified · 1 incident logged at North Gate</span>
       </div>
     </div>
