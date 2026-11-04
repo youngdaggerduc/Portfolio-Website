@@ -406,6 +406,8 @@ export const skills = [
       { l: 'Express', c: 'red' },
       { l: 'REST APIs', c: 'red' },
       { l: 'PHP', c: 'red' },
+      { l: 'Flask', c: 'red' },
+      { l: 'JWT Auth', c: 'red' },
     ],
   },
   {
@@ -429,6 +431,8 @@ export const skills = [
       { l: 'MySQL', c: 'cyan' },
       { l: 'SQL', c: 'cyan' },
       { l: 'CRM', c: 'cyan' },
+      { l: 'Tortoise ORM', c: 'cyan' },
+      { l: 'Data Migration', c: 'cyan' },
     ],
   },
   {
@@ -438,7 +442,7 @@ export const skills = [
       { l: 'JavaScript', c: 'red' },
       { l: 'Java', c: 'red' },
       { l: 'C++', c: 'red' },
-      { l: 'C#', c: 'red' },
+      { l: 'C# (training)', c: 'red' },
     ],
   },
   {
@@ -446,7 +450,10 @@ export const skills = [
     dot: 'mag',
     pills: [
       { l: 'Git / GitHub', c: 'mag' },
+      { l: 'AWS (hands-on labs)', c: 'mag' },
       { l: 'Vercel', c: 'mag' },
+      { l: 'Render', c: 'mag' },
+      { l: 'Cloudflare', c: 'mag' },
       { l: 'Power Automate', c: 'mag' },
       { l: 'PowerShell', c: 'mag' },
       { l: 'Process Optimization', c: 'mag' },
