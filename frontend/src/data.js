@@ -341,6 +341,28 @@ export const certs = [
   },
 ]
 
+// Badges: the collectible wall. Images live in /public/badges as
+// `<img>-200.webp` and `<img>-400.webp` (transparent, trimmed). Add `url`
+// (e.g. a Credly link) to make a badge clickable.
+export const badges = [
+  {
+    id: 'aws-simulearn-cloud',
+    title: 'SimuLearn: Cloud Practitioner',
+    issuer: 'AWS Training & Certification',
+    date: '2026',
+    color: 'cyan',
+    img: '/badges/aws-simulearn-cloud',
+  },
+  {
+    id: 'aws-simulearn-ai',
+    title: 'SimuLearn: AI Practitioner',
+    issuer: 'AWS Training & Certification',
+    date: '2026',
+    color: 'mag',
+    img: '/badges/aws-simulearn-ai',
+  },
+]
+
 export const skills = [
   {
     cat: 'Frontend',
