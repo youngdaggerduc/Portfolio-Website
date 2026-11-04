@@ -28,11 +28,11 @@ const JOBS = [
     color: 'red',
     tag: 'Previous',
     bullets: [
-      'Managed offshore crane operator performance tracking in compliance with client KPI and contract requirements',
+      'Monitored offshore crane operator performance against client KPIs and contract requirements; prepared structured reports for management and client review',
       'Developed and maintained an internal inventory tracking system to improve stock visibility and management',
       'Oversaw daily operational reporting — checklists, incident reports, and action logs',
-      'Managed purchase orders, offshore payroll processing, and invoice preparation',
-      'Coordinated inspection schedules, maintenance follow-ups, and operational reporting',
+      'Processed purchase orders, offshore payroll and invoices; facilitated operator performance meetings and follow-up actions',
+      'Coordinated inspection schedules, maintenance follow-ups and resolution of operational issues among operators, supervisors and client representatives',
     ],
   },
 ]
