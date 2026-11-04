@@ -61,8 +61,8 @@ export default function AboutSection() {
                 </span>{' '}
                 — translating complex operational requirements into scalable technical
                 systems. At Radian H.A. Limited I led and delivered 5 previously stalled
-                strategic projects, including a full Odoo ERP rollout across Accounting,
-                Sales, CRM, Rental, and Reporting.
+                strategic projects, including a full Odoo ERP rollout across Sales, Rental,
+                Inventory, Purchasing, Accounting, CRM, and Reporting.
               </p>
               <p>
                 On the engineering side I work across the full stack — React frontends,
