@@ -4,13 +4,13 @@ import { LINKS } from '../data'
 // The 10-second read for recruiters: everything needed to decide to keep
 // scrolling, in one comic "dossier" strip.
 const FACTS = [
-  { k: 'Target Role', v: 'Full Stack Developer · AI Engineer' },
+  { k: 'Target Role', v: 'Full Stack Developer · Business Process Analyst · AI Engineer' },
   { k: 'Based In', v: 'Trinidad & Tobago (UTC−4) · Remote-ready' },
   { k: 'Available For', v: 'Full-time roles & freelance builds' },
   { k: 'Core Stack', v: 'React · Python · FastAPI · LangChain · Odoo · PostgreSQL' },
   {
     k: 'Proof',
-    v: '4 live client sites · Training Management System in production · Security platform in build',
+    v: '4 live client sites · Training Management System in production · Odoo quotes cut from 45–60 to 2–8 min',
   },
 ]
 
