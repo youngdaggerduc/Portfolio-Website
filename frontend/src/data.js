@@ -33,6 +33,7 @@ export const PROJECT_FILTERS = [
   { id: 'systems', label: 'Systems' },
   { id: 'client', label: 'Client Sites' },
   { id: 'ai', label: 'AI' },
+  { id: 'ops', label: 'Business Analysis' },
   { id: 'personal', label: 'Academic & Personal' },
 ]
 
@@ -209,6 +210,32 @@ export const projects = [
     color: 'cyan',
     image: null,
     icon: '/odoo.png',
+  },
+  {
+    id: 'rental-recon',
+    title: 'Industrial Rental Reconciliation',
+    tag: 'Ops / Analysis',
+    category: 'ops',
+    year: '2025–26',
+    status: 'shipped',
+    statusLabel: 'Closed & Paid',
+    role: 'Lead analyst: investigation & reconciliation',
+    desc: 'Reconciled thousands of manually entered rental records on a large industrial scaffolding job so both sides could agree the bill and close it out.',
+    details:
+      'A very large scaffolding rental job at an industrial plant in Trinidad had produced three manually maintained spreadsheets with thousands of lines, and Radian’s records and the customer’s disagreed by a significant amount. Under a tight deadline I cross-checked every sheet against delivery notes, picking tickets, equipment quantities, rental dates and billing rules, and recalculated the figures. I found errors on both sides rather than assuming the customer was at fault, including weekend rental days the customer’s reconciliation had left out even though the rental policy charges for as long as material is on site.',
+    features: [
+      'Cross-referenced three spreadsheets against delivery notes and picking tickets',
+      'Recalculated quantities, rental periods and billing rules line by line',
+      'Identified incorrect entries on both sides, plus omitted weekend rental charges',
+      'Prepared a defensible reconciliation for both parties to review',
+    ],
+    impact: [
+      'Both parties accepted the final reconciliation; the job was closed and paid',
+      'Lessons fed into more automated rental and record workflows to reduce manual error',
+    ],
+    stack: ['Excel', 'Data Reconciliation', 'Document Control', 'Rental Billing'],
+    color: 'cyan',
+    image: null,
   },
   {
     id: 'radian-stacker',
