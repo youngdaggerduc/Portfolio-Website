@@ -1460,6 +1460,65 @@
   .badge-slot:focus-visible .badge-holo { animation: none; opacity: 0; }
 }
 
+/* ── Hero role swipe: FULL STACK DEVELOPER ⇄ BUSINESS PROCESS ANALYST ──
+   Both labels share one grid cell (so the pill is sized to the longer one)
+   and are clipped in sync with a yellow wipe bar crossing left → right. */
+.hero-role-row { gap: 8px; }
+.hero-role-pill.role-swipe {
+  position: relative;
+  display: inline-grid;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+}
+.role-swipe-label {
+  grid-area: 1 / 1;
+  padding: 5px 14px;
+  text-align: center;
+  white-space: nowrap;
+  animation: 7s linear infinite;
+}
+.role-swipe-a { background: var(--red); color: #fff; animation-name: roleSwipeA; }
+.role-swipe-b { background: var(--cyan); color: #000; animation-name: roleSwipeB; clip-path: inset(0 100% 0 0); }
+.role-swipe-bar {
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: 0;
+  width: 16px;
+  background: #ffd42a;
+  border-left: 2px solid #000;
+  border-right: 2px solid #000;
+  transform: translateX(-50%) skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  animation: roleSwipeBar 7s linear infinite;
+}
+@keyframes roleSwipeA {
+  0%, 44% { clip-path: inset(0 0 0 0); }
+  52% { clip-path: inset(0 0 0 100%); }
+  52.01%, 92% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+@keyframes roleSwipeB {
+  0%, 44% { clip-path: inset(0 100% 0 0); }
+  52%, 92% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 100%); }
+}
+@keyframes roleSwipeBar {
+  0%, 43.99% { left: 0; opacity: 0; }
+  44% { left: 0; opacity: 1; }
+  52% { left: 100%; opacity: 1; }
+  52.01%, 91.99% { left: 0; opacity: 0; }
+  92% { left: 0; opacity: 1; }
+  100% { left: 100%; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-role-pill.role-swipe { display: inline-flex; flex-wrap: wrap; }
+  .role-swipe-label { grid-area: auto; animation: none; clip-path: none; }
+  .role-swipe-bar { display: none; }
+}
+
 /* ── About: How I work ── */
 .how-i-work {
   position: relative;

@@ -93,8 +93,20 @@ export default function HeroSection() {
         </h1>
 
         <div className="hero-role-row">
-          <div className="hero-role-pill red">FULL STACK</div>
-          <div className="hero-role-pill dark">✦</div>
+          {/* Two roles, one slot: a comic wipe swaps them on a loop (CSS-only). */}
+          <div
+            className="hero-role-pill role-swipe"
+            role="text"
+            aria-label="Full Stack Developer and Business Process Analyst"
+          >
+            <span className="role-swipe-label role-swipe-a" aria-hidden="true">
+              FULL STACK DEVELOPER
+            </span>
+            <span className="role-swipe-label role-swipe-b" aria-hidden="true">
+              BUSINESS PROCESS ANALYST
+            </span>
+            <span className="role-swipe-bar" aria-hidden="true" />
+          </div>
           <div className="hero-role-pill cyan">AI ENGINEER</div>
         </div>
 
