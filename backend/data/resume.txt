@@ -1,26 +1,29 @@
 [TITLE: About Pierce]
-Pierce Doman is a Trinidad & Tobago–based Full Stack Developer and Business Process Analyst working across software engineering and business systems. He holds a BSc in Computer Science and has delivered commercial websites, enterprise web applications, ERP implementations, and automation initiatives. He builds practical systems with React, Python, FastAPI, PostgreSQL, and REST APIs, while owning business requirements, cross-functional delivery, cloud deployment, and user adoption. He specializes in turning complex, paper-based processes into integrated digital workflows, and is actively advancing into AI engineering.
+Pierce Doman is a Trinidad & Tobago–based Full Stack Developer and Business Process Analyst who bridges business operations and technology. He holds a BSc in Computer Science and has delivered commercial websites, enterprise web applications, ERP implementations, and automation initiatives. He builds practical systems with React, Python, FastAPI, PostgreSQL, and REST APIs, while owning business requirements, cross-functional delivery, cloud deployment, and user adoption. His background combines engineering operations (offshore crane operations at Pyramid Engineering), ERP implementation, data quality and process improvement, and he builds internal applications with AI-assisted development (ChatGPT for planning, Claude Code for implementation). He specializes in turning complex, paper-based processes into integrated digital workflows, and is actively advancing into AI engineering.
 Portfolio: piercedoman.com. GitHub: youngdaggerduc. Websites he manages: rhatt.com, training.rhatt.com, abscoltdtt.com, lumierett.com.
 
 ---
 
 [TITLE: Current Role: Business Process Analyst at Radian H.A. Limited]
-Period: April 2025 – Present. Focus: software development, ERP and digital transformation.
+Period: April 2025 – Present. Radian H.A. Limited is a scaffolding equipment sales, rental and training business in Trinidad and Tobago. Focus: process analysis, digital transformation, systems implementation and operational improvement.
 - Led delivery of five previously stalled initiatives, taking work from requirements and stakeholder alignment through implementation, testing, and adoption.
-- Spearheaded an organization-wide Odoo ERP rollout across Sales, Rental, Inventory, Purchasing, Accounting, CRM, and Reporting; coordinated data migration and process redesign.
-- Designed and developed the Radian Training Management System (React, FastAPI, PostgreSQL) for enquiries, enrollments, payment tracking, staff roles, and certificate administration.
-- Designing and building a modular security operations application for guard handovers, incident reports, NFC/GPS checkpoints, patrol routes, and multi-site administration.
+- Led the internal Odoo ERP rollout, replacing a failing Microsoft Access quotation system and spreadsheet-based processes. Odoo now covers Sales and Quotations, Rental, Inventory, Purchasing, Accounting, CRM, Reporting, Contacts, Fleet, delivery notes and picking tickets. Comparable quotations went from about 45–60 minutes to about 2–8 minutes.
+- Reconciled a large industrial scaffolding rental job, cross-checking thousands of spreadsheet lines against delivery notes and picking tickets so both parties agreed the final bill; the job was closed and paid.
+- Designed and developed the Radian Training Management System (React, FastAPI, PostgreSQL): live in Trinidad and fully built for Guyana and Suriname.
+- Built the Radian Security Management System, now mostly complete and awaiting management approval and funding to deploy.
 - Led the corporate website redevelopment (rhatt.com) and built a dedicated training website (training.rhatt.com), including responsive UI, deployment, DNS, caching, and content workflows.
+- Evaluates business ideas, workflow changes, approximate costs and potential profitability, and presents recommendations to management; implements approved changes.
+- Improves inventory, rental, warehouse, dispatch, delivery and return workflows.
 - Translated finance, logistics, warehouse, training, and management requirements into software specifications; coordinated vendors and trained employees on systems and AI tools.
-- Analyzed business strategies, operational performance, and workflows to identify process gaps, implementation risks, and productivity opportunities.
-- Evaluated alternative approaches and presented practical recommendations to management on strategic planning, system investment, and operations.
 - Authored and published two books; contributed to a third through content, design, and publication support.
 
 ---
 
 [TITLE: Previous Role: Operations Coordinator at Pyramid Engineering Limited]
-Period: September 2024 – April 2025.
-- Monitored offshore crane operator performance against client KPIs and contract requirements; prepared structured reports for management and client review.
+Period: September 2024 – April 2025. Supported offshore crane operations for Perenco.
+- Communicated daily with offshore crane operators and Perenco representatives; coordinated operators' daily checklists.
+- Prepared and monitored crane time tickets and operator performance against client KPIs and contract requirements; prepared structured reports for management and client review.
+- Sourced and followed up on replacement crane parts; coordinated with maintenance and technical teams and helped coordinate equipment and personnel logistics.
 - Coordinated inspection schedules, maintenance follow-ups, and resolution of operational issues among operators, supervisors, and client representatives.
 - Maintained daily operational checklists, incident reports, action logs, and supporting documentation.
 - Developed an internal inventory-tracking system to improve stock visibility, material records, and stock management.
@@ -34,21 +37,22 @@ BSc Computer Science (Special), University of the West Indies, St. Augustine. Se
 ---
 
 [TITLE: Project: Radian Training Management System]
-Multi-country operations platform Pierce designed and built solo for Radian's training business (CISRS scaffolding and GetmieSafe working-at-height courses). It covers the full lifecycle: lead, deposit, trainee, payments, class scheduling, assessment, certificate and recertification. Live in production across Trinidad (the hub), Guyana and Suriname with per-branch currency and VAT.
+Multi-country operations platform Pierce designed and built solo for Radian's training business (CISRS scaffolding and GetmieSafe working-at-height courses). It covers the full lifecycle: lead, deposit, trainee, payments, class scheduling, assessment, certificate and recertification. Fully built for Trinidad (the hub), Guyana and Suriname with per-branch currency and VAT. It is live in production in Trinidad; Guyana and Suriname will go live once Radian establishes its places of business there.
 Features: Kanban lead-pipeline CRM with duplicate detection; deposit and instalment payment plans with overdue tracking; a sequential invoice register; an accounting layer with per-branch VAT, a unified receipts ledger and VAT / cash-up / journal reports; branded PDF agreements, receipts, enrolment letters, invoices and statements; batches and cohorts; a customer portal for students and sponsoring companies with one-time-password onboarding; admin email 2FA; audit log; Excel bulk import and Excel/PDF reports. 190+ commits.
 Stack: React, FastAPI, PostgreSQL, Tortoise ORM, JWT, APScheduler, jsPDF, Sentry. Hosted on Vercel and Render.
 
 ---
 
 [TITLE: Project: Radian Security Management System]
-Security operations platform Pierce is building solo: one responsive app with an admin command center and a mobile guard interface. Admins draw patrol routes, place NFC/QR checkpoints and define zones on a visual map editor; guards clock in with a GPS geofence and selfie, run patrols, complete checklists and hand over shifts. It also covers incident reporting (people, vehicles, evidence, workflow, severity history), visitor / vehicle / material entry and exit logs, live GPS tracking, 12 server-evaluated alert types plus panic alerts delivered over WebSocket, and internal communications (official notices with read receipts, channels and voice rooms). Role-based permission matrix, multi-site admin, evidence stored in AWS S3, and a pytest test suite. 1,100+ commits; in active development.
+Security operations platform Pierce built solo, now mostly complete and awaiting management approval and funding to deploy: one responsive app with an admin command center and a mobile guard interface. Admins draw patrol routes, place NFC/QR checkpoints and define zones on a visual map editor; guards clock in with a GPS geofence and selfie, run patrols, complete checklists and hand over shifts. It also covers incident reporting (people, vehicles, evidence, workflow, severity history), visitor / vehicle / material entry and exit logs, live GPS tracking, 12 server-evaluated alert types plus panic alerts delivered over WebSocket, and internal communications (official notices with read receipts, channels and voice rooms). Role-based permission matrix, multi-site admin, evidence stored in AWS S3, and a pytest test suite. 1,100+ commits.
 Stack: React, Vite, FastAPI, Tortoise ORM, PostgreSQL, WebSockets, AWS S3. Hosted on Vercel and Render.
 
 ---
 
-[TITLE: Project: Odoo ERP Implementation & Custom Modules]
-Pierce led the company-wide Odoo ERP rollout at Radian across Sales, Rental, Inventory, Purchasing, Accounting, CRM and Reporting, then built seven custom Odoo modules where standard flows fell short: Custom Rental Workflow (split deliveries, partial returns, job grouping, pro-rated rental billing), Multiple Quotation Templates (watermarks, custom fields, professional formatting), per-line pricelists, sale-order line numbering, a rental-duration fix (calendar days instead of 24-hour periods), an archived-product replacer and a scaffolding UoM fix. They run on Odoo 19 Enterprise via Odoo.sh and are kept forward-compatible with Odoo 20.
-Stack: Odoo 19, Python, XML/QWeb, PostgreSQL, Odoo.sh.
+[TITLE: Project: Odoo ERP Rollout & Modernization]
+When Pierce joined Radian, quotations and sales orders ran on an ageing Microsoft Access application whose only developer no longer supported it, and inventory and quote tracking were spread across Excel files. A quotation or sales order could take about 45–60 minutes. With roughly two months to a single go-live date, Pierce led the internal move to Odoo: he met department heads and frontline staff, observed workflows, mapped current and future processes, defined the customisation requirements, and coordinated the external developers who built the custom modules (custom rental workflow, quotation templates, per-line pricelists, sale-order line numbering, rental duration fix and others). He cleaned the legacy data (inconsistent names, spellings, abbreviations and missing fields) with Excel, AI-assisted methods and manual checks, gave data-entry training, and ran a single-date go-live with hands-on demos, one-on-one support and user guides. After go-live he made edits to several of the vendor-built modules to enhance them and align them with in-house workflows.
+Odoo now covers Sales and Quotations, Rental, Inventory, Purchasing, Accounting, CRM, Reporting, Contacts, Fleet, delivery notes and picking tickets, on Odoo 19 Enterprise via Odoo.sh.
+Outcome: comparable quotations went from about 45–60 minutes to about 2–8 minutes (observed times, not a formal time study), with less legacy downtime and better traceability.
 
 ---
 
@@ -151,3 +155,18 @@ Stack: Three.js, React, Vite, FastAPI.
 [TITLE: Project: PierceBrain (AI Second Brain)]
 Pierce's personal knowledge base: an Obsidian vault run on the "LLM wiki" pattern, where he curates sources and asks questions and Claude Code does the writing, filing and cross-linking. It keeps notes per project, idea and concept, plus codebase notes documenting each of his production systems subsystem by subsystem. Python tooling scans every note and wikilink and renders the vault as an interactive radial "cortex" neural-map, an Obsidian canvas and an SVG snapshot, with a linter for broken links.
 Stack: Claude Code, Obsidian, Python, three.js, GSAP.
+
+---
+
+[TITLE: Project: Industrial Rental Reconciliation]
+A very large scaffolding rental job at an industrial plant in Trinidad produced three manually maintained spreadsheets with thousands of lines, and Radian's records and the customer's disagreed by a significant amount. Under a tight deadline Pierce cross-checked the sheets against delivery notes, picking tickets, equipment quantities, rental dates and billing rules, and recalculated the figures. He found errors on both sides, including weekend rental days the customer's reconciliation left out even though the rental policy charges for as long as material is on site. Both parties accepted his final reconciliation, and the job was closed and paid. The lessons fed into more automated rental and record workflows.
+
+---
+
+[TITLE: How Pierce Works]
+1. Listen: talk to department heads and frontline staff about delays, handoffs and pain points.
+2. Observe: watch how work really happens and review the forms, spreadsheets and reports behind it.
+3. Map: document the current process and design a better future-state workflow.
+4. Prioritise: rank by urgency and impact, and work through competing department needs with the people involved.
+5. Build: configure or build the solution, often with AI-assisted development, and demo early.
+6. Test and train: validate against requirements, train staff, and keep improving after rollout.
