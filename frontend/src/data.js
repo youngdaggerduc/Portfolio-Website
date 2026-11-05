@@ -49,11 +49,11 @@ export const projects = [
     category: 'systems',
     year: '2026',
     status: 'live',
-    statusLabel: 'In Production · Multi-Country',
+    statusLabel: 'Live in Trinidad · Ready for 3 Countries',
     role: 'Sole developer: architecture, build & rollout',
     desc: 'A multi-country operations platform purpose-built for Radian\'s training business. Every lead, payment, invoice and certificate in one system.',
     details:
-      'Radian ran its training operation across spreadsheets, inboxes and paper. I designed and built a single platform that covers the whole lifecycle: lead → deposit → trainee → payments → class scheduling → assessment → certificate → recertification. It now runs across Trinidad (the hub), Guyana and Suriname, with per-branch currency and VAT, and generates all the branded paperwork along the way.',
+      'Radian ran its training operation across spreadsheets, inboxes and paper. I designed and built a single platform that covers the whole lifecycle: lead → deposit → trainee → payments → class scheduling → assessment → certificate → recertification. It is fully built for Trinidad (the hub), Guyana and Suriname, with per-branch currency and VAT, and generates all the branded paperwork along the way. Trinidad is live in production; Guyana and Suriname switch on as Radian establishes its places of business there.',
     features: [
       'Kanban lead-pipeline CRM with follow-ups and duplicate detection',
       'Deposit + instalment payment plans, overdue tracking and a sequential invoice register',
@@ -64,9 +64,9 @@ export const projects = [
       'Admin email 2FA, audit log, Excel bulk import and Excel/PDF reports',
     ],
     impact: [
-      'Replaced scattered spreadsheets with one source of truth across three countries',
+      'Replaced scattered spreadsheets with one source of truth, ready for three countries',
       'Certificate expiry is tracked, not remembered',
-      '190+ commits, live in production on Vercel + Render',
+      '190+ commits, live in production in Trinidad on Vercel + Render',
     ],
     stack: ['React', 'FastAPI', 'PostgreSQL', 'Tortoise ORM', 'JWT + 2FA', 'jsPDF'],
     color: 'cyan',
