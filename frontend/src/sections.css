@@ -31,7 +31,8 @@
   white-space: nowrap;
 }
 .status-badge--live { color: #39ff88; }
-.status-badge--building { color: #ffd42a; }
+.status-badge--building,
+.status-badge--pending { color: #ffd42a; }
 .status-badge--shipped { color: var(--cyan); }
 .status-badge-dot {
   width: 7px;
@@ -40,7 +41,8 @@
   background: currentColor;
 }
 .status-badge--live .status-badge-dot,
-.status-badge--building .status-badge-dot { animation: statusBlink 1.6s ease-in-out infinite; }
+.status-badge--building .status-badge-dot,
+.status-badge--pending .status-badge-dot { animation: statusBlink 1.6s ease-in-out infinite; }
 @keyframes statusBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }

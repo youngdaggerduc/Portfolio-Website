@@ -81,8 +81,8 @@ export const projects = [
     tag: 'Flagship · Security Ops',
     category: 'systems',
     year: '2026',
-    status: 'building',
-    statusLabel: 'In Development',
+    status: 'pending',
+    statusLabel: 'Awaiting Deployment Approval',
     role: 'Sole developer: product design & full-stack build',
     desc: 'A security operations platform: an admin command center plus a mobile guard app for patrols, NFC checkpoints, incidents, live GPS and site access logs.',
     details:
@@ -96,6 +96,7 @@ export const projects = [
       'Internal comms: official notices with read receipts, channels and voice rooms',
     ],
     impact: [
+      'Mostly complete; awaiting management approval and funding to deploy',
       '1,100+ commits; most modules already read and write through the API',
       'Role-based permission matrix, multi-site admin, S3 evidence storage, pytest suite',
     ],

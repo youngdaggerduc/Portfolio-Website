@@ -85,9 +85,9 @@ function Flagship({ project, index, onOpen }) {
         ) : (
           <SecurityMapVisual />
         )}
-        {project.status === 'building' && (
+        {(project.status === 'building' || project.status === 'pending') && (
           <span className="flagship-stamp" aria-hidden="true">
-            IN DEVELOPMENT
+            {project.status === 'pending' ? 'AWAITING APPROVAL' : 'IN DEVELOPMENT'}
           </span>
         )}
       </div>

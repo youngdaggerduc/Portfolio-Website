@@ -14,7 +14,7 @@ export default function AboutSection() {
 
   const currently = [
     { dot: 'var(--cyan)', text: 'Business Process Analyst @ Radian H.A. Limited' },
-    { dot: 'var(--red)', text: 'Building the Radian Security Management System' },
+    { dot: 'var(--red)', text: 'Security Management System: awaiting deployment approval' },
     { dot: 'var(--magenta)', text: 'Studying for AWS Cloud & AI Practitioner' },
     { dot: 'var(--cyan)', text: 'Open to freelance & dev opportunities' },
   ]

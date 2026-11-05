@@ -110,7 +110,7 @@ export default function Modal({ project, originRect, onClose }) {
                 sizes="(max-width: 760px) 100vw, 720px"
                 eager
               />
-            ) : project.status === 'building' ? (
+            ) : project.status === 'building' || project.status === 'pending' ? (
               <SecurityMapVisual />
             ) : (
               <ProjectPlaceholder color={project.color} icon={project.icon} title={project.title} />
