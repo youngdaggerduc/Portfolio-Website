@@ -3,6 +3,15 @@ import SwingFigure from './SwingFigure'
 import LetterReveal from './LetterReveal'
 import { stats } from '../data'
 
+const HOW_I_WORK = [
+  { n: '01', t: 'LISTEN', d: 'Talk to department heads and the people doing the work: where are the delays, handoffs and pain points?' },
+  { n: '02', t: 'OBSERVE', d: 'Watch how the work really happens and review the forms, spreadsheets and reports behind it.' },
+  { n: '03', t: 'MAP', d: 'Document the current process and design a better future-state workflow.' },
+  { n: '04', t: 'PRIORITISE', d: 'Rank by urgency and impact, and work through competing department needs.' },
+  { n: '05', t: 'BUILD', d: 'Configure or build it, often with AI-assisted development, and demo early.' },
+  { n: '06', t: 'TEST & TRAIN', d: 'Validate against requirements, train staff, then keep improving after rollout.' },
+]
+
 const STAT_COLORS = {
   red: 'var(--red)',
   cyan: 'var(--cyan)',
@@ -134,6 +143,26 @@ export default function AboutSection() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="how-i-work reveal reveal-up">
+        <div className="how-i-work-head">
+          <span className="how-i-work-kicker">THE METHOD</span>
+          <h3 className="how-i-work-title">HOW I WORK</h3>
+        </div>
+        <ol className="how-i-work-steps">
+          {HOW_I_WORK.map((s, i) => (
+            <li
+              key={s.n}
+              className="how-step reveal reveal-zoom"
+              style={{ '--reveal-delay': `${i * 80}ms` }}
+            >
+              <span className="how-step-n">{s.n}</span>
+              <span className="how-step-t">{s.t}</span>
+              <span className="how-step-d">{s.d}</span>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )

@@ -1459,3 +1459,78 @@
   .badge-slot:hover .badge-holo,
   .badge-slot:focus-visible .badge-holo { animation: none; opacity: 0; }
 }
+
+/* ── About: How I work ── */
+.how-i-work {
+  position: relative;
+  z-index: 1;
+  margin-top: 48px;
+  border: var(--panel-border-thick);
+  background: var(--bg);
+  box-shadow: 6px 6px 0 var(--red);
+}
+.how-i-work-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 20px;
+  background: var(--red);
+  color: #fff;
+  border-bottom: var(--panel-border-thick);
+}
+.how-i-work-kicker {
+  font-family: 'Bangers', cursive;
+  font-size: 13px;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+.how-i-work-title {
+  margin: 0;
+  font-family: 'Bangers', cursive;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 3px;
+}
+.how-i-work-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.how-step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 16px 20px;
+  background: var(--bg);
+}
+.how-step-n {
+  font-family: 'Bangers', cursive;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--cyan);
+}
+.how-step:nth-child(even) .how-step-n { color: var(--magenta); }
+.how-step-t {
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #fff;
+}
+.how-step-d {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(240, 238, 255, 0.72);
+}
+@media (max-width: 1100px) {
+  .how-i-work-steps { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  .how-i-work { margin-top: 32px; box-shadow: 4px 4px 0 var(--red); }
+  .how-i-work-steps { grid-template-columns: repeat(2, 1fr); }
+  .how-step { padding: 14px 12px 16px; }
+  .how-step-d { font-size: 12px; }
+}
